@@ -50,6 +50,7 @@ router.register(r'addresses', AddressViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     url(r'^brain/$', views.brain, name='brain'),
+    url(r'^test-addresses/$', views.random_test_addresses, name='test-addresses'),
     url(r'^ui/$', views.index, name='index'),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))

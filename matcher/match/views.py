@@ -3,6 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from random import randint
 from hashlib import md5
+from models import Address
+import random
 
 
 def index(request):
@@ -39,3 +41,14 @@ def brain(request):
         'q':test_address,
         'candidates': candidate_addresses
     })
+
+
+def random_test_addresses(request):
+    number_requested = int(request.GET.get('n', 5))
+    last = Address.objects.count() - 1
+    addresses = []
+    for i in range(0, number_requested - 1):
+        index = random.randint(0, last)
+        address = Address.objects.all()[index]
+        addresses.append({'address':str(address)})
+    return JsonResponse({'addresses': addresses})
