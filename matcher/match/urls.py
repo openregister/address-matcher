@@ -49,6 +49,7 @@ router.register(r'addresses', AddressViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    url(r'^brain/$', views.brain, name='brain'),
     url(r'^ui/$', views.index, name='index'),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
