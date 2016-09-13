@@ -2,7 +2,7 @@ module Ui exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
--- import Html.Events exposing (onClick)
+import Html.Events exposing (..)
 import Html.App as App
 import Task exposing (perform)
 import Http exposing (..)
@@ -30,14 +30,15 @@ type alias User =
 
 
 type alias Model =
-    { currentUser : Int
+    { currentUserUri : String
     , users : List User
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { currentUser = 0, users = [] }, fetchUsers )
+    ( { currentUserUri = "", users = [] }, fetchUsers )
+
 
 
 -- HTTP
@@ -59,6 +60,7 @@ userDecoder =
     )
 
 
+
 -- UPDATE
 
 
@@ -66,6 +68,7 @@ type Msg
     = FetchUsers
     | FetchUsersOk (List User)
     | FetchUsersFail Http.Error
+    | UserChange String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -80,25 +83,28 @@ update msg model =
         FetchUsersFail error ->
             ( model, Cmd.none )
 
+        UserChange userUri ->
+            ( { model | currentUserUri = userUri }, Cmd.none )
+
 
 
 -- VIEW
 
 
-
 userOption : User -> Html Msg
 userOption user =
-    option [value user.url] [text user.name]
+    option [ value user.url ] [ text user.name ]
 
 
 usersDropdown : List User -> Html Msg
 usersDropdown users =
-    select []
-        ((option [] [text "Select a user"]) :: (map userOption users))
+    select [ onInput UserChange ]
+        ((option [] [ text "Select a user" ]) :: (map userOption users))
 
 
 view : Model -> Html Msg
 view model =
     div []
         [ usersDropdown model.users
+        , div [] [ text (toString model) ]
         ]
