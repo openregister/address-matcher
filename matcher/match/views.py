@@ -47,8 +47,8 @@ def random_test_addresses(request):
     number_requested = int(request.GET.get('n', 5))
     last = Address.objects.count() - 1
     addresses = []
-    for i in range(0, number_requested - 1):
+    for i in range(0, number_requested):
         index = random.randint(0, last)
         address = Address.objects.all()[index]
         addresses.append({'address':str(address)})
-    return JsonResponse({'addresses': addresses})
+    return JsonResponse(addresses, safe=False)
