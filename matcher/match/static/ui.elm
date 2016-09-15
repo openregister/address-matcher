@@ -34,13 +34,15 @@ type alias TestAddress =
     }
 
 
-type alias TestAddresses =
-    List TestAddress
-
-
 type alias CandidateAddress =
     { address : String
     , uprn : String
+    }
+
+
+type alias Address =
+    { test : TestAddress
+    , candidates : List CandidateAddress
     }
 
 
@@ -48,15 +50,13 @@ type alias Model =
     { error : Maybe Error
     , currentUserUri : String
     , users : List User
-    , testAddresses : TestAddresses
-    , candidateAddresses : List CandidateAddress
+    , addresses : List Address
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    (Model Nothing "" [] [] [])
-        ! [ fetchUsers, fetchTestAddresses ]
+    (Model Nothing "" [] []) ! [ fetchUsers, fetchAddresses ]
 
 
 
@@ -90,7 +90,7 @@ usersDecoder =
     )
 
 
-testAddressDecoder : Decoder (TestAddresses)
+testAddressDecoder : Decoder (List TestAddress)
 testAddressDecoder =
     (Json.Decode.list
         (Json.Decode.object1 TestAddress
@@ -99,14 +99,28 @@ testAddressDecoder =
     )
 
 
-fetchTestAddresses : Cmd Msg
-fetchTestAddresses =
-    Task.perform
-        FetchTestAddressesFail
-        FetchTestAddressesOk
-        (fromJson testAddressDecoder
-            (send defaultSettings (jsonGet "/match/test-addresses/?n=5"))
-        )
+fetchCandidates: TestAddress -> Task.Task Error Address
+fetchCandidates testAddress =
+    Task.succeed (Address testAddress [])
+
+
+fetchAddresses : Cmd Msg
+fetchAddresses =
+    let
+        fetchTests : Task.Task Error (List TestAddress)
+        fetchTests =
+            (fromJson testAddressDecoder
+                (send defaultSettings (jsonGet "/match/test-addresses/?n=5"))
+            )
+
+        fetchAllCandidates : List TestAddress -> Task.Task Error (List Address)
+        fetchAllCandidates testAddresses =
+            Task.sequence (List.map fetchCandidates testAddresses)
+    in
+        Task.perform
+            FetchAddressesFail
+            FetchAddressesOk
+            (fetchTests `Task.andThen` fetchAllCandidates)
 
 
 
@@ -118,9 +132,9 @@ type Msg
     | FetchUsersOk (List User)
     | FetchUsersFail Http.Error
     | UserChange String
-    | FetchTestAddresses
-    | FetchTestAddressesOk TestAddresses
-    | FetchTestAddressesFail Http.Error
+    | FetchAddresses
+    | FetchAddressesOk (List Address)
+    | FetchAddressesFail Http.Error
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -138,13 +152,13 @@ update msg model =
         UserChange userUri ->
             ( { model | currentUserUri = userUri }, Cmd.none )
 
-        FetchTestAddresses ->
-            ( model, fetchTestAddresses )
+        FetchAddresses ->
+            ( model, fetchAddresses )
 
-        FetchTestAddressesOk addresses ->
-            ( { model | testAddresses = addresses }, Cmd.none )
+        FetchAddressesOk addresses ->
+            ( { model | addresses = addresses }, Cmd.none )
 
-        FetchTestAddressesFail error ->
+        FetchAddressesFail error ->
             ( { model | error = Just error }, Cmd.none )
 
 
@@ -157,9 +171,9 @@ testAddress address =
     li [] [ address.address |> text ]
 
 
-testAddresses : TestAddresses -> Html Msg
-testAddresses addresses =
-    ul [] (map testAddress addresses)
+-- testAddresses : TestAddresses -> Html Msg
+-- testAddresses addresses =
+--     ul [] (map testAddress addresses)
 
 
 userOption : User -> Html Msg
@@ -183,6 +197,6 @@ view model =
     div []
         [ error model.error
         , usersDropdown model.users
-        , testAddresses model.testAddresses
+        -- , testAddresses model.testAddresses
           -- , div [] [ text (toString model) ]
         ]
