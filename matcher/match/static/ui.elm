@@ -29,10 +29,6 @@ type alias User =
     }
 
 
-
--- TODO: add test number from test dataset
-
-
 type alias TestAddress =
     { address : String
     }

@@ -17,15 +17,7 @@ class Command(BaseCommand):
             tsvin = csv.reader(address_file, delimiter='\t')
 
             for row in tsvin:
-                l = len(row)
-                print row
-                print len(row)
-                address = Address.objects.create(
-                    line1 = row[1] if l > 1 else '',
-                    line2 = row[2] if l > 2 else '',
-                    line3 = row[3] if l > 3 else '',
-                    line4 = row[4] if l > 4 else '',
-                    line5 = row[5] if l > 5 else '',
-                    line6 = row[6] if l > 6 else '',
-                    line7 = row[7] if l > 7 else ''
+                Address.objects.create(
+                    test_id = row[0],
+                    address = ' // '.join(row[1:])
                 )

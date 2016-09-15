@@ -89,6 +89,7 @@ ENV/
 .ropeproject
 
 matcher/match/migrations/
+matcher/match/static/ui.js
 
 elm-stuff
 
