@@ -37,10 +37,7 @@ def brain(request):
         })
 
 
-    return JsonResponse({
-        'q':test_address,
-        'candidates': candidate_addresses
-    })
+    return JsonResponse(candidate_addresses, safe=False)
 
 
 def random_test_addresses(request):
@@ -50,5 +47,8 @@ def random_test_addresses(request):
     for i in range(0, number_requested):
         index = random.randint(0, last)
         address = Address.objects.all()[index]
-        addresses.append({'address':str(address)})
+        addresses.append({
+            'test_id': address.test_id,
+            'address': address.address
+        })
     return JsonResponse(addresses, safe=False)

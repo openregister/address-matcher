@@ -10,6 +10,7 @@ import Json.Decode exposing (Decoder, (:=))
 import List exposing (..)
 
 
+main : Program Never
 main =
     App.program
         { init = init
@@ -99,9 +100,27 @@ testAddressDecoder =
     )
 
 
-fetchCandidates: TestAddress -> Task.Task Error Address
-fetchCandidates testAddress =
-    Task.succeed (Address testAddress [])
+candidateAddressesDecoder : Decoder (List CandidateAddress)
+candidateAddressesDecoder =
+    (Json.Decode.list
+        (Json.Decode.object2 CandidateAddress
+            ("address" := Json.Decode.string)
+            ("uprn" := Json.Decode.string)
+        )
+    )
+
+
+addCandidates : TestAddress -> Task.Task Error Address
+addCandidates testAddress =
+    let
+        candidatesLookupUrl =
+            url "/match/brain/" [ ( "q", testAddress.address ) ]
+    in
+        Task.map
+            (\candidates -> (Address testAddress candidates))
+            (fromJson candidateAddressesDecoder
+                (send defaultSettings (jsonGet candidatesLookupUrl))
+            )
 
 
 fetchAddresses : Cmd Msg
@@ -115,7 +134,7 @@ fetchAddresses =
 
         fetchAllCandidates : List TestAddress -> Task.Task Error (List Address)
         fetchAllCandidates testAddresses =
-            Task.sequence (List.map fetchCandidates testAddresses)
+            Task.sequence (List.map addCandidates testAddresses)
     in
         Task.perform
             FetchAddressesFail
@@ -166,14 +185,22 @@ update msg model =
 -- VIEW
 
 
-testAddress : TestAddress -> Html Msg
-testAddress address =
-    li [] [ address.address |> text ]
+candidate : CandidateAddress -> Html Msg
+candidate candidateAddress =
+    li [] [ candidateAddress.address |> text ]
 
 
--- testAddresses : TestAddresses -> Html Msg
--- testAddresses addresses =
---     ul [] (map testAddress addresses)
+address : Address -> Html Msg
+address address =
+    li []
+        [ address.test.address |> text
+        , ul [] (map candidate address.candidates)
+        ]
+
+
+addresses : List Address -> Html Msg
+addresses addresses =
+    ul [] (map address addresses)
 
 
 userOption : User -> Html Msg
@@ -197,6 +224,6 @@ view model =
     div []
         [ error model.error
         , usersDropdown model.users
-        -- , testAddresses model.testAddresses
+        , addresses model.addresses
           -- , div [] [ text (toString model) ]
         ]
