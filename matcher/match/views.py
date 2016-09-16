@@ -15,7 +15,7 @@ def index(request):
 
 def randomBool(dummy):
     rnd = randint(0,100)
-    return rnd > 20
+    return rnd > 50
 
 
 def degraded_address(address):
@@ -35,8 +35,7 @@ def brain(request):
             'address': address,
             'uprn': m.hexdigest()[:6]
         })
-
-
+    candidate_addresses.sort(lambda x,y: len(y['address'])-len(x['address']))
     return JsonResponse(candidate_addresses, safe=False)
 
 

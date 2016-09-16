@@ -187,7 +187,10 @@ update msg model =
 
 candidate : CandidateAddress -> Html Msg
 candidate candidateAddress =
-    li [] [ candidateAddress.address |> text ]
+    li []
+        [ small [] [ text candidateAddress.uprn ]
+        , text (" " ++ candidateAddress.address)
+        ]
 
 
 address : Address -> Html Msg
