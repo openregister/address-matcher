@@ -56,6 +56,19 @@ type alias Model =
     }
 
 
+
+-- Model transformation functions
+
+
+removeAddress : String -> List Address -> List Address
+removeAddress test_id list =
+    filter (\a -> a.test.id /= test_id ) list
+
+
+
+-- INIT
+
+
 init : ( Model, Cmd Msg )
 init =
     (Model Nothing "" [] []) ! [ fetchUsers, fetchAddresses ]
@@ -184,10 +197,9 @@ update msg model =
             ( { model | error = Just error }, Cmd.none )
 
         SelectCandidate ( selectedCandidateUprn, testId ) ->
-            let
-                _ = Debug.log "pair" (selectedCandidateUprn, testId )
-            in
-                ( model, Cmd.none )
+            ( { model | addresses = removeAddress testId model.addresses }
+            , Cmd.none
+            )
 
 
 -- VIEW
@@ -202,6 +214,7 @@ candidate candidate =
         li []
             [ input
                 [type' "checkbox"
+                , checked False
                 , onClick (SelectCandidate (candidateAddress.uprn, testId))
                 ] []
             , small [] [ text (candidateAddress.uprn) ]
@@ -248,4 +261,5 @@ view model =
         [ error model.error
         , usersDropdown model.users
         , addresses model.addresses
+        , div [] [ text (toString model) ]
         ]
