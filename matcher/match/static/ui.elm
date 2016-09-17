@@ -32,6 +32,7 @@ type alias User =
 
 type alias TestAddress =
     { address : String
+    , id : String
     }
 
 
@@ -94,8 +95,9 @@ usersDecoder =
 testAddressDecoder : Decoder (List TestAddress)
 testAddressDecoder =
     (Json.Decode.list
-        (Json.Decode.object1 TestAddress
+        (Json.Decode.object2 TestAddress
             ("address" := Json.Decode.string)
+            ("test_id" := Json.Decode.string)
         )
     )
 
@@ -154,6 +156,7 @@ type Msg
     | FetchAddresses
     | FetchAddressesOk (List Address)
     | FetchAddressesFail Http.Error
+    | SelectCandidate (String, String)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -180,25 +183,42 @@ update msg model =
         FetchAddressesFail error ->
             ( { model | error = Just error }, Cmd.none )
 
+        SelectCandidate ( selectedCandidateUprn, testId ) ->
+            let
+                _ = Debug.log "pair" (selectedCandidateUprn, testId )
+            in
+                ( model, Cmd.none )
 
 
 -- VIEW
 
 
-candidate : CandidateAddress -> Html Msg
-candidate candidateAddress =
-    li []
-        [ small [] [ text candidateAddress.uprn ]
-        , text (" " ++ candidateAddress.address)
-        ]
+candidate : (CandidateAddress, String) -> Html Msg
+candidate candidate =
+    let
+        candidateAddress = fst candidate
+        testId = snd candidate
+    in
+        li []
+            [ input
+                [type' "checkbox"
+                , onClick (SelectCandidate (candidateAddress.uprn, testId))
+                ] []
+            , small [] [ text (candidateAddress.uprn) ]
+            , text (" " ++ candidateAddress.address)
+            ]
 
 
 address : Address -> Html Msg
 address address =
-    li []
-        [ address.test.address |> text
-        , ul [] (map candidate address.candidates)
-        ]
+    let
+        addTestId : CandidateAddress -> ( CandidateAddress, String )
+        addTestId ca = (ca, address.test.id)
+    in
+        li []
+            [ (address.test.id ++ " -- " ++ address.test.address) |> text
+            , ul [] (map candidate (map addTestId address.candidates))
+            ]
 
 
 addresses : List Address -> Html Msg
@@ -228,5 +248,4 @@ view model =
         [ error model.error
         , usersDropdown model.users
         , addresses model.addresses
-          -- , div [] [ text (toString model) ]
         ]
