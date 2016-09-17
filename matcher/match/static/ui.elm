@@ -213,8 +213,8 @@ candidate candidate =
     in
         li []
             [ input
-                [type' "checkbox"
-                , checked False
+                [type' "button"
+                , value " "
                 , onClick (SelectCandidate (candidateAddress.uprn, testId))
                 ] []
             , small [] [ text (candidateAddress.uprn) ]
