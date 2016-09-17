@@ -217,8 +217,8 @@ candidate candidate =
                 , value " "
                 , onClick (SelectCandidate (candidateAddress.uprn, testId))
                 ] []
-            , small [] [ text (candidateAddress.uprn) ]
             , text (" " ++ candidateAddress.address)
+            , small [] [ text (" " ++ candidateAddress.uprn) ]
             ]
 
 
@@ -229,7 +229,7 @@ address address =
         addTestId ca = (ca, address.test.id)
     in
         li []
-            [ (address.test.id ++ " -- " ++ address.test.address) |> text
+            [ (address.test.address ++ " -- " ++ address.test.id) |> text
             , ul [] (map candidate (map addTestId address.candidates))
             ]
 
