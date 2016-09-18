@@ -8,6 +8,7 @@ import Task exposing (perform)
 import Http exposing (..)
 import Json.Decode exposing (Decoder, (:=))
 import List exposing (..)
+import String exposing (toInt)
 
 
 main : Program Never
@@ -22,7 +23,7 @@ main =
 
 apiUrl : String
 apiUrl =
-    "http://admin@aeropress:127.0.0.1:8000"
+    "http://localhost:8000"
 
 
 
@@ -31,13 +32,13 @@ apiUrl =
 
 type alias User =
     { name : String
-    , url : String
+    , id : Int
     }
 
 
 type alias TestAddress =
     { address : String
-    , id : String
+    , id : Int
     }
 
 
@@ -55,7 +56,7 @@ type alias Address =
 
 type alias Model =
     { error : Maybe Error
-    , currentUserUri : String
+    , currentUserId : Int
     , users : List User
     , addresses : List Address
     }
@@ -65,9 +66,9 @@ type alias Model =
 -- Model transformation functions
 
 
-removeAddress : String -> List Address -> List Address
-removeAddress test_id list =
-    filter (\a -> a.test.id /= test_id) list
+removeAddress : Int -> List Address -> List Address
+removeAddress testId list =
+    filter (\a -> a.test.id /= testId) list
 
 
 
@@ -76,7 +77,7 @@ removeAddress test_id list =
 
 init : ( Model, Cmd Msg )
 init =
-    (Model Nothing "" [] []) ! [ fetchUsers, fetchAddresses ]
+    (Model Nothing 0 [] []) ! [ fetchUsers, fetchAddresses ]
 
 
 
@@ -97,7 +98,9 @@ fetchUsers =
     Task.perform
         FetchUsersFail
         FetchUsersOk
-        (fromJson usersDecoder (send defaultSettings (jsonGet (apiUrl ++ "/match/users"))))
+        (fromJson usersDecoder
+            (send defaultSettings (jsonGet (apiUrl ++ "/match/users/")))
+        )
 
 
 usersDecoder : Decoder (List User)
@@ -105,7 +108,7 @@ usersDecoder =
     (Json.Decode.list
         (Json.Decode.object2 User
             ("name" := Json.Decode.string)
-            ("url" := Json.Decode.string)
+            ("id" := Json.Decode.int)
         )
     )
 
@@ -115,7 +118,7 @@ testAddressDecoder =
     (Json.Decode.list
         (Json.Decode.object2 TestAddress
             ("address" := Json.Decode.string)
-            ("test_id" := Json.Decode.string)
+            ("id" := Json.Decode.int)
         )
     )
 
@@ -149,7 +152,9 @@ fetchAddresses =
         fetchTests : Task.Task Error (List TestAddress)
         fetchTests =
             (fromJson testAddressDecoder
-                (send defaultSettings (jsonGet (apiUrl ++ "/match/test-addresses/?n=5")))
+                (send defaultSettings
+                    (jsonGet (apiUrl ++ "/match/test-addresses/?n=5"))
+                )
             )
 
         fetchAllCandidates : List TestAddress -> Task.Task Error (List Address)
@@ -162,18 +167,23 @@ fetchAddresses =
             (fetchTests `Task.andThen` fetchAllCandidates)
 
 
-sendMatch : Cmd Msg
-sendMatch =
-    Task.perform
-        sendMatchFail
-        sendMatchOk
-        (fromJson matchDecoder
-            (send defaultSettings (jsonPost (apiUrl ++ "/match/matches")))
-        )
+sendMatch : String -> Int -> Int -> Cmd Msg
+sendMatch uprn testId userId =
+    let
+        body =
+            multipart
+                [ stringData "uprn" uprn
+                , stringData "test_address" (toString testId)
+                , stringData "user" (toString userId)
+                ]
+    in
+        Task.perform
+            SendMatchFail
+            SendMatchOk
+            (post (Json.Decode.succeed "") (apiUrl ++ "/match/matches/") body)
 
 
 
--- curl -v -d uprn=23942d -d user="http://localhost:8000/match/users/11/" -d test_address="http://localhost:8000/match/addresses/9/"   http://admin:aeropress@127.0.0.1:8000/match/matches/
 -- UPDATE
 
 
@@ -185,7 +195,9 @@ type Msg
     | FetchAddresses
     | FetchAddressesOk (List Address)
     | FetchAddressesFail Http.Error
-    | SelectCandidate ( String, String )
+    | SelectCandidate ( String, Int )
+    | SendMatchFail Http.Error
+    | SendMatchOk String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -200,8 +212,11 @@ update msg model =
         FetchUsersFail error ->
             ( { model | error = Just error }, Cmd.none )
 
-        UserChange userUri ->
-            ( { model | currentUserUri = userUri }, Cmd.none )
+        UserChange newUserId ->
+            let
+                newUserIdAsInt = newUserId |> toInt |> Result.withDefault 0
+            in
+                ( { model | currentUserId = newUserIdAsInt }, Cmd.none )
 
         FetchAddresses ->
             ( model, fetchAddresses )
@@ -214,15 +229,21 @@ update msg model =
 
         SelectCandidate ( selectedCandidateUprn, testId ) ->
             ( { model | addresses = removeAddress testId model.addresses }
-            , sendMatch
+            , sendMatch selectedCandidateUprn testId model.currentUserId
             )
+
+        SendMatchOk result ->
+            ( model, Cmd.none )
+
+        SendMatchFail error ->
+            ( { model | error = Just error }, Cmd.none )
 
 
 
 -- VIEW
 
 
-candidate : ( CandidateAddress, String ) -> Html Msg
+candidate : ( CandidateAddress, Int ) -> Html Msg
 candidate candidate =
     let
         candidateAddress =
@@ -246,12 +267,12 @@ candidate candidate =
 address : Address -> Html Msg
 address address =
     let
-        addTestId : CandidateAddress -> ( CandidateAddress, String )
+        addTestId : CandidateAddress -> ( CandidateAddress, Int )
         addTestId ca =
             ( ca, address.test.id )
     in
         li []
-            [ (address.test.address ++ " -- " ++ address.test.id) |> text
+            [ (address.test.address) |> text
             , ul [] (map candidate (map addTestId address.candidates))
             ]
 
@@ -263,7 +284,7 @@ addresses addresses =
 
 userOption : User -> Html Msg
 userOption user =
-    option [ value user.url ] [ text user.name ]
+    option [ value (toString user.id) ] [ text user.name ]
 
 
 usersDropdown : List User -> Html Msg
@@ -279,9 +300,16 @@ error message =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ error model.error
-        , usersDropdown model.users
-        , addresses model.addresses
-        , div [] [ text (toString model) ]
-        ]
+    let
+        addressSection =
+            if model.currentUserId == 0 then
+                p [] [ text "Please select a user" ]
+            else
+                addresses model.addresses
+    in
+        div []
+            [ error model.error
+            , usersDropdown model.users
+            , addressSection
+              -- , div [] [ text (toString model) ]
+            ]

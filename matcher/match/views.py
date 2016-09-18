@@ -47,7 +47,7 @@ def random_test_addresses(request):
         index = random.randint(0, last)
         address = Address.objects.all()[index]
         addresses.append({
-            'test_id': address.test_id,
+            'id': address.id,
             'address': address.address
         })
     return JsonResponse(addresses, safe=False)
