@@ -20,6 +20,11 @@ main =
         }
 
 
+apiUrl : String
+apiUrl =
+    "http://admin@aeropress:127.0.0.1:8000"
+
+
 
 -- MODEL
 
@@ -62,7 +67,7 @@ type alias Model =
 
 removeAddress : String -> List Address -> List Address
 removeAddress test_id list =
-    filter (\a -> a.test.id /= test_id ) list
+    filter (\a -> a.test.id /= test_id) list
 
 
 
@@ -92,7 +97,7 @@ fetchUsers =
     Task.perform
         FetchUsersFail
         FetchUsersOk
-        (fromJson usersDecoder (send defaultSettings (jsonGet "/match/users")))
+        (fromJson usersDecoder (send defaultSettings (jsonGet (apiUrl ++ "/match/users"))))
 
 
 usersDecoder : Decoder (List User)
@@ -144,7 +149,7 @@ fetchAddresses =
         fetchTests : Task.Task Error (List TestAddress)
         fetchTests =
             (fromJson testAddressDecoder
-                (send defaultSettings (jsonGet "/match/test-addresses/?n=5"))
+                (send defaultSettings (jsonGet (apiUrl ++ "/match/test-addresses/?n=5")))
             )
 
         fetchAllCandidates : List TestAddress -> Task.Task Error (List Address)
@@ -157,7 +162,18 @@ fetchAddresses =
             (fetchTests `Task.andThen` fetchAllCandidates)
 
 
+sendMatch : Cmd Msg
+sendMatch =
+    Task.perform
+        sendMatchFail
+        sendMatchOk
+        (fromJson matchDecoder
+            (send defaultSettings (jsonPost (apiUrl ++ "/match/matches")))
+        )
 
+
+
+-- curl -v -d uprn=23942d -d user="http://localhost:8000/match/users/11/" -d test_address="http://localhost:8000/match/addresses/9/"   http://admin:aeropress@127.0.0.1:8000/match/matches/
 -- UPDATE
 
 
@@ -169,7 +185,7 @@ type Msg
     | FetchAddresses
     | FetchAddressesOk (List Address)
     | FetchAddressesFail Http.Error
-    | SelectCandidate (String, String)
+    | SelectCandidate ( String, String )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -198,25 +214,30 @@ update msg model =
 
         SelectCandidate ( selectedCandidateUprn, testId ) ->
             ( { model | addresses = removeAddress testId model.addresses }
-            , Cmd.none
+            , sendMatch
             )
+
 
 
 -- VIEW
 
 
-candidate : (CandidateAddress, String) -> Html Msg
+candidate : ( CandidateAddress, String ) -> Html Msg
 candidate candidate =
     let
-        candidateAddress = fst candidate
-        testId = snd candidate
+        candidateAddress =
+            fst candidate
+
+        testId =
+            snd candidate
     in
         li []
             [ input
-                [type' "button"
+                [ type' "button"
                 , value " "
-                , onClick (SelectCandidate (candidateAddress.uprn, testId))
-                ] []
+                , onClick (SelectCandidate ( candidateAddress.uprn, testId ))
+                ]
+                []
             , text (" " ++ candidateAddress.address)
             , small [] [ text (" " ++ candidateAddress.uprn) ]
             ]
@@ -226,7 +247,8 @@ address : Address -> Html Msg
 address address =
     let
         addTestId : CandidateAddress -> ( CandidateAddress, String )
-        addTestId ca = (ca, address.test.id)
+        addTestId ca =
+            ( ca, address.test.id )
     in
         li []
             [ (address.test.address ++ " -- " ++ address.test.id) |> text
