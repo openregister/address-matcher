@@ -1,8 +1,8 @@
 {% load static %}
 
 <div id='ui'></div>
-<script src='{% static "ui.js" %}'></script>
+<script src='{% static "elm.js" %}'></script>
 <script>
     var node = document.getElementById('ui');
-    var app = Elm.Ui.embed(node);
+    var app = Elm.Main.embed(node);
 </script>
