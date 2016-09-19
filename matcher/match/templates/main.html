@@ -1,4 +1,12 @@
+{% extends "base.html" %}
 {% load static %}
+
+
+{% block content %}
+
+<h1>Matcher</h1>
+
+<a href="{% url 'scores' %}">Scores</a>
 
 <div id='ui'></div>
 <script src='{% static "elm.js" %}'></script>
@@ -6,3 +14,5 @@
     var node = document.getElementById('ui');
     var app = Elm.Main.embed(node);
 </script>
+
+{% endblock %}

@@ -38,7 +38,7 @@ address address =
             ( ca, address.test.id )
     in
         li []
-            [ (address.test.address) |> text
+            [ p [ class "heading-medium" ] [(address.test.address) |> text]
             , ul [] (map candidate (map addTestId address.candidates))
             ]
 
@@ -60,8 +60,12 @@ usersDropdown users =
 
 
 error : Maybe Error -> Html Msg
-error message =
-    div [] [ text (toString message) ]
+error err =
+    case err of
+        Nothing ->
+            div [] []
+        Just message ->
+            div [] [ text (toString message) ]
 
 
 view : Model -> Html Msg

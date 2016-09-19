@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<a href="{% url 'main' %}">Main</a>
+
+<h1 class="heading-xlarge">Stats</h1>
+
+
+
+<h2 class="heading-large">Users</h2>
+
+<table>
+    <thead>
+        <tr><th>Name</th><th>Matches</th><th>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            <tr><td>{{ user.name }}</td><td>{{ user.score }}</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 class="heading-large">Test addresses</h2>
+
+<ul>
+    <li>{{ nb_addresses }} addresses</li>
+    <li>{{ nb_matches }} user matches</li>
+    <li>{{ nb_addresses_matched }} addresses matched</li>
+</ul>
+
+<h3 class="heading-medium">Top ambiguous addresses</h3>
+
+<table>
+    <thead>
+        <tr><th>Address</th><th>Matches</th><th>
+    </thead>
+    <tbody>
+        {% for address in matched_addresses %}
+            <tr>
+                <td>{{ address.address.test_id }}</td>
+                <td>{{ address.nb_matches }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
