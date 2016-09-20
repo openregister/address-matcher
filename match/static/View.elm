@@ -60,15 +60,19 @@ addresses addresses =
     ul [] (map address addresses)
 
 
-userOption : User -> Html Msg
-userOption user =
-    option [ value (toString user.id) ] [ text user.name ]
+userOption : Int -> User -> Html Msg
+userOption currentUserId user =
+    option
+        [ value (toString user.id), selected (user.id == currentUserId) ]
+        [ text user.name ]
 
 
-usersDropdown : List User -> Html Msg
-usersDropdown users =
+usersDropdown : Int -> List User -> Html Msg
+usersDropdown currentUserId users =
     select [ onInput UserChange ]
-        ((option [] [ text "Select a user" ]) :: (map userOption users))
+        ((option [] [ text "Select a user" ]) ::
+            (map (userOption currentUserId) users)
+        )
 
 
 error : Maybe Error -> Html Msg
@@ -76,6 +80,7 @@ error err =
     case err of
         Nothing ->
             div [] []
+
         Just message ->
             div [] [ text (toString message) ]
 
@@ -91,7 +96,7 @@ view model =
     in
         div []
             [ error model.error
-            , usersDropdown model.users
+            , usersDropdown model.currentUserId model.users
             , addressSection
               -- , div [] [ text (toString model) ]
             ]
