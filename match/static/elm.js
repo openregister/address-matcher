@@ -8939,6 +8939,31 @@ var _user$project$View$view = function (model) {
 			]));
 };
 
+var _user$project$Rest$sendMatch = F3(
+	function (uprn, testId, userId) {
+		var body = _evancz$elm_http$Http$multipart(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(_evancz$elm_http$Http$stringData, 'uprn', uprn),
+					A2(
+					_evancz$elm_http$Http$stringData,
+					'test_address',
+					_elm_lang$core$Basics$toString(testId)),
+					A2(
+					_evancz$elm_http$Http$stringData,
+					'user',
+					_elm_lang$core$Basics$toString(userId))
+				]));
+		return A3(
+			_elm_lang$core$Task$perform,
+			_user$project$State$SendMatchFail,
+			_user$project$State$SendMatchOk,
+			A3(
+				_evancz$elm_http$Http$post,
+				_elm_lang$core$Json_Decode$succeed(''),
+				'/match/matches/',
+				body));
+	});
 var _user$project$Rest$candidateAddressesDecoder = _elm_lang$core$Json_Decode$list(
 	A3(
 		_elm_lang$core$Json_Decode$object2,
@@ -8968,6 +8993,17 @@ var _user$project$Rest$jsonGet = function (url) {
 		body: _evancz$elm_http$Http$empty
 	};
 };
+var _user$project$Rest$fetchUsers = A3(
+	_elm_lang$core$Task$perform,
+	_user$project$State$FetchUsersFail,
+	_user$project$State$FetchUsersOk,
+	A2(
+		_evancz$elm_http$Http$fromJson,
+		_user$project$Rest$usersDecoder,
+		A2(
+			_evancz$elm_http$Http$send,
+			_evancz$elm_http$Http$defaultSettings,
+			_user$project$Rest$jsonGet('/match/users/'))));
 var _user$project$Rest$addCandidates = function (testAddress) {
 	var candidatesLookupUrl = A2(
 		_evancz$elm_http$Http$url,
@@ -8989,19 +9025,6 @@ var _user$project$Rest$addCandidates = function (testAddress) {
 				_evancz$elm_http$Http$defaultSettings,
 				_user$project$Rest$jsonGet(candidatesLookupUrl))));
 };
-var _user$project$Rest$apiUrl = 'http://localhost:8000';
-var _user$project$Rest$fetchUsers = A3(
-	_elm_lang$core$Task$perform,
-	_user$project$State$FetchUsersFail,
-	_user$project$State$FetchUsersOk,
-	A2(
-		_evancz$elm_http$Http$fromJson,
-		_user$project$Rest$usersDecoder,
-		A2(
-			_evancz$elm_http$Http$send,
-			_evancz$elm_http$Http$defaultSettings,
-			_user$project$Rest$jsonGet(
-				A2(_elm_lang$core$Basics_ops['++'], _user$project$Rest$apiUrl, '/match/users/')))));
 var _user$project$Rest$fetchAddresses = function () {
 	var fetchAllCandidates = function (testAddresses) {
 		return _elm_lang$core$Task$sequence(
@@ -9013,39 +9036,13 @@ var _user$project$Rest$fetchAddresses = function () {
 		A2(
 			_evancz$elm_http$Http$send,
 			_evancz$elm_http$Http$defaultSettings,
-			_user$project$Rest$jsonGet(
-				A2(_elm_lang$core$Basics_ops['++'], _user$project$Rest$apiUrl, '/match/test-addresses/?n=5'))));
+			_user$project$Rest$jsonGet('/match/test-addresses/?n=5')));
 	return A3(
 		_elm_lang$core$Task$perform,
 		_user$project$State$FetchAddressesFail,
 		_user$project$State$FetchAddressesOk,
 		A2(_elm_lang$core$Task$andThen, fetchTests, fetchAllCandidates));
 }();
-var _user$project$Rest$sendMatch = F3(
-	function (uprn, testId, userId) {
-		var body = _evancz$elm_http$Http$multipart(
-			_elm_lang$core$Native_List.fromArray(
-				[
-					A2(_evancz$elm_http$Http$stringData, 'uprn', uprn),
-					A2(
-					_evancz$elm_http$Http$stringData,
-					'test_address',
-					_elm_lang$core$Basics$toString(testId)),
-					A2(
-					_evancz$elm_http$Http$stringData,
-					'user',
-					_elm_lang$core$Basics$toString(userId))
-				]));
-		return A3(
-			_elm_lang$core$Task$perform,
-			_user$project$State$SendMatchFail,
-			_user$project$State$SendMatchOk,
-			A3(
-				_evancz$elm_http$Http$post,
-				_elm_lang$core$Json_Decode$succeed(''),
-				A2(_elm_lang$core$Basics_ops['++'], _user$project$Rest$apiUrl, '/match/matches/'),
-				body));
-	});
 
 var _user$project$Main$update = F2(
 	function (msg, model) {

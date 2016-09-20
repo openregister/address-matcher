@@ -76,16 +76,19 @@ WSGI_APPLICATION = 'matcher.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'matcher',
-        'USER': 'matcher',
-        'PASSWORD': 'matcher',
-        'HOST': 'localhost',
-        'PORT': ''
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'matcher',
+#         'USER': 'matcher',
+#         'PASSWORD': 'matcher',
+#         'HOST': 'localhost',
+#         'PORT': ''
+#     }
+# }
+
+import dj_database_url
+DATABASES = { 'default': dj_database_url.config() }
 
 
 # Password validation
@@ -129,9 +132,9 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(PROJECT_ROOT, 'static'),
+# )
 
 
 

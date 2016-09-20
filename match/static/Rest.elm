@@ -8,12 +8,6 @@ import List exposing (..)
 import State exposing (..)
 
 
-
-apiUrl : String
-apiUrl =
-    "http://localhost:8000"
-
-
 jsonGet : String -> Request
 jsonGet url =
     { verb = "GET"
@@ -29,7 +23,7 @@ fetchUsers =
         FetchUsersFail
         FetchUsersOk
         (fromJson usersDecoder
-            (send defaultSettings (jsonGet (apiUrl ++ "/match/users/")))
+            (send defaultSettings (jsonGet ("/match/users/")))
         )
 
 
@@ -83,7 +77,7 @@ fetchAddresses =
         fetchTests =
             (fromJson testAddressDecoder
                 (send defaultSettings
-                    (jsonGet (apiUrl ++ "/match/test-addresses/?n=5"))
+                    (jsonGet ("/match/test-addresses/?n=5"))
                 )
             )
 
@@ -110,6 +104,6 @@ sendMatch uprn testId userId =
         Task.perform
             SendMatchFail
             SendMatchOk
-            (post (Json.Decode.succeed "") (apiUrl ++ "/match/matches/") body)
+            (post (Json.Decode.succeed "") "/match/matches/" body)
 
 
