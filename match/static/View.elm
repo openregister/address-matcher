@@ -9,6 +9,17 @@ import List exposing (..)
 import State exposing (..)
 
 
+searchUrl : String -> String
+searchUrl search =
+    url "https://www.google.co.uk/search"
+        [ ("q", search) ]
+
+mapUrl : String -> String
+mapUrl search =
+    url "https://www.google.com/maps/embed/v1/place"
+        [ ( "key", "AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc" ), ("q", search) ]
+
+
 candidate : ( CandidateAddress, Int ) -> Html Msg
 candidate candidate =
     let
@@ -18,7 +29,7 @@ candidate candidate =
         testId =
             snd candidate
     in
-        li []
+        li [ style [ ("text-indent", "-20px" ) ] ]
             [ input
                 [ type' "button"
                 , value " "
@@ -27,9 +38,12 @@ candidate candidate =
                 []
             , text (" " ++ candidateAddress.address)
             , text " "
-            , small [] [ a [ href ("https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=" ++ candidateAddress.address), target "_blank" ] [ text "check on map" ] ]
+            , small []
+                [ a [ href (mapUrl candidateAddress.address)
+                , target "_blank"
+                ]
+                [ text "map⧉" ] ]
             ]
-
 
 address : Address -> Html Msg
 address address =
@@ -37,17 +51,31 @@ address address =
         addTestId : CandidateAddress -> ( CandidateAddress, Int )
         addTestId ca =
             ( ca, address.test.id )
-        notSureChoice = li []
+        notSureChoice = li [ style [ ( "text-indent", "-20px" ) ] ]
             [ input
                 [ type' "button"
                 , value " "
                 , onClick (NoMatch address.test.id)
                 ] []
-            , text " Pass ¯\\_(ツ)_/¯"
+            , span [ style [ ("font-weight", "bold" ) ] ]
+                [ text " Pass ¯\\_(ツ)_/¯" ]
             ]
+        testAddressHtml =
+            h2
+                [ class "heading-small" ]
+                [ text (address.test.address)
+                , br [] []
+                , a
+                    [ href (searchUrl address.test.address)
+                    , target "blank"
+                    , style [ ( "font-size", "70%" ) ]
+                    ]
+                    [ text "JFGI⧉" ]
+                ]
     in
-        li []
-            [ p [ class "heading-medium" ] [(address.test.address) |> text]
+        li [ style [ ("clear", "both" ), ( "margin-left", "20px" ) ] ]
+            [ testAddressHtml
+            , embeddedMap (Debug.log ">>" address.test.address)
             , ul []
                 (notSureChoice ::
                     (map candidate (map addTestId address.candidates))
@@ -84,13 +112,18 @@ error err =
         Just message ->
             div [] [ text (toString message) ]
 
+
 embeddedMap : String -> Html Msg
 embeddedMap search =
     iframe
-        [ width 400
+        [ width 300
         , height 400
-        , Html.Attributes.style [("border", "0")]
-        , src ("https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=" ++ search)
+        , style
+            [ ( "border", "0" )
+            , ( "float", "right" )
+            , ( "margin-bottom", "20px" )
+            ]
+        , src ("https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=" ++ search ++ ", United Kingdom")
         ] []
 
 
@@ -103,10 +136,9 @@ view model =
             else
                 addresses model.addresses
     in
-        div []
+        div [ style [ ("font-size", "80%") ]]
             [ error model.error
             , usersDropdown model.currentUserId model.users
-            -- , embeddedMap "51.638514,-0.467906"
             , addressSection
               -- , div [] [ text (toString model) ]
             ]

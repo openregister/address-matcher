@@ -9297,15 +9297,20 @@ var _user$project$View$embeddedMap = function (search) {
 		_elm_lang$html$Html$iframe,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$width(400),
+				_elm_lang$html$Html_Attributes$width(300),
 				_elm_lang$html$Html_Attributes$height(400),
 				_elm_lang$html$Html_Attributes$style(
 				_elm_lang$core$Native_List.fromArray(
 					[
-						{ctor: '_Tuple2', _0: 'border', _1: '0'}
+						{ctor: '_Tuple2', _0: 'border', _1: '0'},
+						{ctor: '_Tuple2', _0: 'float', _1: 'right'},
+						{ctor: '_Tuple2', _0: 'margin-bottom', _1: '20px'}
 					])),
 				_elm_lang$html$Html_Attributes$src(
-				A2(_elm_lang$core$Basics_ops['++'], 'https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=', search))
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=',
+					A2(_elm_lang$core$Basics_ops['++'], search, ', United Kingdom')))
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[]));
@@ -9370,13 +9375,29 @@ var _user$project$View$usersDropdown = F2(
 					_user$project$View$userOption(currentUserId),
 					users)));
 	});
+var _user$project$View$mapUrl = function (search) {
+	return A2(
+		_evancz$elm_http$Http$url,
+		'https://www.google.com/maps/embed/v1/place',
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{ctor: '_Tuple2', _0: 'key', _1: 'AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc'},
+				{ctor: '_Tuple2', _0: 'q', _1: search}
+			]));
+};
 var _user$project$View$candidate = function (candidate) {
 	var testId = _elm_lang$core$Basics$snd(candidate);
 	var candidateAddress = _elm_lang$core$Basics$fst(candidate);
 	return A2(
 		_elm_lang$html$Html$li,
 		_elm_lang$core$Native_List.fromArray(
-			[]),
+			[
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						{ctor: '_Tuple2', _0: 'text-indent', _1: '-20px'}
+					]))
+			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(
@@ -9405,21 +9426,69 @@ var _user$project$View$candidate = function (candidate) {
 						_elm_lang$core$Native_List.fromArray(
 							[
 								_elm_lang$html$Html_Attributes$href(
-								A2(_elm_lang$core$Basics_ops['++'], 'https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=', candidateAddress.address)),
+								_user$project$View$mapUrl(candidateAddress.address)),
 								_elm_lang$html$Html_Attributes$target('_blank')
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_elm_lang$html$Html$text('check on map')
+								_elm_lang$html$Html$text('map⧉')
 							]))
 					]))
 			]));
 };
+var _user$project$View$searchUrl = function (search) {
+	return A2(
+		_evancz$elm_http$Http$url,
+		'https://www.google.co.uk/search',
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{ctor: '_Tuple2', _0: 'q', _1: search}
+			]));
+};
 var _user$project$View$address = function (address) {
+	var testAddressHtml = A2(
+		_elm_lang$html$Html$h2,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('heading-small')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text(address.test.address),
+				A2(
+				_elm_lang$html$Html$br,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_elm_lang$html$Html$a,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$href(
+						_user$project$View$searchUrl(address.test.address)),
+						_elm_lang$html$Html_Attributes$target('blank'),
+						_elm_lang$html$Html_Attributes$style(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								{ctor: '_Tuple2', _0: 'font-size', _1: '70%'}
+							]))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('JFGI⧉')
+					]))
+			]));
 	var notSureChoice = A2(
 		_elm_lang$html$Html$li,
 		_elm_lang$core$Native_List.fromArray(
-			[]),
+			[
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						{ctor: '_Tuple2', _0: 'text-indent', _1: '-20px'}
+					]))
+			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(
@@ -9433,7 +9502,20 @@ var _user$project$View$address = function (address) {
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[])),
-				_elm_lang$html$Html$text(' Pass ¯\\_(ツ)_/¯')
+				A2(
+				_elm_lang$html$Html$span,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$style(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'}
+							]))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(' Pass ¯\\_(ツ)_/¯')
+					]))
 			]));
 	var addTestId = function (ca) {
 		return {ctor: '_Tuple2', _0: ca, _1: address.test.id};
@@ -9441,19 +9523,19 @@ var _user$project$View$address = function (address) {
 	return A2(
 		_elm_lang$html$Html$li,
 		_elm_lang$core$Native_List.fromArray(
-			[]),
+			[
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						{ctor: '_Tuple2', _0: 'clear', _1: 'both'},
+						{ctor: '_Tuple2', _0: 'margin-left', _1: '20px'}
+					]))
+			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				A2(
-				_elm_lang$html$Html$p,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('heading-medium')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text(address.test.address)
-					])),
+				testAddressHtml,
+				_user$project$View$embeddedMap(
+				A2(_elm_lang$core$Debug$log, '>>', address.test.address)),
 				A2(
 				_elm_lang$html$Html$ul,
 				_elm_lang$core$Native_List.fromArray(
@@ -9486,7 +9568,13 @@ var _user$project$View$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
-			[]),
+			[
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						{ctor: '_Tuple2', _0: 'font-size', _1: '80%'}
+					]))
+			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_user$project$View$error(model.error),

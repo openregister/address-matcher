@@ -13,11 +13,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # read a file and copy its contents as test addresses
 
+        Address.objects.all().delete()
+
         with open(options['filename'], 'r') as address_file:
             tsvin = csv.reader(address_file, delimiter='\t')
 
             for row in tsvin:
                 Address.objects.create(
                     test_id = row[0],
-                    address = ' // '.join(row[1:])
+                    address = ', '.join(row[1:])
                 )
