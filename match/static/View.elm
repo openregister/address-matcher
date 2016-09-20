@@ -26,7 +26,8 @@ candidate candidate =
                 ]
                 []
             , text (" " ++ candidateAddress.address)
-            , small [] [ text (" " ++ candidateAddress.uprn) ]
+            , text " "
+            , small [] [ a [ href "#" ] [ text "check on map" ] ]
             ]
 
 
