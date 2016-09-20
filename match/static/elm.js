@@ -9292,6 +9292,24 @@ var _user$project$State$FetchUsersOk = function (a) {
 };
 var _user$project$State$FetchUsers = {ctor: 'FetchUsers'};
 
+var _user$project$View$embeddedMap = function (search) {
+	return A2(
+		_elm_lang$html$Html$iframe,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$width(400),
+				_elm_lang$html$Html_Attributes$height(400),
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						{ctor: '_Tuple2', _0: 'border', _1: '0'}
+					])),
+				_elm_lang$html$Html_Attributes$src(
+				A2(_elm_lang$core$Basics_ops['++'], 'https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=', search))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
+};
 var _user$project$View$error = function (err) {
 	var _p0 = err;
 	if (_p0.ctor === 'Nothing') {
@@ -9386,7 +9404,9 @@ var _user$project$View$candidate = function (candidate) {
 						_elm_lang$html$Html$a,
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_elm_lang$html$Html_Attributes$href('#')
+								_elm_lang$html$Html_Attributes$href(
+								A2(_elm_lang$core$Basics_ops['++'], 'https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=', candidateAddress.address)),
+								_elm_lang$html$Html_Attributes$target('_blank')
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[

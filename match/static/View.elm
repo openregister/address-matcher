@@ -27,7 +27,7 @@ candidate candidate =
                 []
             , text (" " ++ candidateAddress.address)
             , text " "
-            , small [] [ a [ href "#" ] [ text "check on map" ] ]
+            , small [] [ a [ href ("https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=" ++ candidateAddress.address), target "_blank" ] [ text "check on map" ] ]
             ]
 
 
@@ -84,6 +84,15 @@ error err =
         Just message ->
             div [] [ text (toString message) ]
 
+embeddedMap : String -> Html Msg
+embeddedMap search =
+    iframe
+        [ width 400
+        , height 400
+        , Html.Attributes.style [("border", "0")]
+        , src ("https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=" ++ search)
+        ] []
+
 
 view : Model -> Html Msg
 view model =
@@ -97,6 +106,7 @@ view model =
         div []
             [ error model.error
             , usersDropdown model.currentUserId model.users
+            -- , embeddedMap "51.638514,-0.467906"
             , addressSection
               -- , div [] [ text (toString model) ]
             ]
