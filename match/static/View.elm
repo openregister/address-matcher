@@ -43,7 +43,7 @@ address address =
                 , value " "
                 , onClick (NoMatch address.test.id)
                 ] []
-            ,text " Pass"
+            , text " Pass ¯\\_(ツ)_/¯"
             ]
     in
         li []
@@ -85,7 +85,7 @@ view model =
     let
         addressSection =
             if model.currentUserId == 0 then
-                p [] [ text "Please select a user" ]
+                p [] [ text "Please tell me who you are" ]
             else
                 addresses model.addresses
     in
