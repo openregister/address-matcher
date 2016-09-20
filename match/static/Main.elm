@@ -65,6 +65,11 @@ update msg model =
             , Rest.sendMatch selectedCandidateUprn testId model.currentUserId
             )
 
+        NoMatch testId ->
+            ( { model | addresses = removeAddress testId model.addresses }
+            , Cmd.none
+            )
+
         SendMatchOk result ->
             ( model, Cmd.none )
 

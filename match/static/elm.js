@@ -8739,6 +8739,9 @@ var _user$project$State$SendMatchOk = function (a) {
 var _user$project$State$SendMatchFail = function (a) {
 	return {ctor: 'SendMatchFail', _0: a};
 };
+var _user$project$State$NoMatch = function (a) {
+	return {ctor: 'NoMatch', _0: a};
+};
 var _user$project$State$SelectCandidate = function (a) {
 	return {ctor: 'SelectCandidate', _0: a};
 };
@@ -8836,18 +8839,46 @@ var _user$project$View$candidate = function (candidate) {
 					[])),
 				_elm_lang$html$Html$text(
 				A2(_elm_lang$core$Basics_ops['++'], ' ', candidateAddress.address)),
+				_elm_lang$html$Html$text(' '),
 				A2(
 				_elm_lang$html$Html$small,
 				_elm_lang$core$Native_List.fromArray(
 					[]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text(
-						A2(_elm_lang$core$Basics_ops['++'], ' ', candidateAddress.uprn))
+						A2(
+						_elm_lang$html$Html$a,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$href('#')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('check on map')
+							]))
 					]))
 			]));
 };
 var _user$project$View$address = function (address) {
+	var notSureChoice = A2(
+		_elm_lang$html$Html$li,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$input,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$type$('button'),
+						_elm_lang$html$Html_Attributes$value(' '),
+						_elm_lang$html$Html_Events$onClick(
+						_user$project$State$NoMatch(address.test.id))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				_elm_lang$html$Html$text(' Pass')
+			]));
 	var addTestId = function (ca) {
 		return {ctor: '_Tuple2', _0: ca, _1: address.test.id};
 	};
@@ -8872,9 +8903,12 @@ var _user$project$View$address = function (address) {
 				_elm_lang$core$Native_List.fromArray(
 					[]),
 				A2(
-					_elm_lang$core$List$map,
-					_user$project$View$candidate,
-					A2(_elm_lang$core$List$map, addTestId, address.candidates)))
+					_elm_lang$core$List_ops['::'],
+					notSureChoice,
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$View$candidate,
+						A2(_elm_lang$core$List$map, addTestId, address.candidates))))
 			]));
 };
 var _user$project$View$addresses = function (addresses) {
@@ -9079,6 +9113,16 @@ var _user$project$Main$update = F2(
 							addresses: A2(_user$project$State$removeAddress, _p1, model.addresses)
 						}),
 					_1: A3(_user$project$Rest$sendMatch, _p0._0._0, _p1, model.currentUserId)
+				};
+			case 'NoMatch':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							addresses: A2(_user$project$State$removeAddress, _p0._0, model.addresses)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'SendMatchOk':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};

@@ -47,6 +47,7 @@ type Msg
     | FetchAddressesOk (List Address)
     | FetchAddressesFail Http.Error
     | SelectCandidate ( String, Int )
+    | NoMatch Int
     | SendMatchFail Http.Error
     | SendMatchOk String
 

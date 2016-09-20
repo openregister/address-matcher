@@ -37,10 +37,21 @@ address address =
         addTestId : CandidateAddress -> ( CandidateAddress, Int )
         addTestId ca =
             ( ca, address.test.id )
+        notSureChoice = li []
+            [ input
+                [ type' "button"
+                , value " "
+                , onClick (NoMatch address.test.id)
+                ] []
+            ,text " Pass"
+            ]
     in
         li []
             [ p [ class "heading-medium" ] [(address.test.address) |> text]
-            , ul [] (map candidate (map addTestId address.candidates))
+            , ul []
+                (notSureChoice ::
+                    (map candidate (map addTestId address.candidates))
+                )
             ]
 
 
