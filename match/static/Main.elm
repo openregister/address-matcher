@@ -25,7 +25,7 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    (Model Nothing 0 [] []) ! [ Rest.fetchUsers, Rest.fetchAddresses ]
+    (Model Nothing 0 [] []) ! [ Rest.fetchUsers ]
 
 
 
@@ -49,7 +49,9 @@ update msg model =
             let
                 newUserIdAsInt = newUserId |> toInt |> Result.withDefault 0
             in
-                ( { model | currentUserId = newUserIdAsInt }, Cmd.none )
+                ( { model | currentUserId = newUserIdAsInt }
+                , Rest.fetchAddresses
+                )
 
         FetchAddresses ->
             ( model, Rest.fetchAddresses )
