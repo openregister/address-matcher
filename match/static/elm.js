@@ -9703,7 +9703,26 @@ var _user$project$View$view = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_elm_lang$html$Html$text('Please tell me who you are')
-			])) : _user$project$View$addresses(model.addresses);
+			])) : (_elm_lang$core$Native_Utils.eq(
+		model.addresses,
+		_elm_lang$core$Native_List.fromArray(
+			[])) ? A2(
+		_elm_lang$html$Html$p,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$State$FetchAddresses)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('More!')
+					]))
+			])) : _user$project$View$addresses(model.addresses));
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(

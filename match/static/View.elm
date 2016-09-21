@@ -151,7 +151,11 @@ view model =
             if model.currentUserId == 0 then
                 p [] [ text "Please tell me who you are" ]
             else
-                addresses model.addresses
+                if model.addresses == [] then
+                    p []
+                    [ button [ onClick FetchAddresses ][ text "More!" ] ]
+                else
+                    addresses model.addresses
     in
         div [ style [ ("font-size", "90%") ]]
             [ error model.error
