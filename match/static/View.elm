@@ -5,6 +5,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http exposing (..)
 import List exposing (..)
+import InlineHover exposing (hover)
 
 import State exposing (..)
 
@@ -29,21 +30,28 @@ candidate candidate =
         testId =
             snd candidate
     in
-        li [ style [ ("text-indent", "-20px" ) ] ]
-            [ input
-                [ type' "button"
-                , value " "
+        hover
+            [ ( "border", "3px solid red" )
+            , ( "border-radius", "10px" )
+            ]
+            li
+                [ style
+                    [ ("border", "3px solid white" )
+                    , ( "padding-left", ".2em" )
+                    ]
                 , onClick (SelectCandidate ( candidateAddress.uprn, testId ))
                 ]
-                []
-            , text (" " ++ candidateAddress.address)
-            , text " "
-            , small []
-                [ a [ href (mapUrl candidateAddress.address)
-                , target "_blank"
+                [ text (" " ++ candidateAddress.address)
+                , text " "
+                , small []
+                    [ a
+                        [ href (mapUrl candidateAddress.address)
+                        , target "_blank"
+                        ]
+                        [ text "map⧉" ]
+                    ]
                 ]
-                [ text "map⧉" ] ]
-            ]
+
 
 address : Address -> Html Msg
 address address =
@@ -51,15 +59,24 @@ address address =
         addTestId : CandidateAddress -> ( CandidateAddress, Int )
         addTestId ca =
             ( ca, address.test.id )
-        notSureChoice = li [ style [ ( "text-indent", "-20px" ) ] ]
-            [ input
-                [ type' "button"
-                , value " "
-                , onClick (NoMatch address.test.id)
-                ] []
-            , span [ style [ ("font-weight", "bold" ) ] ]
-                [ text " Pass ¯\\_(ツ)_/¯" ]
-            ]
+        notSureChoice =
+            hover
+                [ ( "border", "3px solid red" )
+                , ( "border-radius", "10px" )
+                ]
+                li
+                    [ style
+                        [ ( "border", "3px solid white" )
+                        , ( "padding-left", ".2em" )
+                        ]
+                    , onClick (NoMatch address.test.id)
+                    ]
+                    [ span
+                        [ style
+                            [ ("font-weight", "bold" ) ]
+                        ]
+                        [ text " Pass ¯\\_(ツ)_/¯" ]
+                    ]
         testAddressHtml =
             h2
                 [ class "heading-small" ]
@@ -68,14 +85,14 @@ address address =
                 , a
                     [ href (searchUrl address.test.address)
                     , target "blank"
-                    , style [ ( "font-size", "70%" ) ]
                     ]
                     [ text "JFGI⧉" ]
                 ]
     in
-        li [ style [ ("clear", "both" ), ( "margin-left", "20px" ) ] ]
+        li
+            [ style [ ( "clear", "both" ) ] ]
             [ testAddressHtml
-            , embeddedMap (Debug.log ">>" address.test.address)
+            , embeddedMap address.test.address
             , ul []
                 (notSureChoice ::
                     (map candidate (map addTestId address.candidates))
@@ -136,7 +153,7 @@ view model =
             else
                 addresses model.addresses
     in
-        div [ style [ ("font-size", "80%") ]]
+        div [ style [ ("font-size", "90%") ]]
             [ error model.error
             , usersDropdown model.currentUserId model.users
             , addressSection

@@ -9233,6 +9233,156 @@ var _evancz$elm_http$Http$post = F3(
 			A2(_evancz$elm_http$Http$send, _evancz$elm_http$Http$defaultSettings, request));
 	});
 
+var _jinjor$elm_inline_hover$InlineHover$isValidChars = function (list) {
+	isValidChars:
+	while (true) {
+		var _p0 = list;
+		if (_p0.ctor === '::') {
+			var _p1 = _p0._0;
+			if (_elm_lang$core$Char$isLower(_p1) || _elm_lang$core$Native_Utils.eq(
+				_p1,
+				_elm_lang$core$Native_Utils.chr('-'))) {
+				var _v1 = _p0._1;
+				list = _v1;
+				continue isValidChars;
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+};
+var _jinjor$elm_inline_hover$InlineHover$isValidKey = function (s) {
+	return (!_elm_lang$core$Native_Utils.eq(s, '')) && (A2(
+		_elm_lang$core$List$any,
+		_elm_lang$core$Char$isLower,
+		_elm_lang$core$String$toList(s)) && A2(
+		_elm_lang$core$List$all,
+		function (c) {
+			return _elm_lang$core$Char$isLower(c) || _elm_lang$core$Native_Utils.eq(
+				c,
+				_elm_lang$core$Native_Utils.chr('-'));
+		},
+		_elm_lang$core$String$toList(s)));
+};
+var _jinjor$elm_inline_hover$InlineHover$toCamelCase = function (s) {
+	return _elm_lang$core$String$fromList(
+		_elm_lang$core$List$reverse(
+			_elm_lang$core$Basics$snd(
+				A3(
+					_elm_lang$core$List$foldl,
+					F2(
+						function (c, _p2) {
+							var _p3 = _p2;
+							var _p4 = _p3._1;
+							return _elm_lang$core$Native_Utils.eq(
+								c,
+								_elm_lang$core$Native_Utils.chr('-')) ? {ctor: '_Tuple2', _0: true, _1: _p4} : (_p3._0 ? {
+								ctor: '_Tuple2',
+								_0: false,
+								_1: A2(
+									_elm_lang$core$List_ops['::'],
+									_elm_lang$core$Char$toUpper(c),
+									_p4)
+							} : {
+								ctor: '_Tuple2',
+								_0: false,
+								_1: A2(_elm_lang$core$List_ops['::'], c, _p4)
+							});
+						}),
+					{
+						ctor: '_Tuple2',
+						_0: false,
+						_1: _elm_lang$core$Native_List.fromArray(
+							[])
+					},
+					_elm_lang$core$String$toList(s)))));
+};
+var _jinjor$elm_inline_hover$InlineHover$enterEach = function (_p5) {
+	var _p6 = _p5;
+	var _p8 = _p6._0;
+	var escapedValue = function (_p7) {
+		return A2(
+			_elm_lang$core$String$join,
+			'\"',
+			A2(_elm_lang$core$String$split, '\'', _p7));
+	}(_p6._1);
+	var keyCamel = _jinjor$elm_inline_hover$InlineHover$toCamelCase(_p8);
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'this.setAttribute(\'data-hover-',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_p8,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'\', this.style.',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					keyCamel,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'||\'\');',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'this.style.',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								keyCamel,
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									'=\'',
+									A2(_elm_lang$core$Basics_ops['++'], escapedValue, '\'')))))))));
+};
+var _jinjor$elm_inline_hover$InlineHover$leaveEach = function (_p9) {
+	var _p10 = _p9;
+	var _p11 = _p10._0;
+	var keyCamel = _jinjor$elm_inline_hover$InlineHover$toCamelCase(_p11);
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'this.style.',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			keyCamel,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'=this.getAttribute(\'data-hover-',
+				A2(_elm_lang$core$Basics_ops['++'], _p11, '\')||\'\';'))));
+};
+var _jinjor$elm_inline_hover$InlineHover$hover = F4(
+	function (styles, tag, attrs, children) {
+		var validStyles = A2(
+			_elm_lang$core$List$filter,
+			function (_p12) {
+				var _p13 = _p12;
+				return _jinjor$elm_inline_hover$InlineHover$isValidKey(_p13._0);
+			},
+			styles);
+		var enter = A2(
+			_elm_lang$html$Html_Attributes$attribute,
+			'onmouseenter',
+			A2(
+				_elm_lang$core$String$join,
+				';',
+				A2(_elm_lang$core$List$map, _jinjor$elm_inline_hover$InlineHover$enterEach, validStyles)));
+		var leave = A2(
+			_elm_lang$html$Html_Attributes$attribute,
+			'onmouseleave',
+			A2(
+				_elm_lang$core$String$join,
+				';',
+				A2(_elm_lang$core$List$map, _jinjor$elm_inline_hover$InlineHover$leaveEach, validStyles)));
+		return A2(
+			tag,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Native_List.fromArray(
+					[enter, leave]),
+				attrs),
+			children);
+	});
+
 var _user$project$State$removeAddress = F2(
 	function (testId, list) {
 		return A2(
@@ -9388,30 +9538,28 @@ var _user$project$View$mapUrl = function (search) {
 var _user$project$View$candidate = function (candidate) {
 	var testId = _elm_lang$core$Basics$snd(candidate);
 	var candidateAddress = _elm_lang$core$Basics$fst(candidate);
-	return A2(
+	return A4(
+		_jinjor$elm_inline_hover$InlineHover$hover,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{ctor: '_Tuple2', _0: 'border', _1: '3px solid red'},
+				{ctor: '_Tuple2', _0: 'border-radius', _1: '10px'}
+			]),
 		_elm_lang$html$Html$li,
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_elm_lang$html$Html_Attributes$style(
 				_elm_lang$core$Native_List.fromArray(
 					[
-						{ctor: '_Tuple2', _0: 'text-indent', _1: '-20px'}
-					]))
+						{ctor: '_Tuple2', _0: 'border', _1: '3px solid white'},
+						{ctor: '_Tuple2', _0: 'padding-left', _1: '.2em'}
+					])),
+				_elm_lang$html$Html_Events$onClick(
+				_user$project$State$SelectCandidate(
+					{ctor: '_Tuple2', _0: candidateAddress.uprn, _1: testId}))
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				A2(
-				_elm_lang$html$Html$input,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$type$('button'),
-						_elm_lang$html$Html_Attributes$value(' '),
-						_elm_lang$html$Html_Events$onClick(
-						_user$project$State$SelectCandidate(
-							{ctor: '_Tuple2', _0: candidateAddress.uprn, _1: testId}))
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[])),
 				_elm_lang$html$Html$text(
 				A2(_elm_lang$core$Basics_ops['++'], ' ', candidateAddress.address)),
 				_elm_lang$html$Html$text(' '),
@@ -9467,41 +9615,34 @@ var _user$project$View$address = function (address) {
 					[
 						_elm_lang$html$Html_Attributes$href(
 						_user$project$View$searchUrl(address.test.address)),
-						_elm_lang$html$Html_Attributes$target('blank'),
-						_elm_lang$html$Html_Attributes$style(
-						_elm_lang$core$Native_List.fromArray(
-							[
-								{ctor: '_Tuple2', _0: 'font-size', _1: '70%'}
-							]))
+						_elm_lang$html$Html_Attributes$target('blank')
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$html$Html$text('JFGI⧉')
 					]))
 			]));
-	var notSureChoice = A2(
+	var notSureChoice = A4(
+		_jinjor$elm_inline_hover$InlineHover$hover,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{ctor: '_Tuple2', _0: 'border', _1: '3px solid red'},
+				{ctor: '_Tuple2', _0: 'border-radius', _1: '10px'}
+			]),
 		_elm_lang$html$Html$li,
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_elm_lang$html$Html_Attributes$style(
 				_elm_lang$core$Native_List.fromArray(
 					[
-						{ctor: '_Tuple2', _0: 'text-indent', _1: '-20px'}
-					]))
+						{ctor: '_Tuple2', _0: 'border', _1: '3px solid white'},
+						{ctor: '_Tuple2', _0: 'padding-left', _1: '.2em'}
+					])),
+				_elm_lang$html$Html_Events$onClick(
+				_user$project$State$NoMatch(address.test.id))
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				A2(
-				_elm_lang$html$Html$input,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$type$('button'),
-						_elm_lang$html$Html_Attributes$value(' '),
-						_elm_lang$html$Html_Events$onClick(
-						_user$project$State$NoMatch(address.test.id))
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[])),
 				A2(
 				_elm_lang$html$Html$span,
 				_elm_lang$core$Native_List.fromArray(
@@ -9527,15 +9668,13 @@ var _user$project$View$address = function (address) {
 				_elm_lang$html$Html_Attributes$style(
 				_elm_lang$core$Native_List.fromArray(
 					[
-						{ctor: '_Tuple2', _0: 'clear', _1: 'both'},
-						{ctor: '_Tuple2', _0: 'margin-left', _1: '20px'}
+						{ctor: '_Tuple2', _0: 'clear', _1: 'both'}
 					]))
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
 				testAddressHtml,
-				_user$project$View$embeddedMap(
-				A2(_elm_lang$core$Debug$log, '>>', address.test.address)),
+				_user$project$View$embeddedMap(address.test.address),
 				A2(
 				_elm_lang$html$Html$ul,
 				_elm_lang$core$Native_List.fromArray(
@@ -9572,7 +9711,7 @@ var _user$project$View$view = function (model) {
 				_elm_lang$html$Html_Attributes$style(
 				_elm_lang$core$Native_List.fromArray(
 					[
-						{ctor: '_Tuple2', _0: 'font-size', _1: '80%'}
+						{ctor: '_Tuple2', _0: 'font-size', _1: '90%'}
 					]))
 			]),
 		_elm_lang$core$Native_List.fromArray(
