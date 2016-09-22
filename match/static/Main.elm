@@ -34,8 +34,7 @@ init result =
             else
                 [ Rest.fetchUsers, Rest.fetchAddresses ]
     in
-        (Model 0 NotAsked NotAsked) ! initCmd
-
+        (Model 0 Loading NotAsked) ! initCmd
 
 
 -- Page URL Stuff
