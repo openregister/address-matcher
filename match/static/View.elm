@@ -6,19 +6,19 @@ import Html.Events exposing (..)
 import Http exposing (..)
 import List exposing (..)
 import InlineHover exposing (hover)
-
 import State exposing (..)
 
 
 searchUrl : String -> String
 searchUrl search =
     url "https://www.google.co.uk/search"
-        [ ("q", search) ]
+        [ ( "q", search ) ]
+
 
 mapUrl : String -> String
 mapUrl search =
     url "https://www.google.com/maps/embed/v1/place"
-        [ ( "key", "AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc" ), ("q", search) ]
+        [ ( "key", "AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc" ), ( "q", search ) ]
 
 
 candidate : ( CandidateAddress, Int ) -> Html Msg
@@ -35,22 +35,22 @@ candidate candidate =
             , ( "border-radius", "10px" )
             ]
             li
-                [ style
-                    [ ("border", "3px solid white" )
-                    , ( "padding-left", ".2em" )
-                    ]
-                , onClick (SelectCandidate ( candidateAddress.uprn, testId ))
+            [ style
+                [ ( "border", "3px solid white" )
+                , ( "padding-left", ".2em" )
                 ]
-                [ text (" " ++ candidateAddress.address)
-                , text " "
-                , small []
-                    [ a
-                        [ href (mapUrl candidateAddress.address)
-                        , target "_blank"
-                        ]
-                        [ text "map⧉" ]
+            , onClick (SelectCandidate ( candidateAddress.uprn, testId ))
+            ]
+            [ text (" " ++ candidateAddress.address)
+            , text " "
+            , small []
+                [ a
+                    [ href (mapUrl candidateAddress.address)
+                    , target "_blank"
                     ]
+                    [ text "map⧉" ]
                 ]
+            ]
 
 
 address : Address -> Html Msg
@@ -59,24 +59,26 @@ address address =
         addTestId : CandidateAddress -> ( CandidateAddress, Int )
         addTestId ca =
             ( ca, address.test.id )
+
         notSureChoice =
             hover
                 [ ( "border", "3px solid red" )
                 , ( "border-radius", "10px" )
                 ]
                 li
+                [ style
+                    [ ( "border", "3px solid white" )
+                    , ( "padding-left", ".2em" )
+                    ]
+                , onClick (NoMatch address.test.id)
+                ]
+                [ span
                     [ style
-                        [ ( "border", "3px solid white" )
-                        , ( "padding-left", ".2em" )
-                        ]
-                    , onClick (NoMatch address.test.id)
+                        [ ( "font-weight", "bold" ) ]
                     ]
-                    [ span
-                        [ style
-                            [ ("font-weight", "bold" ) ]
-                        ]
-                        [ text " Pass ¯\\_(ツ)_/¯" ]
-                    ]
+                    [ text " Pass ¯\\_(ツ)_/¯" ]
+                ]
+
         testAddressHtml =
             h2
                 [ class "heading-small" ]
@@ -94,8 +96,8 @@ address address =
             [ testAddressHtml
             , embeddedMap address.test.address
             , ul []
-                (notSureChoice ::
-                    (map candidate (map addTestId address.candidates))
+                (notSureChoice
+                    :: (map candidate (map addTestId address.candidates))
                 )
             ]
 
@@ -112,12 +114,38 @@ userOption currentUserId user =
         [ text user.name ]
 
 
-usersDropdown : Int -> List User -> Html Msg
-usersDropdown currentUserId users =
+userSelect : Int -> List User -> Html Msg
+userSelect currentUserId users =
     select [ onInput UserChange ]
-        ((option [] [ text "Select a user" ]) ::
-            (map (userOption currentUserId) users)
+        ((option [] [ text "Select a user" ])
+            :: (map (userOption currentUserId) users)
         )
+
+
+usersSection : Int -> Users -> Html Msg
+usersSection currentUserId users =
+    case users of
+        NotAsked ->
+            p [] [ text "Users not fetched " ]
+
+        Loading ->
+            p [] [ text "Loading users" ]
+
+        Success userList ->
+            let
+                message =
+                    if currentUserId == 0 then
+                        "Please tell me who you are:"
+                    else
+                        "Current user:"
+            in
+                div []
+                    [ p [] [ text message ]
+                    , userSelect currentUserId userList
+                    ]
+
+        Failure error ->
+            p [] [ text ("Error loading user data: " ++ (error |> toString)) ]
 
 
 error : Maybe Error -> Html Msg
@@ -140,26 +168,36 @@ embeddedMap search =
             , ( "float", "right" )
             , ( "margin-bottom", "20px" )
             ]
-        , src ("https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=" ++ search ++ ", United Kingdom")
-        ] []
+        , src (mapUrl (search ++ ", United Kingdom"))
+        ]
+        []
 
 
 view : Model -> Html Msg
 view model =
     let
+        addressSection : Html Msg
         addressSection =
             if model.currentUserId == 0 then
-                p [] [ text "Please tell me who you are" ]
+                p [] []
             else
-                if model.addresses == [] then
-                    p []
-                    [ button [ onClick FetchAddresses ][ text "More!" ] ]
-                else
-                    addresses model.addresses
+                case model.addresses of
+                    Success listAddresses ->
+                        if listAddresses == [] then
+                            p []
+                                [ button
+                                    [ onClick FetchAddresses ]
+                                    [ text "More!" ]
+                                ]
+                        else
+                            addresses listAddresses
+
+                    _ ->
+                        p [] [ text "No addresses" ]
     in
-        div [ style [ ("font-size", "90%") ]]
-            [ error model.error
-            , usersDropdown model.currentUserId model.users
+        div
+            [ style [ ( "font-size", "90%" ) ] ]
+            [ usersSection model.currentUserId model.users
             , addressSection
               -- , div [] [ text (toString model) ]
             ]

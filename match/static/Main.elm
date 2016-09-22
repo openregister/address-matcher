@@ -1,6 +1,5 @@
 module Main exposing (..)
 
-import Html.App as App
 import String exposing (toInt)
 import Navigation
 import State exposing (..)
@@ -35,7 +34,7 @@ init result =
             else
                 [ Rest.fetchUsers, Rest.fetchAddresses ]
     in
-        (Model Nothing userId [] []) ! initCmd
+        (Model 0 NotAsked NotAsked) ! initCmd
 
 
 
@@ -80,45 +79,63 @@ urlUpdate result model =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        FetchUsers ->
-            ( model, Rest.fetchUsers )
+    let
+        users : Users
+        users =
+            model.users
 
-        FetchUsersOk users ->
-            ( { model | users = users }, Cmd.none )
+        addresses : Addresses
+        addresses =
+            model.addresses
+    in
+        case msg of
+            FetchUsers ->
+                ( { model | users = Loading }
+                , Rest.fetchUsers
+                )
 
-        FetchUsersFail error ->
-            ( { model | error = Just error }, Cmd.none )
+            FetchUsersOk newUserList ->
+                ( { model | users = Success newUserList }, Cmd.none )
 
-        UserChange newUserId ->
-            let
-                newUserIdAsInt =
-                    newUserId |> toInt |> Result.withDefault 0
-            in
-                { model | currentUserId = newUserIdAsInt }
-                    ! [ updateUrl newUserIdAsInt, Rest.fetchAddresses ]
+            FetchUsersFail error ->
+                ( { model | users = Failure error }, Cmd.none )
 
-        FetchAddresses ->
-            ( model, Rest.fetchAddresses )
+            UserChange newUserId ->
+                let
+                    newUserIdAsInt =
+                        newUserId |> toInt |> Result.withDefault 0
+                in
+                    { model | currentUserId = newUserIdAsInt }
+                        ! [ updateUrl newUserIdAsInt, Rest.fetchAddresses ]
 
-        FetchAddressesOk addresses ->
-            ( { model | addresses = addresses }, Cmd.none )
+            FetchAddresses ->
+                ( { model | addresses = Loading }, Rest.fetchAddresses )
 
-        FetchAddressesFail error ->
-            ( { model | error = Just error }, Cmd.none )
+            FetchAddressesOk newAddresses ->
+                ( { model | addresses = Success newAddresses }, Cmd.none )
 
-        SelectCandidate ( selectedCandidateUprn, testId ) ->
-            ( { model | addresses = removeAddress testId model.addresses }
-            , Rest.sendMatch selectedCandidateUprn testId model.currentUserId
-            )
+            FetchAddressesFail error ->
+                ( { model | addresses = Failure error }, Cmd.none )
 
-        NoMatch testId ->
-            ( { model | addresses = removeAddress testId model.addresses }
-            , Cmd.none
-            )
+            SelectCandidate ( selectedCandidateUprn, testId ) ->
+                ( { model | addresses = removeAddress testId model.addresses }
+                , Rest.sendMatch
+                    selectedCandidateUprn
+                    testId
+                    model.currentUserId
+                )
 
-        SendMatchOk result ->
-            ( model, Cmd.none )
+            NoMatch testId ->
+                ( { model | addresses = removeAddress testId model.addresses }
+                , Cmd.none
+                )
 
-        SendMatchFail error ->
-            ( { model | error = Just error }, Cmd.none )
+            SendMatchOk result ->
+                ( model, Cmd.none )
+
+            SendMatchFail error ->
+                ( model, Cmd.none )
+
+
+
+-- FIXME

@@ -4,11 +4,25 @@ import Http exposing (..)
 import List exposing (..)
 
 
+type RemoteData error data
+    = NotAsked
+    | Loading
+    | Success data
+    | Failure error
+
+
+
+-- User types
+
 
 type alias User =
     { name : String
     , id : Int
     }
+
+
+
+-- Address types
 
 
 type alias TestAddress =
@@ -29,13 +43,23 @@ type alias Address =
     }
 
 
-type alias Model =
-    { error : Maybe Error
-    , currentUserId : Int
-    , users : List User
-    , addresses : List Address
-    }
+type alias Addresses =
+    RemoteData Http.Error (List Address)
 
+
+type alias Users =
+    RemoteData Http.Error (List User)
+
+
+
+-- Model
+
+
+type alias Model =
+    { currentUserId : Int
+    , users : Users
+    , addresses : Addresses
+    }
 
 
 type Msg
@@ -52,10 +76,15 @@ type Msg
     | SendMatchOk String
 
 
+
 -- Model transformation functions
 
 
-removeAddress : Int -> List Address -> List Address
-removeAddress testId list =
-    filter (\a -> a.test.id /= testId) list
+removeAddress : Int -> Addresses -> Addresses
+removeAddress testId addresses =
+    case addresses of
+        Success list ->
+            Success (filter (\a -> a.test.id /= testId) list)
 
+        _ ->
+            addresses

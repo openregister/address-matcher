@@ -4,7 +4,6 @@ import Task exposing (perform)
 import Http exposing (..)
 import Json.Decode exposing (Decoder, (:=))
 import List exposing (..)
-
 import State exposing (..)
 
 
@@ -105,5 +104,3 @@ sendMatch uprn testId userId =
             SendMatchFail
             SendMatchOk
             (post (Json.Decode.succeed "") "/match/matches/" body)
-
-

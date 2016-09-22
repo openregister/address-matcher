@@ -9383,15 +9383,6 @@ var _jinjor$elm_inline_hover$InlineHover$hover = F4(
 			children);
 	});
 
-var _user$project$State$removeAddress = F2(
-	function (testId, list) {
-		return A2(
-			_elm_lang$core$List$filter,
-			function (a) {
-				return !_elm_lang$core$Native_Utils.eq(a.test.id, testId);
-			},
-			list);
-	});
 var _user$project$State$User = F2(
 	function (a, b) {
 		return {name: a, id: b};
@@ -9408,10 +9399,33 @@ var _user$project$State$Address = F2(
 	function (a, b) {
 		return {test: a, candidates: b};
 	});
-var _user$project$State$Model = F4(
-	function (a, b, c, d) {
-		return {error: a, currentUserId: b, users: c, addresses: d};
+var _user$project$State$Model = F3(
+	function (a, b, c) {
+		return {currentUserId: a, users: b, addresses: c};
 	});
+var _user$project$State$Failure = function (a) {
+	return {ctor: 'Failure', _0: a};
+};
+var _user$project$State$Success = function (a) {
+	return {ctor: 'Success', _0: a};
+};
+var _user$project$State$removeAddress = F2(
+	function (testId, addresses) {
+		var _p0 = addresses;
+		if (_p0.ctor === 'Success') {
+			return _user$project$State$Success(
+				A2(
+					_elm_lang$core$List$filter,
+					function (a) {
+						return !_elm_lang$core$Native_Utils.eq(a.test.id, testId);
+					},
+					_p0._0));
+		} else {
+			return addresses;
+		}
+	});
+var _user$project$State$Loading = {ctor: 'Loading'};
+var _user$project$State$NotAsked = {ctor: 'NotAsked'};
 var _user$project$State$SendMatchOk = function (a) {
 	return {ctor: 'SendMatchOk', _0: a};
 };
@@ -9442,29 +9456,6 @@ var _user$project$State$FetchUsersOk = function (a) {
 };
 var _user$project$State$FetchUsers = {ctor: 'FetchUsers'};
 
-var _user$project$View$embeddedMap = function (search) {
-	return A2(
-		_elm_lang$html$Html$iframe,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$width(300),
-				_elm_lang$html$Html_Attributes$height(400),
-				_elm_lang$html$Html_Attributes$style(
-				_elm_lang$core$Native_List.fromArray(
-					[
-						{ctor: '_Tuple2', _0: 'border', _1: '0'},
-						{ctor: '_Tuple2', _0: 'float', _1: 'right'},
-						{ctor: '_Tuple2', _0: 'margin-bottom', _1: '20px'}
-					])),
-				_elm_lang$html$Html_Attributes$src(
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=',
-					A2(_elm_lang$core$Basics_ops['++'], search, ', United Kingdom')))
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[]));
-};
 var _user$project$View$error = function (err) {
 	var _p0 = err;
 	if (_p0.ctor === 'Nothing') {
@@ -9502,7 +9493,7 @@ var _user$project$View$userOption = F2(
 					_elm_lang$html$Html$text(user.name)
 				]));
 	});
-var _user$project$View$usersDropdown = F2(
+var _user$project$View$userSelect = F2(
 	function (currentUserId, users) {
 		return A2(
 			_elm_lang$html$Html$select,
@@ -9524,6 +9515,61 @@ var _user$project$View$usersDropdown = F2(
 					_elm_lang$core$List$map,
 					_user$project$View$userOption(currentUserId),
 					users)));
+	});
+var _user$project$View$usersSection = F2(
+	function (currentUserId, users) {
+		var _p1 = users;
+		switch (_p1.ctor) {
+			case 'NotAsked':
+				return A2(
+					_elm_lang$html$Html$p,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text('Users not fetched ')
+						]));
+			case 'Loading':
+				return A2(
+					_elm_lang$html$Html$p,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text('Loading users')
+						]));
+			case 'Success':
+				var message = _elm_lang$core$Native_Utils.eq(currentUserId, 0) ? 'Please tell me who you are:' : 'Current user:';
+				return A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$p,
+							_elm_lang$core$Native_List.fromArray(
+								[]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text(message)
+								])),
+							A2(_user$project$View$userSelect, currentUserId, _p1._0)
+						]));
+			default:
+				return A2(
+					_elm_lang$html$Html$p,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'Error loading user data: ',
+								_elm_lang$core$Basics$toString(_p1._0)))
+						]));
+		}
 	});
 var _user$project$View$mapUrl = function (search) {
 	return A2(
@@ -9583,6 +9629,27 @@ var _user$project$View$candidate = function (candidate) {
 							]))
 					]))
 			]));
+};
+var _user$project$View$embeddedMap = function (search) {
+	return A2(
+		_elm_lang$html$Html$iframe,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$width(300),
+				_elm_lang$html$Html_Attributes$height(400),
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						{ctor: '_Tuple2', _0: 'border', _1: '0'},
+						{ctor: '_Tuple2', _0: 'float', _1: 'right'},
+						{ctor: '_Tuple2', _0: 'margin-bottom', _1: '20px'}
+					])),
+				_elm_lang$html$Html_Attributes$src(
+				_user$project$View$mapUrl(
+					A2(_elm_lang$core$Basics_ops['++'], search, ', United Kingdom')))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
 };
 var _user$project$View$searchUrl = function (search) {
 	return A2(
@@ -9696,33 +9763,50 @@ var _user$project$View$addresses = function (addresses) {
 		A2(_elm_lang$core$List$map, _user$project$View$address, addresses));
 };
 var _user$project$View$view = function (model) {
-	var addressSection = _elm_lang$core$Native_Utils.eq(model.currentUserId, 0) ? A2(
-		_elm_lang$html$Html$p,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html$text('Please tell me who you are')
-			])) : (_elm_lang$core$Native_Utils.eq(
-		model.addresses,
-		_elm_lang$core$Native_List.fromArray(
-			[])) ? A2(
-		_elm_lang$html$Html$p,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$button,
+	var addressSection = function () {
+		if (_elm_lang$core$Native_Utils.eq(model.currentUserId, 0)) {
+			return A2(
+				_elm_lang$html$Html$p,
 				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onClick(_user$project$State$FetchAddresses)
-					]),
+					[]),
 				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('More!')
-					]))
-			])) : _user$project$View$addresses(model.addresses));
+					[]));
+		} else {
+			var _p2 = model.addresses;
+			if (_p2.ctor === 'Success') {
+				var _p3 = _p2._0;
+				return _elm_lang$core$Native_Utils.eq(
+					_p3,
+					_elm_lang$core$Native_List.fromArray(
+						[])) ? A2(
+					_elm_lang$html$Html$p,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$button,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Events$onClick(_user$project$State$FetchAddresses)
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('More!')
+								]))
+						])) : _user$project$View$addresses(_p3);
+			} else {
+				return A2(
+					_elm_lang$html$Html$p,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text('No addresses')
+						]));
+			}
+		}
+	}();
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -9735,8 +9819,7 @@ var _user$project$View$view = function (model) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$View$error(model.error),
-				A2(_user$project$View$usersDropdown, model.currentUserId, model.users),
+				A2(_user$project$View$usersSection, model.currentUserId, model.users),
 				addressSection
 			]));
 };
@@ -9869,16 +9952,26 @@ var _user$project$Main$updateUrl = function (userId) {
 };
 var _user$project$Main$update = F2(
 	function (msg, model) {
+		var addresses = model.addresses;
+		var users = model.users;
 		var _p1 = msg;
 		switch (_p1.ctor) {
 			case 'FetchUsers':
-				return {ctor: '_Tuple2', _0: model, _1: _user$project$Rest$fetchUsers};
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{users: _user$project$State$Loading}),
+					_1: _user$project$Rest$fetchUsers
+				};
 			case 'FetchUsersOk':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{users: _p1._0}),
+						{
+							users: _user$project$State$Success(_p1._0)
+						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'FetchUsersFail':
@@ -9887,7 +9980,7 @@ var _user$project$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							error: _elm_lang$core$Maybe$Just(_p1._0)
+							users: _user$project$State$Failure(_p1._0)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -9907,13 +10000,21 @@ var _user$project$Main$update = F2(
 							_user$project$Rest$fetchAddresses
 						]));
 			case 'FetchAddresses':
-				return {ctor: '_Tuple2', _0: model, _1: _user$project$Rest$fetchAddresses};
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{addresses: _user$project$State$Loading}),
+					_1: _user$project$Rest$fetchAddresses
+				};
 			case 'FetchAddressesOk':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{addresses: _p1._0}),
+						{
+							addresses: _user$project$State$Success(_p1._0)
+						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'FetchAddressesFail':
@@ -9922,7 +10023,7 @@ var _user$project$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							error: _elm_lang$core$Maybe$Just(_p1._0)
+							addresses: _user$project$State$Failure(_p1._0)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -9950,15 +10051,7 @@ var _user$project$Main$update = F2(
 			case 'SendMatchOk':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			default:
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							error: _elm_lang$core$Maybe$Just(_p1._0)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});
 var _user$project$Main$urlUpdate = F2(
@@ -9988,14 +10081,7 @@ var _user$project$Main$init = function (result) {
 		[_user$project$Rest$fetchUsers, _user$project$Rest$fetchAddresses]);
 	return A2(
 		_elm_lang$core$Platform_Cmd_ops['!'],
-		A4(
-			_user$project$State$Model,
-			_elm_lang$core$Maybe$Nothing,
-			userId,
-			_elm_lang$core$Native_List.fromArray(
-				[]),
-			_elm_lang$core$Native_List.fromArray(
-				[])),
+		A3(_user$project$State$Model, 0, _user$project$State$NotAsked, _user$project$State$NotAsked),
 		initCmd);
 };
 var _user$project$Main$main = {
