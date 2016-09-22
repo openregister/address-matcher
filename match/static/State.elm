@@ -15,9 +15,13 @@ type RemoteData error data
 -- User types
 
 
+type alias UserId =
+    Int
+
+
 type alias User =
     { name : String
-    , id : Int
+    , id : UserId
     }
 
 
@@ -25,9 +29,13 @@ type alias User =
 -- Address types
 
 
+type alias TestAddressId =
+    Int
+
+
 type alias TestAddress =
     { address : String
-    , id : Int
+    , id : TestAddressId
     }
 
 
@@ -56,7 +64,7 @@ type alias Users =
 
 
 type alias Model =
-    { currentUserId : Int
+    { currentUserId : UserId
     , users : Users
     , addresses : Addresses
     }
@@ -70,8 +78,8 @@ type Msg
     | FetchAddresses
     | FetchAddressesOk (List Address)
     | FetchAddressesFail Http.Error
-    | SelectCandidate ( String, Int )
-    | NoMatch Int
+    | SelectCandidate ( String, TestAddressId )
+    | NoMatch TestAddressId
     | SendMatchFail Http.Error
     | SendMatchOk String
 
@@ -80,7 +88,7 @@ type Msg
 -- Model transformation functions
 
 
-removeAddress : Int -> Addresses -> Addresses
+removeAddress : UserId -> Addresses -> Addresses
 removeAddress testId addresses =
     case addresses of
         Success list ->

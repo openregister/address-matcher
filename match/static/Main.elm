@@ -22,7 +22,7 @@ main =
 -- INIT
 
 
-init : Result String Int -> ( Model, Cmd Msg )
+init : Result String UserId -> ( Model, Cmd Msg )
 init result =
     let
         userId =
@@ -41,27 +41,27 @@ init result =
 -- Page URL Stuff
 
 
-userIdToUrl : Int -> String
+userIdToUrl : UserId -> String
 userIdToUrl userId =
     "#" ++ (toString userId)
 
 
-updateUrl : Int -> Cmd Msg
+updateUrl : UserId -> Cmd Msg
 updateUrl userId =
     Navigation.newUrl (userIdToUrl userId)
 
 
-fromUrl : String -> Result String Int
+fromUrl : String -> Result String UserId
 fromUrl url =
     String.toInt (String.dropLeft 1 url)
 
 
-urlParser : Navigation.Parser (Result String Int)
+urlParser : Navigation.Parser (Result String UserId)
 urlParser =
     Navigation.makeParser (fromUrl << .hash)
 
 
-urlUpdate : Result String Int -> Model -> ( Model, Cmd Msg )
+urlUpdate : Result String UserId -> Model -> ( Model, Cmd Msg )
 urlUpdate result model =
     case result of
         Ok newUserId ->
@@ -100,13 +100,13 @@ update msg model =
             FetchUsersFail error ->
                 ( { model | users = Failure error }, Cmd.none )
 
-            UserChange newUserId ->
+            UserChange newUserIdAsText ->
                 let
-                    newUserIdAsInt =
-                        newUserId |> toInt |> Result.withDefault 0
+                    newUserId =
+                        newUserIdAsText |> toInt |> Result.withDefault 0
                 in
-                    { model | currentUserId = newUserIdAsInt }
-                        ! [ updateUrl newUserIdAsInt, Rest.fetchAddresses ]
+                    { model | currentUserId = newUserId }
+                        ! [ updateUrl newUserId, Rest.fetchAddresses ]
 
             FetchAddresses ->
                 ( { model | addresses = Loading }, Rest.fetchAddresses )

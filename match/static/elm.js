@@ -9985,7 +9985,7 @@ var _user$project$Main$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'UserChange':
-				var newUserIdAsInt = A2(
+				var newUserId = A2(
 					_elm_lang$core$Result$withDefault,
 					0,
 					_elm_lang$core$String$toInt(_p1._0));
@@ -9993,10 +9993,10 @@ var _user$project$Main$update = F2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{currentUserId: newUserIdAsInt}),
+						{currentUserId: newUserId}),
 					_elm_lang$core$Native_List.fromArray(
 						[
-							_user$project$Main$updateUrl(newUserIdAsInt),
+							_user$project$Main$updateUrl(newUserId),
 							_user$project$Rest$fetchAddresses
 						]));
 			case 'FetchAddresses':

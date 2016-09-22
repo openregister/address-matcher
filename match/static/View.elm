@@ -21,7 +21,7 @@ mapUrl search =
         [ ( "key", "AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc" ), ( "q", search ) ]
 
 
-candidate : ( CandidateAddress, Int ) -> Html Msg
+candidate : ( CandidateAddress, TestAddressId ) -> Html Msg
 candidate candidate =
     let
         candidateAddress =
@@ -56,7 +56,7 @@ candidate candidate =
 address : Address -> Html Msg
 address address =
     let
-        addTestId : CandidateAddress -> ( CandidateAddress, Int )
+        addTestId : CandidateAddress -> ( CandidateAddress, TestAddressId )
         addTestId ca =
             ( ca, address.test.id )
 
@@ -107,14 +107,14 @@ addresses addresses =
     ul [] (map address addresses)
 
 
-userOption : Int -> User -> Html Msg
+userOption : UserId -> User -> Html Msg
 userOption currentUserId user =
     option
         [ value (toString user.id), selected (user.id == currentUserId) ]
         [ text user.name ]
 
 
-userSelect : Int -> List User -> Html Msg
+userSelect : UserId -> List User -> Html Msg
 userSelect currentUserId users =
     select [ onInput UserChange ]
         ((option [] [ text "Select a user" ])
@@ -122,7 +122,7 @@ userSelect currentUserId users =
         )
 
 
-usersSection : Int -> Users -> Html Msg
+usersSection : UserId -> Users -> Html Msg
 usersSection currentUserId users =
     case users of
         NotAsked ->

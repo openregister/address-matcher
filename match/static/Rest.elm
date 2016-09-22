@@ -90,7 +90,7 @@ fetchAddresses =
             (fetchTests `Task.andThen` fetchAllCandidates)
 
 
-sendMatch : String -> Int -> Int -> Cmd Msg
+sendMatch : String -> TestAddressId -> UserId -> Cmd Msg
 sendMatch uprn testId userId =
     let
         body =
