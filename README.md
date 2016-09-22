@@ -2,6 +2,17 @@
 UI for matching addresses
 
 
+# Running locally
+
+```
+$ virtualenv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+$ export DATABASE_URL=postgres://matcher:matcher@localhost:5432/matcher
+$ ./manage.py import-users /app/data/sample-users.tsv
+$ ./manage.py import-addresses /app/data/test-addresses-01.tsv
+```
+
 ## Deploying on Heroku
 
 Following https://devcenter.heroku.com/articles/deploying-python#build-your-app-and-run-it-locally
