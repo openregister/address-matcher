@@ -9773,37 +9773,48 @@ var _user$project$View$view = function (model) {
 					[]));
 		} else {
 			var _p2 = model.addresses;
-			if (_p2.ctor === 'Success') {
-				var _p3 = _p2._0;
-				return _elm_lang$core$Native_Utils.eq(
-					_p3,
-					_elm_lang$core$Native_List.fromArray(
-						[])) ? A2(
-					_elm_lang$html$Html$p,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							A2(
-							_elm_lang$html$Html$button,
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html_Events$onClick(_user$project$State$FetchAddresses)
-								]),
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html$text('More!')
-								]))
-						])) : _user$project$View$addresses(_p3);
-			} else {
-				return A2(
-					_elm_lang$html$Html$p,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html$text('No addresses')
-						]));
+			switch (_p2.ctor) {
+				case 'Success':
+					var _p3 = _p2._0;
+					return _elm_lang$core$Native_Utils.eq(
+						_p3,
+						_elm_lang$core$Native_List.fromArray(
+							[])) ? A2(
+						_elm_lang$html$Html$p,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(
+								_elm_lang$html$Html$button,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html_Events$onClick(_user$project$State$FetchAddresses)
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('More!')
+									]))
+							])) : _user$project$View$addresses(
+						A2(_elm_lang$core$List$take, 1, _p3));
+				case 'Loading':
+					return A2(
+						_elm_lang$html$Html$p,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Loading addresses')
+							]));
+				default:
+					return A2(
+						_elm_lang$html$Html$p,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('No addresses')
+							]));
 			}
 		}
 	}();

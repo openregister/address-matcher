@@ -190,7 +190,10 @@ view model =
                                     [ text "More!" ]
                                 ]
                         else
-                            addresses listAddresses
+                            addresses (take 1 listAddresses)
+
+                    Loading ->
+                        p [] [ text "Loading addresses" ]
 
                     _ ->
                         p [] [ text "No addresses" ]
