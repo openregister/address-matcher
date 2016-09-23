@@ -9963,8 +9963,6 @@ var _user$project$Main$updateUrl = function (userId) {
 };
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var addresses = model.addresses;
-		var users = model.users;
 		var _p1 = msg;
 		switch (_p1.ctor) {
 			case 'FetchUsers':
