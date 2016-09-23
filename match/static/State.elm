@@ -11,6 +11,10 @@ type RemoteData error data
     | Failure error
 
 
+type alias WebData data =
+    RemoteData Http.Error data
+
+
 
 -- User types
 
@@ -52,11 +56,11 @@ type alias Address =
 
 
 type alias Addresses =
-    RemoteData Http.Error (List Address)
+    WebData (List Address)
 
 
 type alias Users =
-    RemoteData Http.Error (List User)
+    WebData (List User)
 
 
 

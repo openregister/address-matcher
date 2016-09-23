@@ -10081,7 +10081,7 @@ var _user$project$Main$init = function (result) {
 		[_user$project$Rest$fetchUsers, _user$project$Rest$fetchAddresses]);
 	return A2(
 		_elm_lang$core$Platform_Cmd_ops['!'],
-		A3(_user$project$State$Model, 0, _user$project$State$NotAsked, _user$project$State$NotAsked),
+		A3(_user$project$State$Model, 0, _user$project$State$Loading, _user$project$State$NotAsked),
 		initCmd);
 };
 var _user$project$Main$main = {
