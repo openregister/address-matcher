@@ -34,7 +34,7 @@ init result =
             else
                 [ Rest.fetchUsers, Rest.fetchAddresses ]
     in
-        (Model 0 Loading NotAsked) ! initCmd
+        (Model userId Loading NotAsked) ! initCmd
 
 
 
