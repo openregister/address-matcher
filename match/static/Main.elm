@@ -5,6 +5,8 @@ import Navigation
 import State exposing (..)
 import View
 import Rest
+import Types exposing (..)
+import User exposing (..)
 
 
 main : Program Never

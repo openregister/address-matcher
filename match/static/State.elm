@@ -2,32 +2,8 @@ module State exposing (..)
 
 import Http exposing (..)
 import List exposing (..)
-
-
-type RemoteData error data
-    = NotAsked
-    | Loading
-    | Success data
-    | Failure error
-
-
-type alias WebData data =
-    RemoteData Http.Error data
-
-
-
--- User types
-
-
-type alias UserId =
-    Int
-
-
-type alias User =
-    { name : String
-    , id : UserId
-    }
-
+import Types exposing (..)
+import User exposing (..)
 
 
 -- Address types
@@ -59,17 +35,15 @@ type alias Addresses =
     WebData (List Address)
 
 
-type alias Users =
-    WebData (List User)
-
-
 
 -- Model
+-- TODO: can we remove currentUserId and make the current user the top of the
+-- users list?
 
 
 type alias Model =
     { currentUserId : UserId
-    , users : Users
+    , users : RemoteUsers
     , addresses : Addresses
     }
 

@@ -7,6 +7,8 @@ import Http exposing (..)
 import List exposing (..)
 import InlineHover exposing (hover)
 import State exposing (..)
+import Types exposing (..)
+import User exposing (..)
 
 
 searchUrl : String -> String
@@ -110,8 +112,10 @@ addresses addresses =
 userOption : UserId -> User -> Html Msg
 userOption currentUserId user =
     option
-        [ value (toString user.id), selected (user.id == currentUserId) ]
-        [ text user.name ]
+        [ value (user |> User.id |> toString)
+        , selected (currentUserId == User.id user)
+        ]
+        [ user |> User.name |> text ]
 
 
 userSelect : UserId -> List User -> Html Msg
@@ -122,7 +126,7 @@ userSelect currentUserId users =
         )
 
 
-usersSection : UserId -> Users -> Html Msg
+usersSection : UserId -> RemoteUsers -> Html Msg
 usersSection currentUserId users =
     case users of
         NotAsked ->

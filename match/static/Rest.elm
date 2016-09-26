@@ -5,6 +5,7 @@ import Http exposing (..)
 import Json.Decode exposing (Decoder, (:=))
 import List exposing (..)
 import State exposing (..)
+import User exposing (..)
 
 
 jsonGet : String -> Request
@@ -12,7 +13,7 @@ jsonGet url =
     { verb = "GET"
     , headers = [ ( "Accept", "application/json" ) ]
     , url = url
-    , body = empty
+    , body = Http.empty
     }
 
 
@@ -24,16 +25,6 @@ fetchUsers =
         (fromJson usersDecoder
             (send defaultSettings (jsonGet ("/match/users/")))
         )
-
-
-usersDecoder : Decoder (List User)
-usersDecoder =
-    (Json.Decode.list
-        (Json.Decode.object2 User
-            ("name" := Json.Decode.string)
-            ("id" := Json.Decode.int)
-        )
-    )
 
 
 testAddressDecoder : Decoder (List TestAddress)

@@ -9383,9 +9383,68 @@ var _jinjor$elm_inline_hover$InlineHover$hover = F4(
 			children);
 	});
 
-var _user$project$State$User = F2(
+var _user$project$Types$Failure = function (a) {
+	return {ctor: 'Failure', _0: a};
+};
+var _user$project$Types$Success = function (a) {
+	return {ctor: 'Success', _0: a};
+};
+var _user$project$Types$Loading = {ctor: 'Loading'};
+var _user$project$Types$NotAsked = {ctor: 'NotAsked'};
+
+var _user$project$User$name = function (_p0) {
+	var _p1 = _p0;
+	return _p1._0.name;
+};
+var _user$project$User$id = function (_p2) {
+	var _p3 = _p2;
+	return _p3._0.id;
+};
+var _user$project$User$findById = F2(
+	function (userId, users) {
+		return _elm_lang$core$List$head(
+			A2(
+				_elm_lang$core$List$filter,
+				function (user) {
+					return _elm_lang$core$Native_Utils.eq(
+						_user$project$User$id(user),
+						userId);
+				},
+				users));
+	});
+var _user$project$User$UserRecord = F2(
 	function (a, b) {
 		return {name: a, id: b};
+	});
+var _user$project$User$userRecordDecoder = A3(
+	_elm_lang$core$Json_Decode$object2,
+	_user$project$User$UserRecord,
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int));
+var _user$project$User$User = function (a) {
+	return {ctor: 'User', _0: a};
+};
+var _user$project$User$userDecoder = _elm_lang$core$Json_Decode$oneOf(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			A2(_elm_lang$core$Json_Decode$map, _user$project$User$User, _user$project$User$userRecordDecoder)
+		]));
+var _user$project$User$usersDecoder = _elm_lang$core$Json_Decode$list(_user$project$User$userDecoder);
+
+var _user$project$State$removeAddress = F2(
+	function (testId, addresses) {
+		var _p0 = addresses;
+		if (_p0.ctor === 'Success') {
+			return _user$project$Types$Success(
+				A2(
+					_elm_lang$core$List$filter,
+					function (a) {
+						return !_elm_lang$core$Native_Utils.eq(a.test.id, testId);
+					},
+					_p0._0));
+		} else {
+			return addresses;
+		}
 	});
 var _user$project$State$TestAddress = F2(
 	function (a, b) {
@@ -9403,29 +9462,6 @@ var _user$project$State$Model = F3(
 	function (a, b, c) {
 		return {currentUserId: a, users: b, addresses: c};
 	});
-var _user$project$State$Failure = function (a) {
-	return {ctor: 'Failure', _0: a};
-};
-var _user$project$State$Success = function (a) {
-	return {ctor: 'Success', _0: a};
-};
-var _user$project$State$removeAddress = F2(
-	function (testId, addresses) {
-		var _p0 = addresses;
-		if (_p0.ctor === 'Success') {
-			return _user$project$State$Success(
-				A2(
-					_elm_lang$core$List$filter,
-					function (a) {
-						return !_elm_lang$core$Native_Utils.eq(a.test.id, testId);
-					},
-					_p0._0));
-		} else {
-			return addresses;
-		}
-	});
-var _user$project$State$Loading = {ctor: 'Loading'};
-var _user$project$State$NotAsked = {ctor: 'NotAsked'};
 var _user$project$State$SendMatchOk = function (a) {
 	return {ctor: 'SendMatchOk', _0: a};
 };
@@ -9484,13 +9520,17 @@ var _user$project$View$userOption = F2(
 			_elm_lang$core$Native_List.fromArray(
 				[
 					_elm_lang$html$Html_Attributes$value(
-					_elm_lang$core$Basics$toString(user.id)),
+					_elm_lang$core$Basics$toString(
+						_user$project$User$id(user))),
 					_elm_lang$html$Html_Attributes$selected(
-					_elm_lang$core$Native_Utils.eq(user.id, currentUserId))
+					_elm_lang$core$Native_Utils.eq(
+						currentUserId,
+						_user$project$User$id(user)))
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html$text(user.name)
+					_elm_lang$html$Html$text(
+					_user$project$User$name(user))
 				]));
 	});
 var _user$project$View$userSelect = F2(
@@ -9872,12 +9912,6 @@ var _user$project$Rest$testAddressDecoder = _elm_lang$core$Json_Decode$list(
 		_user$project$State$TestAddress,
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'address', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int)));
-var _user$project$Rest$usersDecoder = _elm_lang$core$Json_Decode$list(
-	A3(
-		_elm_lang$core$Json_Decode$object2,
-		_user$project$State$User,
-		A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
-		A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int)));
 var _user$project$Rest$jsonGet = function (url) {
 	return {
 		verb: 'GET',
@@ -9895,7 +9929,7 @@ var _user$project$Rest$fetchUsers = A3(
 	_user$project$State$FetchUsersOk,
 	A2(
 		_evancz$elm_http$Http$fromJson,
-		_user$project$Rest$usersDecoder,
+		_user$project$User$usersDecoder,
 		A2(
 			_evancz$elm_http$Http$send,
 			_evancz$elm_http$Http$defaultSettings,
@@ -9970,7 +10004,7 @@ var _user$project$Main$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{users: _user$project$State$Loading}),
+						{users: _user$project$Types$Loading}),
 					_1: _user$project$Rest$fetchUsers
 				};
 			case 'FetchUsersOk':
@@ -9979,7 +10013,7 @@ var _user$project$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							users: _user$project$State$Success(_p1._0)
+							users: _user$project$Types$Success(_p1._0)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -9989,7 +10023,7 @@ var _user$project$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							users: _user$project$State$Failure(_p1._0)
+							users: _user$project$Types$Failure(_p1._0)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -10013,7 +10047,7 @@ var _user$project$Main$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{addresses: _user$project$State$Loading}),
+						{addresses: _user$project$Types$Loading}),
 					_1: _user$project$Rest$fetchAddresses
 				};
 			case 'FetchAddressesOk':
@@ -10022,7 +10056,7 @@ var _user$project$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							addresses: _user$project$State$Success(_p1._0)
+							addresses: _user$project$Types$Success(_p1._0)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -10032,7 +10066,7 @@ var _user$project$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							addresses: _user$project$State$Failure(_p1._0)
+							addresses: _user$project$Types$Failure(_p1._0)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -10090,7 +10124,7 @@ var _user$project$Main$init = function (result) {
 		[_user$project$Rest$fetchUsers, _user$project$Rest$fetchAddresses]);
 	return A2(
 		_elm_lang$core$Platform_Cmd_ops['!'],
-		A3(_user$project$State$Model, userId, _user$project$State$Loading, _user$project$State$NotAsked),
+		A3(_user$project$State$Model, userId, _user$project$Types$Loading, _user$project$Types$NotAsked),
 		initCmd);
 };
 var _user$project$Main$main = {
