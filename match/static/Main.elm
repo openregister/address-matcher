@@ -7,6 +7,7 @@ import View
 import Rest
 import Types exposing (..)
 import User exposing (..)
+import Address exposing (..)
 
 
 main : Program Never

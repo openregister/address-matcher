@@ -9,7 +9,7 @@ import InlineHover exposing (hover)
 import State exposing (..)
 import Types exposing (..)
 import User exposing (..)
-
+import Address exposing (..)
 
 searchUrl : String -> String
 searchUrl search =

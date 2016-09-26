@@ -6,7 +6,7 @@ import Json.Decode exposing (Decoder, (:=))
 import List exposing (..)
 import State exposing (..)
 import User exposing (..)
-
+import Address exposing (..)
 
 jsonGet : String -> Request
 jsonGet url =

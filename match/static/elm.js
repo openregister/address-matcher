@@ -9392,6 +9392,34 @@ var _user$project$Types$Success = function (a) {
 var _user$project$Types$Loading = {ctor: 'Loading'};
 var _user$project$Types$NotAsked = {ctor: 'NotAsked'};
 
+var _user$project$Address$removeAddress = F2(
+	function (testId, addresses) {
+		var _p0 = addresses;
+		if (_p0.ctor === 'Success') {
+			return _user$project$Types$Success(
+				A2(
+					_elm_lang$core$List$filter,
+					function (a) {
+						return !_elm_lang$core$Native_Utils.eq(a.test.id, testId);
+					},
+					_p0._0));
+		} else {
+			return addresses;
+		}
+	});
+var _user$project$Address$TestAddress = F2(
+	function (a, b) {
+		return {address: a, id: b};
+	});
+var _user$project$Address$CandidateAddress = F2(
+	function (a, b) {
+		return {address: a, uprn: b};
+	});
+var _user$project$Address$Address = F2(
+	function (a, b) {
+		return {test: a, candidates: b};
+	});
+
 var _user$project$User$name = function (_p0) {
 	var _p1 = _p0;
 	return _p1._0.name;
@@ -9431,33 +9459,6 @@ var _user$project$User$userDecoder = _elm_lang$core$Json_Decode$oneOf(
 		]));
 var _user$project$User$usersDecoder = _elm_lang$core$Json_Decode$list(_user$project$User$userDecoder);
 
-var _user$project$State$removeAddress = F2(
-	function (testId, addresses) {
-		var _p0 = addresses;
-		if (_p0.ctor === 'Success') {
-			return _user$project$Types$Success(
-				A2(
-					_elm_lang$core$List$filter,
-					function (a) {
-						return !_elm_lang$core$Native_Utils.eq(a.test.id, testId);
-					},
-					_p0._0));
-		} else {
-			return addresses;
-		}
-	});
-var _user$project$State$TestAddress = F2(
-	function (a, b) {
-		return {address: a, id: b};
-	});
-var _user$project$State$CandidateAddress = F2(
-	function (a, b) {
-		return {address: a, uprn: b};
-	});
-var _user$project$State$Address = F2(
-	function (a, b) {
-		return {test: a, candidates: b};
-	});
 var _user$project$State$Model = F3(
 	function (a, b, c) {
 		return {currentUserId: a, users: b, addresses: c};
@@ -9903,13 +9904,13 @@ var _user$project$Rest$sendMatch = F3(
 var _user$project$Rest$candidateAddressesDecoder = _elm_lang$core$Json_Decode$list(
 	A3(
 		_elm_lang$core$Json_Decode$object2,
-		_user$project$State$CandidateAddress,
+		_user$project$Address$CandidateAddress,
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'address', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'uprn', _elm_lang$core$Json_Decode$string)));
 var _user$project$Rest$testAddressDecoder = _elm_lang$core$Json_Decode$list(
 	A3(
 		_elm_lang$core$Json_Decode$object2,
-		_user$project$State$TestAddress,
+		_user$project$Address$TestAddress,
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'address', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int)));
 var _user$project$Rest$jsonGet = function (url) {
@@ -9945,7 +9946,7 @@ var _user$project$Rest$addCandidates = function (testAddress) {
 	return A2(
 		_elm_lang$core$Task$map,
 		function (candidates) {
-			return A2(_user$project$State$Address, testAddress, candidates);
+			return A2(_user$project$Address$Address, testAddress, candidates);
 		},
 		A2(
 			_evancz$elm_http$Http$fromJson,
@@ -10077,7 +10078,7 @@ var _user$project$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							addresses: A2(_user$project$State$removeAddress, _p2, model.addresses)
+							addresses: A2(_user$project$Address$removeAddress, _p2, model.addresses)
 						}),
 					_1: A3(_user$project$Rest$sendMatch, _p1._0._0, _p2, model.currentUserId)
 				};
@@ -10087,7 +10088,7 @@ var _user$project$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							addresses: A2(_user$project$State$removeAddress, _p1._0, model.addresses)
+							addresses: A2(_user$project$Address$removeAddress, _p1._0, model.addresses)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
