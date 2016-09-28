@@ -45,6 +45,31 @@ mapUrl search =
         [ ( "key", "AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc" ), ( "q", search ) ]
 
 
+liStyle : List (String, String)
+liStyle =
+    [ ( "border", "3px solid white" )
+    , ( "margin-left", "1em" )
+    , ( "padding-left", ".2em" )
+    , ( "list-style-type", "disc" )
+    ]
+
+
+
+viewEmbeddedMap : String -> Html Msg
+viewEmbeddedMap search =
+    iframe
+        [ width 300
+        , height 400
+        , class "column-one-third"
+        , style
+            [ ( "border", "0" )
+            , ( "margin-bottom", "20px" )
+            ]
+        , src (mapUrl (search ++ ", United Kingdom"))
+        ]
+        []
+
+
 viewCandidate : ( CandidateAddress, TestAddressId ) -> Html Msg
 viewCandidate candidate =
     let
@@ -59,10 +84,7 @@ viewCandidate candidate =
             , ( "border-radius", "10px" )
             ]
             li
-            [ style
-                [ ( "border", "3px solid white" )
-                , ( "padding-left", ".2em" )
-                ]
+            [ style liStyle
             , onClick (SelectCandidate ( candidateAddress.uprn, testId ))
             ]
             [ text (" " ++ candidateAddress.address)
@@ -90,10 +112,7 @@ viewAddress address =
                 , ( "border-radius", "10px" )
                 ]
                 li
-                [ style
-                    [ ( "border", "3px solid white" )
-                    , ( "padding-left", ".2em" )
-                    ]
+                [ style liStyle
                 , onClick (NoMatch address.test.id)
                 ]
                 [ span
@@ -115,20 +134,22 @@ viewAddress address =
                     [ text "JFGI⧉" ]
                 ]
     in
-        li
-            [ style [ ( "clear", "both" ) ] ]
+        div
+            []
             [ testAddressHtml
-            , viewEmbeddedMap (extractPostcode address.test.address)
-            , ul []
-                (notSureChoice
-                    :: (map viewCandidate (map addTestId address.candidates))
-                )
+            , div
+                [ class "grid-row" ]
+                [ ul [ class "column-two-thirds" ]
+                    (notSureChoice
+                        :: (map viewCandidate (map addTestId address.candidates))
+                    )
+                 , viewEmbeddedMap (extractPostcode address.test.address)
+                ]
             ]
-
 
 viewAddresses : List Address -> Html Msg
 viewAddresses addresses =
-    ul [] (map viewAddress addresses)
+    div [] (map viewAddress addresses)
 
 
 viewUserOption : UserId -> User -> Html Msg
@@ -172,21 +193,6 @@ viewUsersSection currentUserId users =
 
         Failure error ->
             p [] [ text ("Error loading user data: " ++ (error |> toString)) ]
-
-
-viewEmbeddedMap : String -> Html Msg
-viewEmbeddedMap search =
-    iframe
-        [ width 300
-        , height 400
-        , style
-            [ ( "border", "0" )
-            , ( "float", "right" )
-            , ( "margin-bottom", "20px" )
-            ]
-        , src (mapUrl (search ++ ", United Kingdom"))
-        ]
-        []
 
 
 view : Model -> Html Msg
