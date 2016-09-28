@@ -209,8 +209,14 @@ view model =
                         if listAddresses == [] then
                             p []
                                 [ button
-                                    [ onClick FetchAddresses ]
-                                    [ text "More!" ]
+                                    [ onClick FetchAddresses
+                                    , style
+                                        [ ( "font-size", "50px" )
+                                        , ( "font-weight", "bold" )
+                                        , ( "margin-top", "20px" )
+                                        ]
+                                    ]
+                                    [ text "Give me more!" ]
                                 ]
                         else
                             viewAddresses (take 1 listAddresses)
