@@ -10,6 +10,28 @@ import State exposing (..)
 import Types exposing (..)
 import User exposing (..)
 import Address exposing (..)
+import Regex exposing (..)
+
+
+postcodeRegex : Regex
+postcodeRegex = (regex "(GIR 0AA)|((([A-Z]\\d+)|(([A-Z]{2}\\d+)|(([A-Z][0-9][A-HJKSTUW])|([A-Z]{2}[0-9][ABEHMNPRVWXY]))))\\s?[0-9][A-Z]{2})")
+
+
+extractPostcode : String -> String
+extractPostcode text =
+    let
+        match =
+            find (AtMost 1) postcodeRegex text
+            |> head
+            |> Debug.log "match"
+    in
+        case match of
+            Nothing ->
+                text
+
+            Just m ->
+                m.match
+
 
 searchUrl : String -> String
 searchUrl search =
@@ -96,7 +118,7 @@ address address =
         li
             [ style [ ( "clear", "both" ) ] ]
             [ testAddressHtml
-            , embeddedMap address.test.address
+            , embeddedMap (extractPostcode address.test.address)
             , ul []
                 (notSureChoice
                     :: (map candidate (map addTestId address.candidates))
