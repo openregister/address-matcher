@@ -46,13 +46,31 @@ mapUrl search =
         [ ( "key", "AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc" ), ( "q", search ) ]
 
 
-liStyle : List ( String, String )
-liStyle =
-    [ ( "border", "3px solid white" )
-    , ( "margin-left", "1em" )
-    , ( "padding-left", ".2em" )
-    , ( "list-style-type", "disc" )
-    ]
+liStyle : Int -> List ( String, String )
+liStyle index =
+    let
+        always =
+            [ ( "border", "3px solid white" )
+            , ( "margin-left", "1em" )
+            , ( "padding-left", ".2em" )
+            ]
+    in
+        if index % 2 == 0 then
+            ( "background-color", "#eee" ) :: always
+        else
+            always
+
+
+viewExternalLink : String -> String -> Html Msg
+viewExternalLink linkText linkHref =
+    a
+        [ href linkHref
+        , target "blank"
+        , style [ ( "font-size", "80%" ) ]
+        ]
+        [ text linkText
+        , sup [] [ text "⧉" ]
+        ]
 
 
 viewEmbeddedMap : String -> Html Msg
@@ -70,8 +88,8 @@ viewEmbeddedMap search =
         []
 
 
-viewCandidate : ( CandidateAddress, TestAddressId ) -> Html Msg
-viewCandidate candidate =
+viewCandidate : Int -> ( CandidateAddress, TestAddressId ) -> Html Msg
+viewCandidate index candidate =
     let
         candidateAddress =
             fst candidate
@@ -84,19 +102,14 @@ viewCandidate candidate =
             , ( "border-radius", "10px" )
             ]
             li
-            [ style liStyle
-            , onClick (SelectCandidate ( candidateAddress.uprn, testId ))
-            ]
-            [ text (" " ++ candidateAddress.address)
-            , text " "
-            , small []
-                [ a
-                    [ href (mapUrl candidateAddress.address)
-                    , target "_blank"
-                    ]
-                    [ text "map⧉" ]
+                [ style (liStyle index)
+                , onClick (SelectCandidate ( candidateAddress.uprn, testId ))
                 ]
-            ]
+                [ text ("🢂 " ++ candidateAddress.address)
+                , text " "
+                , small []
+                    [ viewExternalLink " map" (mapUrl candidateAddress.address) ]
+                ]
 
 
 viewAddress : Address -> Html Msg
@@ -112,26 +125,22 @@ viewAddress address =
                 , ( "border-radius", "10px" )
                 ]
                 li
-                [ style liStyle
-                , onClick (NoMatch address.test.id)
-                ]
-                [ span
-                    [ style
-                        [ ( "font-weight", "bold" ) ]
+                    [ style (liStyle -1)
+                    , onClick (NoMatch address.test.id)
                     ]
-                    [ text " Pass ¯\\_(ツ)_/¯" ]
-                ]
+                    [ span
+                        [ style
+                            [ ( "font-weight", "bold" ) ]
+                        ]
+                        [ text "🢂 Pass ¯\\_(ツ)_/¯" ]
+                    ]
 
         testAddressHtml =
-            h2
-                [ class "heading-small" ]
+            h1
+                [ class "heading-medium" ]
                 [ text (address.test.address)
-                , br [] []
-                , a
-                    [ href (searchUrl address.test.address)
-                    , target "blank"
-                    ]
-                    [ text "JFGI⧉" ]
+                , span [] [ text " - " ]
+                , viewExternalLink "Search" (searchUrl address.test.address)
                 ]
     in
         div
@@ -141,7 +150,7 @@ viewAddress address =
                 [ class "grid-row" ]
                 [ ul [ class "column-two-thirds" ]
                     (notSureChoice
-                        :: (map viewCandidate (map addTestId address.candidates))
+                        :: (indexedMap viewCandidate (map addTestId address.candidates))
                     )
                 , viewEmbeddedMap (extractPostcode address.test.address)
                 ]
