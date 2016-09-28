@@ -45,8 +45,8 @@ mapUrl search =
         [ ( "key", "AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc" ), ( "q", search ) ]
 
 
-candidate : ( CandidateAddress, TestAddressId ) -> Html Msg
-candidate candidate =
+viewCandidate : ( CandidateAddress, TestAddressId ) -> Html Msg
+viewCandidate candidate =
     let
         candidateAddress =
             fst candidate
@@ -77,8 +77,8 @@ candidate candidate =
             ]
 
 
-address : Address -> Html Msg
-address address =
+viewAddress : Address -> Html Msg
+viewAddress address =
     let
         addTestId : CandidateAddress -> ( CandidateAddress, TestAddressId )
         addTestId ca =
@@ -118,21 +118,21 @@ address address =
         li
             [ style [ ( "clear", "both" ) ] ]
             [ testAddressHtml
-            , embeddedMap (extractPostcode address.test.address)
+            , viewEmbeddedMap (extractPostcode address.test.address)
             , ul []
                 (notSureChoice
-                    :: (map candidate (map addTestId address.candidates))
+                    :: (map viewCandidate (map addTestId address.candidates))
                 )
             ]
 
 
-addresses : List Address -> Html Msg
-addresses addresses =
-    ul [] (map address addresses)
+viewAddresses : List Address -> Html Msg
+viewAddresses addresses =
+    ul [] (map viewAddress addresses)
 
 
-userOption : UserId -> User -> Html Msg
-userOption currentUserId user =
+viewUserOption : UserId -> User -> Html Msg
+viewUserOption currentUserId user =
     option
         [ value (user |> User.id |> toString)
         , selected (currentUserId == User.id user)
@@ -140,16 +140,16 @@ userOption currentUserId user =
         [ user |> User.name |> text ]
 
 
-userSelect : UserId -> List User -> Html Msg
-userSelect currentUserId users =
+viewUserSelect : UserId -> List User -> Html Msg
+viewUserSelect currentUserId users =
     select [ onInput UserChange ]
         ((option [] [ text "Select a user" ])
-            :: (map (userOption currentUserId) users)
+            :: (map (viewUserOption currentUserId) users)
         )
 
 
-usersSection : UserId -> RemoteUsers -> Html Msg
-usersSection currentUserId users =
+viewUsersSection : UserId -> RemoteUsers -> Html Msg
+viewUsersSection currentUserId users =
     case users of
         NotAsked ->
             p [] [ text "Users not fetched " ]
@@ -167,25 +167,15 @@ usersSection currentUserId users =
             in
                 div []
                     [ p [] [ text message ]
-                    , userSelect currentUserId userList
+                    , viewUserSelect currentUserId userList
                     ]
 
         Failure error ->
             p [] [ text ("Error loading user data: " ++ (error |> toString)) ]
 
 
-error : Maybe Error -> Html Msg
-error err =
-    case err of
-        Nothing ->
-            div [] []
-
-        Just message ->
-            div [] [ text (toString message) ]
-
-
-embeddedMap : String -> Html Msg
-embeddedMap search =
+viewEmbeddedMap : String -> Html Msg
+viewEmbeddedMap search =
     iframe
         [ width 300
         , height 400
@@ -216,7 +206,7 @@ view model =
                                     [ text "More!" ]
                                 ]
                         else
-                            addresses (take 1 listAddresses)
+                            viewAddresses (take 1 listAddresses)
 
                     Loading ->
                         p [] [ text "Loading addresses" ]
@@ -226,7 +216,7 @@ view model =
     in
         div
             [ style [ ( "font-size", "90%" ) ] ]
-            [ usersSection model.currentUserId model.users
+            [ viewUsersSection model.currentUserId model.users
             , addressSection
               -- , div [] [ text (toString model) ]
             ]
