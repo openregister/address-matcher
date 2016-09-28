@@ -14,7 +14,8 @@ import Regex exposing (..)
 
 
 postcodeRegex : Regex
-postcodeRegex = (regex "(GIR 0AA)|((([A-Z]\\d+)|(([A-Z]{2}\\d+)|(([A-Z][0-9][A-HJKSTUW])|([A-Z]{2}[0-9][ABEHMNPRVWXY]))))\\s?[0-9][A-Z]{2})")
+postcodeRegex =
+    regex "(GIR 0AA)|((([A-Z]\\d+)|(([A-Z]{2}\\d+)|(([A-Z][0-9][A-HJKSTUW])|([A-Z]{2}[0-9][ABEHMNPRVWXY]))))\\s?[0-9][A-Z]{2})"
 
 
 extractPostcode : String -> String
@@ -22,8 +23,8 @@ extractPostcode text =
     let
         match =
             find (AtMost 1) postcodeRegex text
-            |> head
-            |> Debug.log "match"
+                |> head
+                |> Debug.log "match"
     in
         case match of
             Nothing ->
@@ -45,14 +46,13 @@ mapUrl search =
         [ ( "key", "AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc" ), ( "q", search ) ]
 
 
-liStyle : List (String, String)
+liStyle : List ( String, String )
 liStyle =
     [ ( "border", "3px solid white" )
     , ( "margin-left", "1em" )
     , ( "padding-left", ".2em" )
     , ( "list-style-type", "disc" )
     ]
-
 
 
 viewEmbeddedMap : String -> Html Msg
@@ -143,9 +143,10 @@ viewAddress address =
                     (notSureChoice
                         :: (map viewCandidate (map addTestId address.candidates))
                     )
-                 , viewEmbeddedMap (extractPostcode address.test.address)
+                , viewEmbeddedMap (extractPostcode address.test.address)
                 ]
             ]
+
 
 viewAddresses : List Address -> Html Msg
 viewAddresses addresses =
