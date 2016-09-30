@@ -217,7 +217,19 @@ view model =
                     Success listAddresses ->
                         if listAddresses == [] then
                             p []
-                                [ button
+                                [ p
+                                    [ style
+                                        [ ( "font-size", "20px" ) ]
+                                    ]
+                                    [ text "Your score is 244" ]
+                                , p
+                                    [ style
+                                        [ ( "font-size", "30px" )
+                                        , ( "color", "gold" )
+                                        ]
+                                    ]
+                                    [ text "🏆 You're in first place! 🏆" ]
+                                , button
                                     [ onClick FetchAddresses
                                     , style
                                         [ ( "font-size", "50px" )
