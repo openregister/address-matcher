@@ -102,14 +102,14 @@ viewCandidate index candidate =
             , ( "border-radius", "10px" )
             ]
             li
-                [ style (liStyle index)
-                , onClick (SelectCandidate ( candidateAddress.uprn, testId ))
-                ]
-                [ text ("🢂 " ++ candidateAddress.address)
-                , text " "
-                , small []
-                    [ viewExternalLink " map" (mapUrl candidateAddress.address) ]
-                ]
+            [ style (liStyle index)
+            , onClick (SelectCandidate ( candidateAddress.uprn, testId ))
+            ]
+            [ text ("🢂 " ++ candidateAddress.address)
+            , text " "
+            , small []
+                [ viewExternalLink " map" (mapUrl candidateAddress.address) ]
+            ]
 
 
 viewAddress : Address -> Html Msg
@@ -125,15 +125,15 @@ viewAddress address =
                 , ( "border-radius", "10px" )
                 ]
                 li
-                    [ style (liStyle -1)
-                    , onClick (NoMatch address.test.id)
+                [ style (liStyle -1)
+                , onClick (NoMatch address.test.id)
+                ]
+                [ span
+                    [ style
+                        [ ( "font-weight", "bold" ) ]
                     ]
-                    [ span
-                        [ style
-                            [ ( "font-weight", "bold" ) ]
-                        ]
-                        [ text "🢂 Pass ¯\\_(ツ)_/¯" ]
-                    ]
+                    [ text "🢂 Pass ¯\\_(ツ)_/¯" ]
+                ]
 
         testAddressHtml =
             h1
@@ -157,9 +157,12 @@ viewAddress address =
             ]
 
 
-viewAddresses : List Address -> Html Msg
-viewAddresses addresses =
-    div [] (map viewAddress addresses)
+viewAddresses : Int -> List Address -> Html Msg
+viewAddresses numberDone addresses =
+    div []
+        (viewProgressBar (20 * (5 - numberDone))
+            :: (map viewAddress addresses)
+        )
 
 
 viewUserOption : UserId -> User -> Html Msg
@@ -181,76 +184,117 @@ viewUserSelect currentUserId users =
 
 viewUsersSection : UserId -> RemoteUsers -> Html Msg
 viewUsersSection currentUserId users =
-    case users of
-        NotAsked ->
-            p [] [ text "Users not fetched " ]
+    div
+        [ style [ ( "margin-bottom", "20px" ) ] ]
+        [ case users of
+            NotAsked ->
+                p [] [ text "Users not fetched " ]
 
-        Loading ->
-            p [] [ text "Loading users" ]
+            Loading ->
+                p [] [ text "Loading users" ]
 
-        Success userList ->
-            let
-                message =
-                    if currentUserId == 0 then
-                        "Please tell me who you are:"
-                    else
-                        "Current user:"
-            in
-                div []
-                    [ p [] [ text message ]
-                    , viewUserSelect currentUserId userList
+            Success userList ->
+                let
+                    message =
+                        if currentUserId == 0 then
+                            "Please tell me who you are:"
+                        else
+                            "Current user:"
+                in
+                    div []
+                        [ p [] [ text message ]
+                        , viewUserSelect currentUserId userList
+                        ]
+
+            Failure error ->
+                p []
+                    [ text
+                        ("Error loading user data: " ++ (error |> toString))
                     ]
+        ]
 
-        Failure error ->
-            p [] [ text ("Error loading user data: " ++ (error |> toString)) ]
+
+viewProgressBar : Int -> Html Msg
+viewProgressBar percent =
+    let
+        pc =
+            (percent |> toString) ++ "%"
+    in
+        div
+            [ style
+                [ ( "background-color"
+                  , if percent == 0 then
+                        "white"
+                    else
+                        "green"
+                  )
+                , ( "color"
+                  , if percent == 0 then
+                        "black"
+                    else
+                        "white"
+                  )
+                , ( "font-weight", "bold" )
+                , ( "font-size", "2em" )
+                , ( "width"
+                  , if percent == 0 then
+                        "100px"
+                    else
+                        pc
+                  )
+                , ( "text-align", "center" )
+                ]
+            ]
+            [ pc |> text ]
+
+
+viewAddressSection : UserId -> RemoteAddresses -> Html Msg
+viewAddressSection currentUserId addresses =
+    if currentUserId == 0 then
+        p [] []
+    else
+        case addresses of
+            Success listAddresses ->
+                if listAddresses == [] then
+                    div []
+                        [ viewProgressBar 100
+                        , p
+                            [ style
+                                [ ( "font-size", "20px" ) ]
+                            ]
+                            [ text "Your score is 244" ]
+                        , p
+                            [ style
+                                [ ( "font-size", "30px" )
+                                , ( "color", "gold" )
+                                ]
+                            ]
+                            [ text "🏆 You're in first place! 🏆" ]
+                        , button
+                            [ onClick FetchAddresses
+                            , style
+                                [ ( "font-size", "50px" )
+                                , ( "font-weight", "bold" )
+                                , ( "margin-top", "20px" )
+                                ]
+                            ]
+                            [ text "Give me more!" ]
+                        ]
+                else
+                    viewAddresses (length listAddresses) (take 1 listAddresses)
+
+            Loading ->
+                p [] [ text "Loading addresses" ]
+
+            _ ->
+                p [] [ text "No addresses" ]
 
 
 view : Model -> Html Msg
 view model =
-    let
-        addressSection : Html Msg
-        addressSection =
-            if model.currentUserId == 0 then
-                p [] []
-            else
-                case model.addresses of
-                    Success listAddresses ->
-                        if listAddresses == [] then
-                            p []
-                                [ p
-                                    [ style
-                                        [ ( "font-size", "20px" ) ]
-                                    ]
-                                    [ text "Your score is 244" ]
-                                , p
-                                    [ style
-                                        [ ( "font-size", "30px" )
-                                        , ( "color", "gold" )
-                                        ]
-                                    ]
-                                    [ text "🏆 You're in first place! 🏆" ]
-                                , button
-                                    [ onClick FetchAddresses
-                                    , style
-                                        [ ( "font-size", "50px" )
-                                        , ( "font-weight", "bold" )
-                                        , ( "margin-top", "20px" )
-                                        ]
-                                    ]
-                                    [ text "Give me more!" ]
-                                ]
-                        else
-                            viewAddresses (take 1 listAddresses)
-
-                    Loading ->
-                        p [] [ text "Loading addresses" ]
-
-                    _ ->
-                        p [] [ text "No addresses" ]
-    in
-        div
-            [ style [ ( "font-size", "90%" ) ] ]
-            [ viewUsersSection model.currentUserId model.users
-            , addressSection
-              -- , div [] [ text (toString model) ]
-            ]
+    div
+        [ style [ ( "font-size", "90%" ) ] ]
+        [ viewUsersSection model.currentUserId model.users
+        , viewAddressSection model.currentUserId model.addresses
+          -- , div [] [ text (toString model) ]
+        ]

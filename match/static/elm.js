@@ -9628,6 +9628,43 @@ var _user$project$State$FetchUsersOk = function (a) {
 };
 var _user$project$State$FetchUsers = {ctor: 'FetchUsers'};
 
+var _user$project$View$viewProgressBar = function (percent) {
+	var pc = A2(
+		_elm_lang$core$Basics_ops['++'],
+		_elm_lang$core$Basics$toString(percent),
+		'%');
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						{
+						ctor: '_Tuple2',
+						_0: 'background-color',
+						_1: _elm_lang$core$Native_Utils.eq(percent, 0) ? 'white' : 'green'
+					},
+						{
+						ctor: '_Tuple2',
+						_0: 'color',
+						_1: _elm_lang$core$Native_Utils.eq(percent, 0) ? 'black' : 'white'
+					},
+						{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
+						{ctor: '_Tuple2', _0: 'font-size', _1: '2em'},
+						{
+						ctor: '_Tuple2',
+						_0: 'width',
+						_1: _elm_lang$core$Native_Utils.eq(percent, 0) ? '100px' : pc
+					},
+						{ctor: '_Tuple2', _0: 'text-align', _1: 'center'}
+					]))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text(pc)
+			]));
+};
 var _user$project$View$viewUserOption = F2(
 	function (currentUserId, user) {
 		return A2(
@@ -9673,58 +9710,73 @@ var _user$project$View$viewUserSelect = F2(
 	});
 var _user$project$View$viewUsersSection = F2(
 	function (currentUserId, users) {
-		var _p0 = users;
-		switch (_p0.ctor) {
-			case 'NotAsked':
-				return A2(
-					_elm_lang$html$Html$p,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$style(
 					_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$html$Html$text('Users not fetched ')
-						]));
-			case 'Loading':
-				return A2(
-					_elm_lang$html$Html$p,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html$text('Loading users')
-						]));
-			case 'Success':
-				var message = _elm_lang$core$Native_Utils.eq(currentUserId, 0) ? 'Please tell me who you are:' : 'Current user:';
-				return A2(
-					_elm_lang$html$Html$div,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							A2(
-							_elm_lang$html$Html$p,
-							_elm_lang$core$Native_List.fromArray(
-								[]),
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html$text(message)
-								])),
-							A2(_user$project$View$viewUserSelect, currentUserId, _p0._0)
-						]));
-			default:
-				return A2(
-					_elm_lang$html$Html$p,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html$text(
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								'Error loading user data: ',
-								_elm_lang$core$Basics$toString(_p0._0)))
-						]));
-		}
+							{ctor: '_Tuple2', _0: 'margin-bottom', _1: '20px'}
+						]))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					function () {
+					var _p0 = users;
+					switch (_p0.ctor) {
+						case 'NotAsked':
+							return A2(
+								_elm_lang$html$Html$p,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('Users not fetched ')
+									]));
+						case 'Loading':
+							return A2(
+								_elm_lang$html$Html$p,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('Loading users')
+									]));
+						case 'Success':
+							var message = _elm_lang$core$Native_Utils.eq(currentUserId, 0) ? 'Please tell me who you are:' : 'Current user:';
+							return A2(
+								_elm_lang$html$Html$div,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										A2(
+										_elm_lang$html$Html$p,
+										_elm_lang$core$Native_List.fromArray(
+											[]),
+										_elm_lang$core$Native_List.fromArray(
+											[
+												_elm_lang$html$Html$text(message)
+											])),
+										A2(_user$project$View$viewUserSelect, currentUserId, _p0._0)
+									]));
+						default:
+							return A2(
+								_elm_lang$html$Html$p,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'Error loading user data: ',
+											_elm_lang$core$Basics$toString(_p0._0)))
+									]));
+					}
+				}()
+				]));
 	});
 var _user$project$View$viewExternalLink = F2(
 	function (linkText, linkHref) {
@@ -9954,16 +10006,20 @@ var _user$project$View$viewAddress = function (address) {
 					]))
 			]));
 };
-var _user$project$View$viewAddresses = function (addresses) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		A2(_elm_lang$core$List$map, _user$project$View$viewAddress, addresses));
-};
-var _user$project$View$view = function (model) {
-	var addressSection = function () {
-		if (_elm_lang$core$Native_Utils.eq(model.currentUserId, 0)) {
+var _user$project$View$viewAddresses = F2(
+	function (numberDone, addresses) {
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			A2(
+				_elm_lang$core$List_ops['::'],
+				_user$project$View$viewProgressBar(20 * (5 - numberDone)),
+				A2(_elm_lang$core$List$map, _user$project$View$viewAddress, addresses)));
+	});
+var _user$project$View$viewAddressSection = F2(
+	function (currentUserId, addresses) {
+		if (_elm_lang$core$Native_Utils.eq(currentUserId, 0)) {
 			return A2(
 				_elm_lang$html$Html$p,
 				_elm_lang$core$Native_List.fromArray(
@@ -9971,7 +10027,7 @@ var _user$project$View$view = function (model) {
 				_elm_lang$core$Native_List.fromArray(
 					[]));
 		} else {
-			var _p2 = model.addresses;
+			var _p2 = addresses;
 			switch (_p2.ctor) {
 				case 'Success':
 					var _p3 = _p2._0;
@@ -9979,11 +10035,12 @@ var _user$project$View$view = function (model) {
 						_p3,
 						_elm_lang$core$Native_List.fromArray(
 							[])) ? A2(
-						_elm_lang$html$Html$p,
+						_elm_lang$html$Html$div,
 						_elm_lang$core$Native_List.fromArray(
 							[]),
 						_elm_lang$core$Native_List.fromArray(
 							[
+								_user$project$View$viewProgressBar(100),
 								A2(
 								_elm_lang$html$Html$p,
 								_elm_lang$core$Native_List.fromArray(
@@ -10030,7 +10087,9 @@ var _user$project$View$view = function (model) {
 									[
 										_elm_lang$html$Html$text('Give me more!')
 									]))
-							])) : _user$project$View$viewAddresses(
+							])) : A2(
+						_user$project$View$viewAddresses,
+						_elm_lang$core$List$length(_p3),
 						A2(_elm_lang$core$List$take, 1, _p3));
 				case 'Loading':
 					return A2(
@@ -10052,7 +10111,8 @@ var _user$project$View$view = function (model) {
 							]));
 			}
 		}
-	}();
+	});
+var _user$project$View$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -10066,7 +10126,7 @@ var _user$project$View$view = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(_user$project$View$viewUsersSection, model.currentUserId, model.users),
-				addressSection
+				A2(_user$project$View$viewAddressSection, model.currentUserId, model.addresses)
 			]));
 };
 
