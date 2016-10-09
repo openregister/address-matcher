@@ -11,6 +11,8 @@ import Types exposing (..)
 import User exposing (..)
 import Address exposing (..)
 import Regex exposing (..)
+import Animation
+import Animation.Messenger
 
 
 postcodeRegex : Regex
@@ -24,7 +26,6 @@ extractPostcode text =
         match =
             find (AtMost 1) postcodeRegex text
                 |> head
-                |> Debug.log "match"
     in
         case match of
             Nothing ->
@@ -112,8 +113,8 @@ viewCandidate index candidate =
             ]
 
 
-viewAddress : Address -> Html Msg
-viewAddress address =
+viewAddress : Animation.Messenger.State Msg -> Address -> Html Msg
+viewAddress animState address =
     let
         addTestId : CandidateAddress -> ( CandidateAddress, TestAddressId )
         addTestId ca =
@@ -144,7 +145,13 @@ viewAddress address =
                 ]
     in
         div
-            []
+            (Animation.render animState
+                        ++ [ style
+                                [ ( "position", "relative" )
+                                , ( "border-style", "dotted" )
+                                ]
+                            ]
+                        )
             [ testAddressHtml
             , div
                 [ class "grid-row" ]
@@ -152,16 +159,16 @@ viewAddress address =
                     (notSureChoice
                         :: (indexedMap viewCandidate (map addTestId address.candidates))
                     )
-                , viewEmbeddedMap (extractPostcode address.test.address)
+--                , viewEmbeddedMap (extractPostcode address.test.address)
                 ]
             ]
 
 
-viewAddresses : Int -> List Address -> Html Msg
-viewAddresses numberDone addresses =
+viewAddresses : Animation.Messenger.State Msg -> Int -> List Address -> Html Msg
+viewAddresses animState numberDone addresses =
     div []
         (viewProgressBar (20 * (5 - numberDone))
-            :: (map viewAddress addresses)
+            :: (map (viewAddress animState) addresses)
         )
 
 
@@ -248,8 +255,8 @@ viewProgressBar percent =
             [ pc |> text ]
 
 
-viewAddressSection : UserId -> RemoteAddresses -> Html Msg
-viewAddressSection currentUserId addresses =
+viewAddressSection : Animation.Messenger.State Msg -> UserId -> RemoteAddresses -> Html Msg
+viewAddressSection animState currentUserId addresses =
     if currentUserId == 0 then
         p [] []
     else
@@ -281,7 +288,10 @@ viewAddressSection currentUserId addresses =
                             [ text "Give me more!" ]
                         ]
                 else
-                    viewAddresses (length listAddresses) (take 1 listAddresses)
+                    viewAddresses
+                        animState
+                        (length listAddresses)
+                        (take 1 listAddresses)
 
             Loading ->
                 p [] [ text "Loading addresses" ]
@@ -295,6 +305,16 @@ view model =
     div
         [ style [ ( "font-size", "90%" ) ] ]
         [ viewUsersSection model.currentUserId model.users
-        , viewAddressSection model.currentUserId model.addresses
+        , viewAddressSection model.style model.currentUserId model.addresses
+        -- , div [ onClick AnimateExit ] [ text "click" ]
           -- , div [] [ text (toString model) ]
+        -- , div
+        --     (Animation.render model.style
+        --                 ++ [ style
+        --                         [ ( "position", "absolute" )
+        --                         , ( "border-style", "dotted" )
+        --                         ]
+        --                     ]
+        --                 )
+        --     [ text "XXXXX" ]
         ]

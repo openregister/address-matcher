@@ -2,6 +2,8 @@ module Main exposing (..)
 
 import String exposing (toInt)
 import Navigation
+import Animation exposing (px)
+import Animation.Messenger
 import State exposing (..)
 import View
 import Rest
@@ -16,7 +18,7 @@ main =
         { init = init
         , view = View.view
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions
         , urlUpdate = urlUpdate
         }
 
@@ -36,8 +38,22 @@ init result =
                 [ Rest.fetchUsers ]
             else
                 [ Rest.fetchUsers, Rest.fetchAddresses ]
+
+        initStyle =
+            Animation.style
+                [ Animation.left (px 0)
+                ]
     in
-        (Model userId Loading NotAsked) ! initCmd
+        (Model userId Loading NotAsked initStyle) ! initCmd
+
+
+
+-- Subscriptions
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Animation.subscription Animate [ model.style ]
 
 
 
@@ -112,7 +128,27 @@ update msg model =
             ( { model | addresses = Failure error }, Cmd.none )
 
         SelectCandidate ( selectedCandidateUprn, testId ) ->
-            ( { model | addresses = removeAddress testId model.addresses }
+            ( { model
+                | style =
+                    Animation.interrupt
+                        [ Animation.to
+                            [ Animation.left (px -1000)
+                            ]
+                        , Animation.Messenger.send
+                            (NextCandidate ( selectedCandidateUprn, testId ))
+                        , Animation.set
+                            [ Animation.left (px 0)
+                            ]
+                        ]
+                        model.style
+              }
+            , Cmd.none
+            )
+
+        NextCandidate ( selectedCandidateUprn, testId ) ->
+            ( { model
+                | addresses = removeAddress testId model.addresses
+              }
             , Rest.sendMatch
                 selectedCandidateUprn
                 testId
@@ -129,3 +165,16 @@ update msg model =
 
         SendMatchFail error ->
             ( model, Cmd.none )
+
+        Animate animMsg ->
+            let
+                ( newStyle, cmds ) =
+                    Animation.Messenger.update
+                        animMsg
+                        model.style
+            in
+                ( { model
+                    | style = newStyle
+                  }
+                , cmds
+                )
