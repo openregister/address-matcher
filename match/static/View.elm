@@ -6,13 +6,15 @@ import Html.Events exposing (..)
 import Http exposing (..)
 import List exposing (..)
 import InlineHover exposing (hover)
+import Regex exposing (..)
+import Animation
+import Animation.Messenger
+import Css
+
 import State exposing (..)
 import Types exposing (..)
 import User exposing (..)
 import Address exposing (..)
-import Regex exposing (..)
-import Animation
-import Animation.Messenger
 
 
 postcodeRegex : Regex
@@ -53,26 +55,42 @@ mapUrl search =
 -- Lists of style properties
 
 
-styleCandidate : Int -> List ( String, String )
+styleCandidate : Int -> List (String, String)
 styleCandidate index =
     let
         always =
-            [ ( "border", "3px solid white" )
-            , ( "margin-left", "1em" )
-            , ( "padding-left", ".2em" )
-            ]
+                [ Css.border3 (Css.px 3) Css.solid (Css.hex "FFF")
+                , Css.marginLeft (Css.em 1)
+                , Css.paddingLeft (Css.em 0.2)
+                ]
     in
         if index % 2 == 0 then
-            ( "background-color", "#eee" ) :: always
+            Css.asPairs (Css.backgroundColor (Css.hex "EEE" ) :: always)
         else
-            always
+            Css.asPairs always
 
 
 styleCandidateAddressHover : List (String, String)
 styleCandidateAddressHover =
-    [ ( "border", "3px solid red" )
-    , ( "border-radius", "10px" )
-    ]
+    Css.asPairs
+        [ Css.border3 (Css.px 3) Css.solid (Css.hex "F00")
+        , Css.borderRadius (Css.px 10)
+        ]
+
+styleEmbeddedMap : List (String, String)
+styleEmbeddedMap =
+    Css.asPairs
+        [ Css.border (Css.px 0)
+        , Css.marginBottom (Css.px 20)
+        ]
+
+styleFetchAddressButton : List (String, String)
+styleFetchAddressButton =
+    Css.asPairs
+        [ Css.fontSize (Css.px 50)
+        , Css.fontWeight Css.bold
+        , Css.marginTop (Css.px 20)
+        ]
 
 
 
@@ -86,8 +104,8 @@ viewExternalLink linkText linkHref =
         , target "blank"
         , style [ ( "font-size", "80%" ) ]
         ]
-        [ text linkText
-        , sup [] [ text "⧉" ]
+        [ Html.text linkText
+        , sup [] [ Html.text "⧉" ]
         ]
 
 
@@ -97,10 +115,7 @@ viewEmbeddedMap search =
         [ width 300
         , height 400
         , class "column-one-third"
-        , style
-            [ ( "border", "0" )
-            , ( "margin-bottom", "20px" )
-            ]
+        , style styleEmbeddedMap
         , src (mapUrl (search ++ ", United Kingdom"))
         ]
         []
@@ -123,7 +138,7 @@ viewCandidate index candidate =
                 , onClick
                     (SelectCandidate (Just ( candidateAddress.uprn, testId )))
                 ]
-                [ text ("➞ " ++ candidateAddress.address)
+                [ Html.text ("➞ " ++ candidateAddress.address)
                 , text " "
                 , small []
                 [ viewExternalLink " map" (mapUrl candidateAddress.address) ]
@@ -148,14 +163,14 @@ viewAddress animState address =
                         [ style
                             [ ( "font-weight", "bold" ) ]
                         ]
-                        [ text "Pass ¯\\_(ツ)_/¯" ]
+                        [ Html.text "Pass ¯\\_(ツ)_/¯" ]
                     ]
 
         testAddressHtml =
             h1
                 [ class "heading-medium" ]
-                [ text (address.test.address)
-                , span [] [ text " - " ]
+                [ Html.text (address.test.address)
+                , span [] [ Html.text " - " ]
                 , viewExternalLink "Search" (searchUrl address.test.address)
                 ]
     in
@@ -189,13 +204,13 @@ viewUserOption currentUserId user =
         [ value (user |> User.id |> toString)
         , selected (currentUserId == User.id user)
         ]
-        [ user |> User.name |> text ]
+        [ user |> User.name |> Html.text ]
 
 
 viewUserSelect : UserId -> List User -> Html Msg
 viewUserSelect currentUserId users =
     select [ onInput UserChange ]
-        ((option [] [ text "Select a user" ])
+        ((option [] [ Html.text "Select a user" ])
             :: (map (viewUserOption currentUserId) users)
         )
 
@@ -206,10 +221,10 @@ viewUsersSection currentUserId users =
         [ style [ ( "margin-bottom", "20px" ) ] ]
         [ case users of
             NotAsked ->
-                p [] [ text "Users not fetched " ]
+                p [] [ Html.text "Users not fetched " ]
 
             Loading ->
-                p [] [ text "Loading users" ]
+                p [] [ Html.text "Loading users" ]
 
             Success userList ->
                 let
@@ -220,13 +235,13 @@ viewUsersSection currentUserId users =
                             "Current user:"
                 in
                     div []
-                        [ p [] [ text message ]
+                        [ p [] [ Html.text message ]
                         , viewUserSelect currentUserId userList
                         ]
 
             Failure error ->
                 p []
-                    [ text
+                    [ Html.text
                         ("Error loading user data: " ++ (error |> toString))
                     ]
         ]
@@ -263,7 +278,7 @@ viewProgressBar percent =
                 , ( "text-align", "center" )
                 ]
             ]
-            [ pc |> text ]
+            [ pc |> Html.text ]
 
 
 viewAddressSection : Animation.Messenger.State Msg -> UserId -> RemoteAddresses -> Html Msg
@@ -280,23 +295,19 @@ viewAddressSection animState currentUserId addresses =
                             [ style
                                 [ ( "font-size", "20px" ) ]
                             ]
-                            [ text "Your score is 244" ]
+                            [ Html.text "Your score is 244" ]
                         , p
                             [ style
                                 [ ( "font-size", "30px" )
                                 , ( "color", "gold" )
                                 ]
                             ]
-                            [ text "🏆 You're in first place! 🏆" ]
+                            [ Html.text "🏆 You're in first place! 🏆" ]
                         , button
                             [ onClick FetchAddresses
-                            , style
-                                [ ( "font-size", "50px" )
-                                , ( "font-weight", "bold" )
-                                , ( "margin-top", "20px" )
-                                ]
+                            , style styleFetchAddressButton
                             ]
-                            [ text "Give me more!" ]
+                            [ Html.text "Give me more!" ]
                         ]
                 else
                     viewAddresses
@@ -305,10 +316,10 @@ viewAddressSection animState currentUserId addresses =
                         (take 1 listAddresses)
 
             Loading ->
-                p [] [ text "Loading addresses" ]
+                p [] [ Html.text "Loading addresses" ]
 
             _ ->
-                p [] [ text "No addresses" ]
+                p [] [ Html.text "No addresses" ]
 
 
 view : Model -> Html Msg
