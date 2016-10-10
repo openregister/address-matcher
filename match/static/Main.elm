@@ -131,14 +131,12 @@ update msg model =
             ( { model
                 | style =
                     Animation.interrupt
-                        [ Animation.to
-                            [ Animation.left (px -1000)
-                            ]
+                        [ Animation.toWith
+                            (Animation.speed { perSecond = 4000 })
+                            [ Animation.left (px -2000) ]
                         , Animation.Messenger.send
                             (NextCandidate ( selectedCandidateUprn, testId ))
-                        , Animation.set
-                            [ Animation.left (px 0)
-                            ]
+                        , Animation.set [ Animation.left (px 0) ]
                         ]
                         model.style
               }
@@ -173,8 +171,4 @@ update msg model =
                         animMsg
                         model.style
             in
-                ( { model
-                    | style = newStyle
-                  }
-                , cmds
-                )
+                ( { model | style = newStyle }, cmds )

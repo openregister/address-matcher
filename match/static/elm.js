@@ -16682,11 +16682,14 @@ var _user$project$Main$update = F2(
 								_mdgriffith$elm_style_animation$Animation$interrupt,
 								_elm_lang$core$Native_List.fromArray(
 									[
-										_mdgriffith$elm_style_animation$Animation$to(
+										A2(
+										_mdgriffith$elm_style_animation$Animation$toWith,
+										_mdgriffith$elm_style_animation$Animation$speed(
+											{perSecond: 4000}),
 										_elm_lang$core$Native_List.fromArray(
 											[
 												_mdgriffith$elm_style_animation$Animation$left(
-												_mdgriffith$elm_style_animation$Animation$px(-1000))
+												_mdgriffith$elm_style_animation$Animation$px(-2000))
 											])),
 										_mdgriffith$elm_style_animation$Animation_Messenger$send(
 										_user$project$State$NextCandidate(
