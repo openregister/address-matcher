@@ -16139,7 +16139,12 @@ var _user$project$View$viewExternalLink = F2(
 						]))
 				]));
 	});
-var _user$project$View$liStyle = function (index) {
+var _user$project$View$styleCandidateAddressHover = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'border', _1: '3px solid red'},
+		{ctor: '_Tuple2', _0: 'border-radius', _1: '10px'}
+	]);
+var _user$project$View$styleCandidate = function (index) {
 	var always = _elm_lang$core$Native_List.fromArray(
 		[
 			{ctor: '_Tuple2', _0: 'border', _1: '3px solid white'},
@@ -16190,16 +16195,12 @@ var _user$project$View$viewCandidate = F2(
 		var candidateAddress = _elm_lang$core$Basics$fst(candidate);
 		return A4(
 			_jinjor$elm_inline_hover$InlineHover$hover,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					{ctor: '_Tuple2', _0: 'border', _1: '3px solid red'},
-					{ctor: '_Tuple2', _0: 'border-radius', _1: '10px'}
-				]),
+			_user$project$View$styleCandidateAddressHover,
 			_elm_lang$html$Html$li,
 			_elm_lang$core$Native_List.fromArray(
 				[
 					_elm_lang$html$Html_Attributes$style(
-					_user$project$View$liStyle(index)),
+					_user$project$View$styleCandidate(index)),
 					_elm_lang$html$Html_Events$onClick(
 					_user$project$State$SelectCandidate(
 						_elm_lang$core$Maybe$Just(
@@ -16208,7 +16209,7 @@ var _user$project$View$viewCandidate = F2(
 			_elm_lang$core$Native_List.fromArray(
 				[
 					_elm_lang$html$Html$text(
-					A2(_elm_lang$core$Basics_ops['++'], '🢂 ', candidateAddress.address)),
+					A2(_elm_lang$core$Basics_ops['++'], '➞ ', candidateAddress.address)),
 					_elm_lang$html$Html$text(' '),
 					A2(
 					_elm_lang$html$Html$small,
@@ -16273,16 +16274,12 @@ var _user$project$View$viewAddress = F2(
 				]));
 		var notSureChoice = A4(
 			_jinjor$elm_inline_hover$InlineHover$hover,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					{ctor: '_Tuple2', _0: 'border', _1: '3px solid red'},
-					{ctor: '_Tuple2', _0: 'border-radius', _1: '10px'}
-				]),
+			_user$project$View$styleCandidateAddressHover,
 			_elm_lang$html$Html$li,
 			_elm_lang$core$Native_List.fromArray(
 				[
 					_elm_lang$html$Html_Attributes$style(
-					_user$project$View$liStyle(-1)),
+					_user$project$View$styleCandidate(-1)),
 					_elm_lang$html$Html_Events$onClick(
 					_user$project$State$SelectCandidate(_elm_lang$core$Maybe$Nothing))
 				]),
@@ -16300,7 +16297,7 @@ var _user$project$View$viewAddress = F2(
 						]),
 					_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$html$Html$text('🢂 Pass ¯\\_(ツ)_/¯')
+							_elm_lang$html$Html$text('Pass ¯\\_(ツ)_/¯')
 						]))
 				]));
 		var addTestId = function (ca) {

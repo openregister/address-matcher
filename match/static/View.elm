@@ -44,11 +44,17 @@ searchUrl search =
 mapUrl : String -> String
 mapUrl search =
     url "https://www.google.com/maps/embed/v1/place"
-        [ ( "key", "AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc" ), ( "q", search ) ]
+        [ ( "key", "AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc" )
+        , ( "q", search )
+        ]
 
 
-liStyle : Int -> List ( String, String )
-liStyle index =
+
+-- Lists of style properties
+
+
+styleCandidate : Int -> List ( String, String )
+styleCandidate index =
     let
         always =
             [ ( "border", "3px solid white" )
@@ -60,6 +66,17 @@ liStyle index =
             ( "background-color", "#eee" ) :: always
         else
             always
+
+
+styleCandidateAddressHover : List (String, String)
+styleCandidateAddressHover =
+    [ ( "border", "3px solid red" )
+    , ( "border-radius", "10px" )
+    ]
+
+
+
+-- HTML Generating Functions
 
 
 viewExternalLink : String -> String -> Html Msg
@@ -89,6 +106,7 @@ viewEmbeddedMap search =
         []
 
 
+
 viewCandidate : Int -> ( CandidateAddress, TestAddressId ) -> Html Msg
 viewCandidate index candidate =
     let
@@ -99,18 +117,17 @@ viewCandidate index candidate =
             snd candidate
     in
         hover
-            [ ( "border", "3px solid red" )
-            , ( "border-radius", "10px" )
-            ]
+            styleCandidateAddressHover
             li
-            [ style (liStyle index)
-            , onClick (SelectCandidate (Just ( candidateAddress.uprn, testId )))
-            ]
-            [ text ("🢂 " ++ candidateAddress.address)
-            , text " "
-            , small []
+                [ style (styleCandidate index)
+                , onClick
+                    (SelectCandidate (Just ( candidateAddress.uprn, testId )))
+                ]
+                [ text ("➞ " ++ candidateAddress.address)
+                , text " "
+                , small []
                 [ viewExternalLink " map" (mapUrl candidateAddress.address) ]
-            ]
+                ]
 
 
 viewAddress : Animation.Messenger.State Msg -> Address -> Html Msg
@@ -122,19 +139,17 @@ viewAddress animState address =
 
         notSureChoice =
             hover
-                [ ( "border", "3px solid red" )
-                , ( "border-radius", "10px" )
-                ]
+                styleCandidateAddressHover
                 li
-                [ style (liStyle -1)
-                , onClick (SelectCandidate Nothing)
-                ]
-                [ span
-                    [ style
-                        [ ( "font-weight", "bold" ) ]
+                    [ style (styleCandidate -1)
+                    , onClick (SelectCandidate Nothing)
                     ]
-                    [ text "🢂 Pass ¯\\_(ツ)_/¯" ]
-                ]
+                    [ span
+                        [ style
+                            [ ( "font-weight", "bold" ) ]
+                        ]
+                        [ text "Pass ¯\\_(ツ)_/¯" ]
+                    ]
 
         testAddressHtml =
             h1
@@ -301,5 +316,6 @@ view model =
     div
         [ style [ ( "font-size", "90%" ) ] ]
         [ viewUsersSection model.currentUserId model.users
-        , viewAddressSection model.animationStyle model.currentUserId model.addresses
+        , viewAddressSection
+            model.animationStyle model.currentUserId model.addresses
         ]
