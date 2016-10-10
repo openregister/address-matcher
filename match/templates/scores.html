@@ -28,20 +28,4 @@
     <li>{{ nb_addresses_matched }} addresses matched</li>
 </ul>
 
-<h3 class="heading-medium">Top ambiguous addresses</h3>
-
-<table>
-    <thead>
-        <tr><th>Address</th><th>Matches</th><th>
-    </thead>
-    <tbody>
-        {% for address in matched_addresses %}
-            <tr>
-                <td>{{ address.address.test_id }}</td>
-                <td>{{ address.nb_matches }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
 {% endblock %}

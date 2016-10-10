@@ -39,18 +39,6 @@ def scores(request):
 
     stats['addresses'] = []
 
-    matched_addresses = []
-    for address in addresses:
-        address_matches = Match.objects.filter(
-            test_address__id = address.pk)
-        if len(address_matches) > 0:
-            ma = {'address': address, 'nb_matches': len(address_matches) }
-            matched_addresses.append(ma)
-    stats['matched_addresses'] = sorted(matched_addresses,
-        key=lambda x: x['nb_matches'], reverse=True)[:3]
-
-
-
     template = loader.get_template('scores.html')
 
     return HttpResponse(template.render(stats, request))
