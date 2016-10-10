@@ -15938,9 +15938,6 @@ var _user$project$State$SendMatchOk = function (a) {
 var _user$project$State$SendMatchFail = function (a) {
 	return {ctor: 'SendMatchFail', _0: a};
 };
-var _user$project$State$NoMatch = function (a) {
-	return {ctor: 'NoMatch', _0: a};
-};
 var _user$project$State$SelectCandidate = function (a) {
 	return {ctor: 'SelectCandidate', _0: a};
 };
@@ -16205,7 +16202,8 @@ var _user$project$View$viewCandidate = F2(
 					_user$project$View$liStyle(index)),
 					_elm_lang$html$Html_Events$onClick(
 					_user$project$State$SelectCandidate(
-						{ctor: '_Tuple2', _0: candidateAddress.uprn, _1: testId}))
+						_elm_lang$core$Maybe$Just(
+							{ctor: '_Tuple2', _0: candidateAddress.uprn, _1: testId})))
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
@@ -16286,7 +16284,7 @@ var _user$project$View$viewAddress = F2(
 					_elm_lang$html$Html_Attributes$style(
 					_user$project$View$liStyle(-1)),
 					_elm_lang$html$Html_Events$onClick(
-					_user$project$State$NoMatch(address.test.id))
+					_user$project$State$SelectCandidate(_elm_lang$core$Maybe$Nothing))
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
@@ -16674,67 +16672,65 @@ var _user$project$Main$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'SelectCandidate':
+				var animationReset = _mdgriffith$elm_style_animation$Animation$set(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_mdgriffith$elm_style_animation$Animation$left(
+							_mdgriffith$elm_style_animation$Animation$px(0))
+						]));
+				var animationMoveLeft = A2(
+					_mdgriffith$elm_style_animation$Animation$toWith,
+					_mdgriffith$elm_style_animation$Animation$speed(
+						{perSecond: 8000}),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_mdgriffith$elm_style_animation$Animation$left(
+							_mdgriffith$elm_style_animation$Animation$px(-3000))
+						]));
+				var animation = function () {
+					var _p2 = _p1._0;
+					if (_p2.ctor === 'Nothing') {
+						return _elm_lang$core$Native_List.fromArray(
+							[animationMoveLeft, animationReset]);
+					} else {
+						return _elm_lang$core$Native_List.fromArray(
+							[
+								animationMoveLeft,
+								_mdgriffith$elm_style_animation$Animation_Messenger$send(
+								_user$project$State$NextCandidate(
+									{ctor: '_Tuple2', _0: _p2._0._0, _1: _p2._0._1})),
+								animationReset
+							]);
+					}
+				}();
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							animationStyle: A2(
-								_mdgriffith$elm_style_animation$Animation$interrupt,
-								_elm_lang$core$Native_List.fromArray(
-									[
-										A2(
-										_mdgriffith$elm_style_animation$Animation$toWith,
-										_mdgriffith$elm_style_animation$Animation$speed(
-											{perSecond: 8000}),
-										_elm_lang$core$Native_List.fromArray(
-											[
-												_mdgriffith$elm_style_animation$Animation$left(
-												_mdgriffith$elm_style_animation$Animation$px(-3000))
-											])),
-										_mdgriffith$elm_style_animation$Animation_Messenger$send(
-										_user$project$State$NextCandidate(
-											{ctor: '_Tuple2', _0: _p1._0._0, _1: _p1._0._1})),
-										_mdgriffith$elm_style_animation$Animation$set(
-										_elm_lang$core$Native_List.fromArray(
-											[
-												_mdgriffith$elm_style_animation$Animation$left(
-												_mdgriffith$elm_style_animation$Animation$px(0))
-											]))
-									]),
-								model.animationStyle)
+							animationStyle: A2(_mdgriffith$elm_style_animation$Animation$interrupt, animation, model.animationStyle)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'NextCandidate':
-				var _p2 = _p1._0._1;
+				var _p3 = _p1._0._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							addresses: A2(_user$project$Address$removeAddress, _p2, model.addresses)
+							addresses: A2(_user$project$Address$removeAddress, _p3, model.addresses)
 						}),
-					_1: A3(_user$project$Rest$sendMatch, _p1._0._0, _p2, model.currentUserId)
-				};
-			case 'NoMatch':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							addresses: A2(_user$project$Address$removeAddress, _p1._0, model.addresses)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
+					_1: A3(_user$project$Rest$sendMatch, _p1._0._0, _p3, model.currentUserId)
 				};
 			case 'SendMatchOk':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'SendMatchFail':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			default:
-				var _p3 = A2(_mdgriffith$elm_style_animation$Animation_Messenger$update, _p1._0, model.animationStyle);
-				var newStyle = _p3._0;
-				var cmds = _p3._1;
+				var _p4 = A2(_mdgriffith$elm_style_animation$Animation_Messenger$update, _p1._0, model.animationStyle);
+				var newStyle = _p4._0;
+				var cmds = _p4._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -16746,13 +16742,13 @@ var _user$project$Main$update = F2(
 	});
 var _user$project$Main$urlUpdate = F2(
 	function (result, model) {
-		var _p4 = result;
-		if (_p4.ctor === 'Ok') {
+		var _p5 = result;
+		if (_p5.ctor === 'Ok') {
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model,
-					{currentUserId: _p4._0}),
+					{currentUserId: _p5._0}),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {

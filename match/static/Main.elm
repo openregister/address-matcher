@@ -7,9 +7,11 @@ import Animation.Messenger
 import State exposing (..)
 import View
 import Rest
+import Maybe
 import Types exposing (..)
 import User exposing (..)
 import Address exposing (..)
+
 
 
 main : Program Never
@@ -39,7 +41,8 @@ init result =
             else
                 [ Rest.fetchUsers, Rest.fetchAddresses ]
 
-        initialAnimationStyle = Animation.style [ Animation.left (px 0) ]
+        initialAnimationStyle =
+            Animation.style [ Animation.left (px 0) ]
     in
         (Model userId Loading NotAsked initialAnimationStyle) ! initCmd
 
@@ -89,6 +92,7 @@ urlUpdate result model =
             )
 
 
+
 -- UPDATE
 
 
@@ -123,21 +127,33 @@ update msg model =
         FetchAddressesFail error ->
             ( { model | addresses = Failure error }, Cmd.none )
 
-        SelectCandidate ( selectedCandidateUprn, testId ) ->
-            ( { model
-                | animationStyle =
-                    Animation.interrupt
-                        [ Animation.toWith
-                            (Animation.speed { perSecond = 8000 })
-                            [ Animation.left (px -3000) ]
-                        , Animation.Messenger.send
-                            (NextCandidate ( selectedCandidateUprn, testId ))
-                        , Animation.set [ Animation.left (px 0) ]
-                        ]
-                        model.animationStyle
-              }
-            , Cmd.none
-            )
+        SelectCandidate match ->
+            let
+                animationMoveLeft =
+                    Animation.toWith
+                        (Animation.speed { perSecond = 8000 })
+                        [ Animation.left (px -3000) ]
+
+                animationReset =
+                    Animation.set [ Animation.left (px 0) ]
+
+                animation =
+                    case match of
+                        Nothing ->
+                            [ animationMoveLeft, animationReset ]
+
+                        Just ( selectedCandidateUprn, testId ) ->
+                            [ animationMoveLeft
+                            , Animation.Messenger.send
+                                (NextCandidate
+                                     ( selectedCandidateUprn, testId ))
+                            , animationReset
+                            ]
+            in
+                ( { model | animationStyle =
+                        (Animation.interrupt animation model.animationStyle) }
+                , Cmd.none
+                )
 
         NextCandidate ( selectedCandidateUprn, testId ) ->
             ( { model
@@ -147,11 +163,6 @@ update msg model =
                 selectedCandidateUprn
                 testId
                 model.currentUserId
-            )
-
-        NoMatch testId ->
-            ( { model | addresses = removeAddress testId model.addresses }
-            , Cmd.none
             )
 
         SendMatchOk result ->

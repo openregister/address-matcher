@@ -29,8 +29,7 @@ type Msg
     | FetchAddressesOk (List Address)
     | FetchAddressesFail Http.Error
     | NextCandidate ( String, TestAddressId )
-    | SelectCandidate ( String, TestAddressId )
-    | NoMatch TestAddressId
+    | SelectCandidate (Maybe ( String, TestAddressId ))
     | SendMatchFail Http.Error
     | SendMatchOk String
     | Animate Animation.Msg

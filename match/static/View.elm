@@ -104,7 +104,7 @@ viewCandidate index candidate =
             ]
             li
             [ style (liStyle index)
-            , onClick (SelectCandidate ( candidateAddress.uprn, testId ))
+            , onClick (SelectCandidate (Just ( candidateAddress.uprn, testId )))
             ]
             [ text ("🢂 " ++ candidateAddress.address)
             , text " "
@@ -127,7 +127,7 @@ viewAddress animState address =
                 ]
                 li
                 [ style (liStyle -1)
-                , onClick (NoMatch address.test.id)
+                , onClick (SelectCandidate Nothing)
                 ]
                 [ span
                     [ style
