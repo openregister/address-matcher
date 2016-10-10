@@ -39,12 +39,9 @@ init result =
             else
                 [ Rest.fetchUsers, Rest.fetchAddresses ]
 
-        initStyle =
-            Animation.style
-                [ Animation.left (px 0)
-                ]
+        initialAnimationStyle = Animation.style [ Animation.left (px 0) ]
     in
-        (Model userId Loading NotAsked initStyle) ! initCmd
+        (Model userId Loading NotAsked initialAnimationStyle) ! initCmd
 
 
 
@@ -53,7 +50,7 @@ init result =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Animation.subscription Animate [ model.style ]
+    Animation.subscription Animate [ model.animationStyle ]
 
 
 
@@ -92,7 +89,6 @@ urlUpdate result model =
             )
 
 
-
 -- UPDATE
 
 
@@ -129,16 +125,16 @@ update msg model =
 
         SelectCandidate ( selectedCandidateUprn, testId ) ->
             ( { model
-                | style =
+                | animationStyle =
                     Animation.interrupt
                         [ Animation.toWith
-                            (Animation.speed { perSecond = 4000 })
-                            [ Animation.left (px -2000) ]
+                            (Animation.speed { perSecond = 8000 })
+                            [ Animation.left (px -3000) ]
                         , Animation.Messenger.send
                             (NextCandidate ( selectedCandidateUprn, testId ))
                         , Animation.set [ Animation.left (px 0) ]
                         ]
-                        model.style
+                        model.animationStyle
               }
             , Cmd.none
             )
@@ -169,6 +165,6 @@ update msg model =
                 ( newStyle, cmds ) =
                     Animation.Messenger.update
                         animMsg
-                        model.style
+                        model.animationStyle
             in
-                ( { model | style = newStyle }, cmds )
+                ( { model | animationStyle = newStyle }, cmds )

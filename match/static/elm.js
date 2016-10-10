@@ -15927,7 +15927,7 @@ var _user$project$User$usersDecoder = _elm_lang$core$Json_Decode$list(_user$proj
 
 var _user$project$State$Model = F4(
 	function (a, b, c, d) {
-		return {currentUserId: a, users: b, addresses: c, style: d};
+		return {currentUserId: a, users: b, addresses: c, animationStyle: d};
 	});
 var _user$project$State$Animate = function (a) {
 	return {ctor: 'Animate', _0: a};
@@ -16234,6 +16234,21 @@ var _user$project$View$searchUrl = function (search) {
 				{ctor: '_Tuple2', _0: 'q', _1: search}
 			]));
 };
+var _user$project$View$postcodeRegex = _elm_lang$core$Regex$regex('(GIR 0AA)|((([A-Z]\\d+)|(([A-Z]{2}\\d+)|(([A-Z][0-9][A-HJKSTUW])|([A-Z]{2}[0-9][ABEHMNPRVWXY]))))\\s?[0-9][A-Z]{2})');
+var _user$project$View$extractPostcode = function (text) {
+	var match = _elm_lang$core$List$head(
+		A3(
+			_elm_lang$core$Regex$find,
+			_elm_lang$core$Regex$AtMost(1),
+			_user$project$View$postcodeRegex,
+			text));
+	var _p1 = match;
+	if (_p1.ctor === 'Nothing') {
+		return text;
+	} else {
+		return _p1._0.match;
+	}
+};
 var _user$project$View$viewAddress = F2(
 	function (animState, address) {
 		var testAddressHtml = A2(
@@ -16303,8 +16318,7 @@ var _user$project$View$viewAddress = F2(
 						_elm_lang$html$Html_Attributes$style(
 						_elm_lang$core$Native_List.fromArray(
 							[
-								{ctor: '_Tuple2', _0: 'position', _1: 'relative'},
-								{ctor: '_Tuple2', _0: 'border-style', _1: 'dotted'}
+								{ctor: '_Tuple2', _0: 'position', _1: 'relative'}
 							]))
 					])),
 			_elm_lang$core$Native_List.fromArray(
@@ -16330,7 +16344,9 @@ var _user$project$View$viewAddress = F2(
 								A2(
 									_elm_lang$core$List$indexedMap,
 									_user$project$View$viewCandidate,
-									A2(_elm_lang$core$List$map, addTestId, address.candidates))))
+									A2(_elm_lang$core$List$map, addTestId, address.candidates)))),
+							_user$project$View$viewEmbeddedMap(
+							_user$project$View$extractPostcode(address.test.address))
 						]))
 				]));
 	});
@@ -16358,12 +16374,12 @@ var _user$project$View$viewAddressSection = F3(
 				_elm_lang$core$Native_List.fromArray(
 					[]));
 		} else {
-			var _p1 = addresses;
-			switch (_p1.ctor) {
+			var _p2 = addresses;
+			switch (_p2.ctor) {
 				case 'Success':
-					var _p2 = _p1._0;
+					var _p3 = _p2._0;
 					return _elm_lang$core$Native_Utils.eq(
-						_p2,
+						_p3,
 						_elm_lang$core$Native_List.fromArray(
 							[])) ? A2(
 						_elm_lang$html$Html$div,
@@ -16421,8 +16437,8 @@ var _user$project$View$viewAddressSection = F3(
 							])) : A3(
 						_user$project$View$viewAddresses,
 						animState,
-						_elm_lang$core$List$length(_p2),
-						A2(_elm_lang$core$List$take, 1, _p2));
+						_elm_lang$core$List$length(_p3),
+						A2(_elm_lang$core$List$take, 1, _p3));
 				case 'Loading':
 					return A2(
 						_elm_lang$html$Html$p,
@@ -16458,23 +16474,8 @@ var _user$project$View$view = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(_user$project$View$viewUsersSection, model.currentUserId, model.users),
-				A3(_user$project$View$viewAddressSection, model.style, model.currentUserId, model.addresses)
+				A3(_user$project$View$viewAddressSection, model.animationStyle, model.currentUserId, model.addresses)
 			]));
-};
-var _user$project$View$postcodeRegex = _elm_lang$core$Regex$regex('(GIR 0AA)|((([A-Z]\\d+)|(([A-Z]{2}\\d+)|(([A-Z][0-9][A-HJKSTUW])|([A-Z]{2}[0-9][ABEHMNPRVWXY]))))\\s?[0-9][A-Z]{2})');
-var _user$project$View$extractPostcode = function (text) {
-	var match = _elm_lang$core$List$head(
-		A3(
-			_elm_lang$core$Regex$find,
-			_elm_lang$core$Regex$AtMost(1),
-			_user$project$View$postcodeRegex,
-			text));
-	var _p3 = match;
-	if (_p3.ctor === 'Nothing') {
-		return text;
-	} else {
-		return _p3._0.match;
-	}
 };
 
 var _user$project$Rest$sendMatch = F3(
@@ -16678,18 +16679,18 @@ var _user$project$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							style: A2(
+							animationStyle: A2(
 								_mdgriffith$elm_style_animation$Animation$interrupt,
 								_elm_lang$core$Native_List.fromArray(
 									[
 										A2(
 										_mdgriffith$elm_style_animation$Animation$toWith,
 										_mdgriffith$elm_style_animation$Animation$speed(
-											{perSecond: 4000}),
+											{perSecond: 8000}),
 										_elm_lang$core$Native_List.fromArray(
 											[
 												_mdgriffith$elm_style_animation$Animation$left(
-												_mdgriffith$elm_style_animation$Animation$px(-2000))
+												_mdgriffith$elm_style_animation$Animation$px(-3000))
 											])),
 										_mdgriffith$elm_style_animation$Animation_Messenger$send(
 										_user$project$State$NextCandidate(
@@ -16701,7 +16702,7 @@ var _user$project$Main$update = F2(
 												_mdgriffith$elm_style_animation$Animation$px(0))
 											]))
 									]),
-								model.style)
+								model.animationStyle)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -16731,14 +16732,14 @@ var _user$project$Main$update = F2(
 			case 'SendMatchFail':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			default:
-				var _p3 = A2(_mdgriffith$elm_style_animation$Animation_Messenger$update, _p1._0, model.style);
+				var _p3 = A2(_mdgriffith$elm_style_animation$Animation_Messenger$update, _p1._0, model.animationStyle);
 				var newStyle = _p3._0;
 				var cmds = _p3._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{style: newStyle}),
+						{animationStyle: newStyle}),
 					_1: cmds
 				};
 		}
@@ -16768,10 +16769,10 @@ var _user$project$Main$subscriptions = function (model) {
 		_mdgriffith$elm_style_animation$Animation$subscription,
 		_user$project$State$Animate,
 		_elm_lang$core$Native_List.fromArray(
-			[model.style]));
+			[model.animationStyle]));
 };
 var _user$project$Main$init = function (result) {
-	var initStyle = _mdgriffith$elm_style_animation$Animation$style(
+	var initialAnimationStyle = _mdgriffith$elm_style_animation$Animation$style(
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_mdgriffith$elm_style_animation$Animation$left(
@@ -16783,7 +16784,7 @@ var _user$project$Main$init = function (result) {
 		[_user$project$Rest$fetchUsers, _user$project$Rest$fetchAddresses]);
 	return A2(
 		_elm_lang$core$Platform_Cmd_ops['!'],
-		A4(_user$project$State$Model, userId, _user$project$Types$Loading, _user$project$Types$NotAsked, initStyle),
+		A4(_user$project$State$Model, userId, _user$project$Types$Loading, _user$project$Types$NotAsked, initialAnimationStyle),
 		initCmd);
 };
 var _user$project$Main$main = {

@@ -16,7 +16,7 @@ type alias Model =
     { currentUserId : UserId
     , users : RemoteUsers
     , addresses : RemoteAddresses
-    , style : Animation.Messenger.State Msg
+    , animationStyle : Animation.Messenger.State Msg
     }
 
 

@@ -146,12 +146,8 @@ viewAddress animState address =
     in
         div
             (Animation.render animState
-                        ++ [ style
-                                [ ( "position", "relative" )
-                                , ( "border-style", "dotted" )
-                                ]
-                            ]
-                        )
+                ++ [ style [ ( "position", "relative" ) ] ]
+            )
             [ testAddressHtml
             , div
                 [ class "grid-row" ]
@@ -159,7 +155,7 @@ viewAddress animState address =
                     (notSureChoice
                         :: (indexedMap viewCandidate (map addTestId address.candidates))
                     )
---                , viewEmbeddedMap (extractPostcode address.test.address)
+                , viewEmbeddedMap (extractPostcode address.test.address)
                 ]
             ]
 
@@ -305,16 +301,5 @@ view model =
     div
         [ style [ ( "font-size", "90%" ) ] ]
         [ viewUsersSection model.currentUserId model.users
-        , viewAddressSection model.style model.currentUserId model.addresses
-        -- , div [ onClick AnimateExit ] [ text "click" ]
-          -- , div [] [ text (toString model) ]
-        -- , div
-        --     (Animation.render model.style
-        --                 ++ [ style
-        --                         [ ( "position", "absolute" )
-        --                         , ( "border-style", "dotted" )
-        --                         ]
-        --                     ]
-        --                 )
-        --     [ text "XXXXX" ]
+        , viewAddressSection model.animationStyle model.currentUserId model.addresses
         ]
