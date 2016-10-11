@@ -59,8 +59,7 @@ styleCandidate : Int -> List (String, String)
 styleCandidate index =
     let
         always =
-                [ Css.border3 (Css.px 3) Css.solid (Css.hex "FFF")
-                , Css.marginLeft (Css.em 1)
+                [ Css.marginLeft (Css.em 1)
                 , Css.paddingLeft (Css.em 0.2)
                 ]
     in
@@ -73,7 +72,7 @@ styleCandidate index =
 styleCandidateAddressHover : List (String, String)
 styleCandidateAddressHover =
     Css.asPairs
-        [ Css.border3 (Css.px 3) Css.solid (Css.hex "F00")
+        [ Css.outline3 (Css.px 3) Css.solid (Css.hex "F00")
         , Css.borderRadius (Css.px 10)
         ]
 

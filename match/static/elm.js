@@ -20129,7 +20129,7 @@ var _user$project$View$styleCandidateAddressHover = _rtfeldman$elm_css$Css$asPai
 	_elm_lang$core$Native_List.fromArray(
 		[
 			A3(
-			_rtfeldman$elm_css$Css$border3,
+			_rtfeldman$elm_css$Css$outline3,
 			_rtfeldman$elm_css$Css$px(3),
 			_rtfeldman$elm_css$Css$solid,
 			_rtfeldman$elm_css$Css$hex('F00')),
@@ -20139,11 +20139,6 @@ var _user$project$View$styleCandidateAddressHover = _rtfeldman$elm_css$Css$asPai
 var _user$project$View$styleCandidate = function (index) {
 	var always = _elm_lang$core$Native_List.fromArray(
 		[
-			A3(
-			_rtfeldman$elm_css$Css$border3,
-			_rtfeldman$elm_css$Css$px(3),
-			_rtfeldman$elm_css$Css$solid,
-			_rtfeldman$elm_css$Css$hex('FFF')),
 			_rtfeldman$elm_css$Css$marginLeft(
 			_rtfeldman$elm_css$Css$em(1)),
 			_rtfeldman$elm_css$Css$paddingLeft(
