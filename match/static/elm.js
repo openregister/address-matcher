@@ -10200,6 +10200,10 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _elm_lang$html$Html_Keyed$node = _elm_lang$virtual_dom$VirtualDom$keyedNode;
+var _elm_lang$html$Html_Keyed$ol = _elm_lang$html$Html_Keyed$node('ol');
+var _elm_lang$html$Html_Keyed$ul = _elm_lang$html$Html_Keyed$node('ul');
+
 var _elm_lang$navigation$Native_Navigation = function() {
 
 function go(n)
@@ -20183,36 +20187,40 @@ var _user$project$View$viewCandidate = F2(
 	function (index, candidate) {
 		var testId = _elm_lang$core$Basics$snd(candidate);
 		var candidateAddress = _elm_lang$core$Basics$fst(candidate);
-		return A4(
-			_jinjor$elm_inline_hover$InlineHover$hover,
-			_user$project$View$styleCandidateAddressHover,
-			_elm_lang$html$Html$li,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Attributes$style(
-					_user$project$View$styleCandidate(index)),
-					_elm_lang$html$Html_Events$onClick(
-					_user$project$State$SelectCandidate(
-						_elm_lang$core$Maybe$Just(
-							{ctor: '_Tuple2', _0: candidateAddress.uprn, _1: testId})))
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html$text(
-					A2(_elm_lang$core$Basics_ops['++'], '➞ ', candidateAddress.address)),
-					_elm_lang$html$Html$text(' '),
-					A2(
-					_elm_lang$html$Html$small,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							A2(
-							_user$project$View$viewExternalLink,
-							' map',
-							_user$project$View$mapUrl(candidateAddress.address))
-						]))
-				]));
+		return {
+			ctor: '_Tuple2',
+			_0: candidateAddress.uprn,
+			_1: A4(
+				_jinjor$elm_inline_hover$InlineHover$hover,
+				_user$project$View$styleCandidateAddressHover,
+				_elm_lang$html$Html$li,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$style(
+						_user$project$View$styleCandidate(index)),
+						_elm_lang$html$Html_Events$onClick(
+						_user$project$State$SelectCandidate(
+							_elm_lang$core$Maybe$Just(
+								{ctor: '_Tuple2', _0: candidateAddress.uprn, _1: testId})))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(_elm_lang$core$Basics_ops['++'], '➞ ', candidateAddress.address)),
+						_elm_lang$html$Html$text(' '),
+						A2(
+						_elm_lang$html$Html$small,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(
+								_user$project$View$viewExternalLink,
+								' map',
+								_user$project$View$mapUrl(candidateAddress.address))
+							]))
+					]))
+		};
 	});
 var _user$project$View$searchUrl = function (search) {
 	return A2(
@@ -20318,14 +20326,14 @@ var _user$project$View$viewAddress = F2(
 					_elm_lang$core$Native_List.fromArray(
 						[
 							A2(
-							_elm_lang$html$Html$ul,
+							_elm_lang$html$Html_Keyed$ul,
 							_elm_lang$core$Native_List.fromArray(
 								[
 									_elm_lang$html$Html_Attributes$class('column-two-thirds')
 								]),
 							A2(
 								_elm_lang$core$List_ops['::'],
-								notSureChoice,
+								{ctor: '_Tuple2', _0: 'pass', _1: notSureChoice},
 								A2(
 									_elm_lang$core$List$indexedMap,
 									_user$project$View$viewCandidate,

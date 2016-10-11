@@ -3,6 +3,7 @@ module View exposing (view)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Html.Keyed
 import Http exposing (..)
 import List exposing (..)
 import InlineHover exposing (hover)
@@ -121,7 +122,7 @@ viewEmbeddedMap search =
 
 
 
-viewCandidate : Int -> ( CandidateAddress, TestAddressId ) -> Html Msg
+viewCandidate : Int -> ( CandidateAddress, TestAddressId ) -> (String, Html Msg)
 viewCandidate index candidate =
     let
         candidateAddress =
@@ -130,7 +131,8 @@ viewCandidate index candidate =
         testId =
             snd candidate
     in
-        hover
+        (candidateAddress.uprn
+        ,hover
             styleCandidateAddressHover
             li
                 [ style (styleCandidate index)
@@ -142,6 +144,7 @@ viewCandidate index candidate =
                 , small []
                 [ viewExternalLink " map" (mapUrl candidateAddress.address) ]
                 ]
+        )
 
 
 viewAddress : Animation.Messenger.State Msg -> Address -> Html Msg
@@ -180,8 +183,8 @@ viewAddress animState address =
             [ testAddressHtml
             , div
                 [ class "grid-row" ]
-                [ ul [ class "column-two-thirds" ]
-                    (notSureChoice
+                [ Html.Keyed.ul [ class "column-two-thirds" ]
+                    (("pass", notSureChoice)
                         :: (indexedMap viewCandidate (map addTestId address.candidates))
                     )
                 , viewEmbeddedMap (extractPostcode address.test.address)
