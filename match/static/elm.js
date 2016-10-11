@@ -19935,43 +19935,43 @@ var _user$project$State$FetchUsersOk = function (a) {
 };
 var _user$project$State$FetchUsers = {ctor: 'FetchUsers'};
 
-var _user$project$View$viewProgressBar = function (percent) {
-	var pc = A2(
-		_elm_lang$core$Basics_ops['++'],
-		_elm_lang$core$Basics$toString(percent),
-		'%');
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$style(
-				_elm_lang$core$Native_List.fromArray(
-					[
-						{
-						ctor: '_Tuple2',
-						_0: 'background-color',
-						_1: _elm_lang$core$Native_Utils.eq(percent, 0) ? 'white' : 'green'
-					},
-						{
-						ctor: '_Tuple2',
-						_0: 'color',
-						_1: _elm_lang$core$Native_Utils.eq(percent, 0) ? 'black' : 'white'
-					},
-						{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
-						{ctor: '_Tuple2', _0: 'font-size', _1: '2em'},
-						{
-						ctor: '_Tuple2',
-						_0: 'width',
-						_1: _elm_lang$core$Native_Utils.eq(percent, 0) ? '100px' : pc
-					},
-						{ctor: '_Tuple2', _0: 'text-align', _1: 'center'}
-					]))
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html$text(pc)
-			]));
-};
+var _user$project$View$viewProgressBar = F2(
+	function (remaining, max) {
+		var percent = (100 * _elm_lang$core$Basics$toFloat((max - remaining) + 1)) / _elm_lang$core$Basics$toFloat(max);
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$style(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							{ctor: '_Tuple2', _0: 'background-color', _1: 'green'},
+							{ctor: '_Tuple2', _0: 'color', _1: 'white'},
+							{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
+							{ctor: '_Tuple2', _0: 'font-size', _1: '2em'},
+							{
+							ctor: '_Tuple2',
+							_0: 'width',
+							_1: A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(percent),
+								'%')
+						},
+							{ctor: '_Tuple2', _0: 'text-align', _1: 'center'}
+						]))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString((max + 1) - remaining),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'/',
+							_elm_lang$core$Basics$toString(max))))
+				]));
+	});
 var _user$project$View$viewUserOption = F2(
 	function (currentUserId, user) {
 		return A2(
@@ -20344,14 +20344,14 @@ var _user$project$View$viewAddress = F2(
 				]));
 	});
 var _user$project$View$viewAddresses = F3(
-	function (animState, numberDone, addresses) {
+	function (animState, numberRemaining, addresses) {
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
 				[]),
 			A2(
 				_elm_lang$core$List_ops['::'],
-				_user$project$View$viewProgressBar(20 * (5 - numberDone)),
+				A2(_user$project$View$viewProgressBar, numberRemaining, 5),
 				A2(
 					_elm_lang$core$List$map,
 					_user$project$View$viewAddress(animState),
@@ -20380,7 +20380,6 @@ var _user$project$View$viewAddressSection = F3(
 							[]),
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_user$project$View$viewProgressBar(100),
 								A2(
 								_elm_lang$html$Html$p,
 								_elm_lang$core$Native_List.fromArray(

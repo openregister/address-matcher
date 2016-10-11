@@ -193,9 +193,9 @@ viewAddress animState address =
 
 
 viewAddresses : Animation.Messenger.State Msg -> Int -> List Address -> Html Msg
-viewAddresses animState numberDone addresses =
+viewAddresses animState numberRemaining addresses =
     div []
-        (viewProgressBar (20 * (5 - numberDone))
+        ((viewProgressBar numberRemaining 5)
             :: (map (viewAddress animState) addresses)
         )
 
@@ -249,38 +249,26 @@ viewUsersSection currentUserId users =
         ]
 
 
-viewProgressBar : Int -> Html Msg
-viewProgressBar percent =
+viewProgressBar : Int -> Int -> Html Msg
+viewProgressBar remaining max =
     let
-        pc =
-            (percent |> toString) ++ "%"
+        percent : Float
+        percent =
+            100 * (toFloat (max-remaining+1)) / (toFloat max)
     in
         div
             [ style
-                [ ( "background-color"
-                  , if percent == 0 then
-                        "white"
-                    else
-                        "green"
-                  )
-                , ( "color"
-                  , if percent == 0 then
-                        "black"
-                    else
-                        "white"
-                  )
+                [ ( "background-color", "green" )
+                , ( "color", "white" )
                 , ( "font-weight", "bold" )
                 , ( "font-size", "2em" )
-                , ( "width"
-                  , if percent == 0 then
-                        "100px"
-                    else
-                        pc
-                  )
+                , ( "width", (percent |> toString) ++ "%")
                 , ( "text-align", "center" )
                 ]
             ]
-            [ pc |> Html.text ]
+            [ (toString
+                (max + 1 - remaining)) ++ "/" ++ (toString max) |> Html.text
+            ]
 
 
 viewAddressSection : Animation.Messenger.State Msg -> UserId -> RemoteAddresses -> Html Msg
@@ -292,8 +280,7 @@ viewAddressSection animState currentUserId addresses =
             Success listAddresses ->
                 if listAddresses == [] then
                     div []
-                        [ viewProgressBar 100
-                        , p
+                        [ p
                             [ style
                                 [ ( "font-size", "20px" ) ]
                             ]
