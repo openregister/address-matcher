@@ -19941,35 +19941,61 @@ var _user$project$View$viewProgressBar = F2(
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Attributes$style(
-					_elm_lang$core$Native_List.fromArray(
-						[
-							{ctor: '_Tuple2', _0: 'background-color', _1: 'green'},
-							{ctor: '_Tuple2', _0: 'color', _1: 'white'},
-							{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
-							{ctor: '_Tuple2', _0: 'font-size', _1: '2em'},
-							{
-							ctor: '_Tuple2',
-							_0: 'width',
-							_1: A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(percent),
-								'%')
-						},
-							{ctor: '_Tuple2', _0: 'text-align', _1: 'center'}
-						]))
-				]),
+				[]),
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html$text(
 					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString((max + 1) - remaining),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'/',
-							_elm_lang$core$Basics$toString(max))))
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$style(
+							_elm_lang$core$Native_List.fromArray(
+								[
+									{ctor: '_Tuple2', _0: 'background-color', _1: '#BBB'},
+									{ctor: '_Tuple2', _0: 'height', _1: '40px'},
+									{ctor: '_Tuple2', _0: 'width', _1: '100%'}
+								]))
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text('-')
+						])),
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$style(
+							_elm_lang$core$Native_List.fromArray(
+								[
+									{ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+									{ctor: '_Tuple2', _0: 'top', _1: '-40px'},
+									{ctor: '_Tuple2', _0: 'background-color', _1: 'green'},
+									{ctor: '_Tuple2', _0: 'color', _1: 'white'},
+									{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
+									{ctor: '_Tuple2', _0: 'font-size', _1: '2em'},
+									{ctor: '_Tuple2', _0: 'height', _1: '40px'},
+									{
+									ctor: '_Tuple2',
+									_0: 'width',
+									_1: A2(
+										_elm_lang$core$Basics_ops['++'],
+										_elm_lang$core$Basics$toString(percent),
+										'%')
+								},
+									{ctor: '_Tuple2', _0: 'text-align', _1: 'center'}
+								]))
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString((max + 1) - remaining),
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									'/',
+									_elm_lang$core$Basics$toString(max))))
+						]))
 				]));
 	});
 var _user$project$View$viewUserOption = F2(

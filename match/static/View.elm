@@ -257,17 +257,31 @@ viewProgressBar remaining max =
             100 * (toFloat (max-remaining+1)) / (toFloat max)
     in
         div
-            [ style
-                [ ( "background-color", "green" )
-                , ( "color", "white" )
-                , ( "font-weight", "bold" )
-                , ( "font-size", "2em" )
-                , ( "width", (percent |> toString) ++ "%")
-                , ( "text-align", "center" )
+            []
+            [ div
+                [ style
+                    [ ( "background-color", "#BBB" )
+                    , ( "height", "40px" )
+                    , ( "width", "100%")
+                    ]
                 ]
-            ]
-            [ (toString
-                (max + 1 - remaining)) ++ "/" ++ (toString max) |> Html.text
+                [ "-" |> text ]
+            , div
+                [ style
+                    [ ( "position", "relative" )
+                    , ( "top", "-40px" )
+                    , ( "background-color", "green" )
+                    , ( "color", "white" )
+                    , ( "font-weight", "bold" )
+                    , ( "font-size", "2em" )
+                    , ( "height", "40px" )
+                    , ( "width", (percent |> toString) ++ "%")
+                    , ( "text-align", "center" )
+                    ]
+                ]
+                [ (toString
+                    (max + 1 - remaining)) ++ "/" ++ (toString max) |> Html.text
+                ]
             ]
 
 
