@@ -11,6 +11,7 @@ import Regex exposing (..)
 import Animation
 import Animation.Messenger
 import Css
+import String
 
 import State exposing (..)
 import Types exposing (..)
@@ -61,11 +62,12 @@ styleCandidate index =
     let
         always =
                 [ Css.marginLeft (Css.em 1)
+                , Css.marginTop (Css.em 1)
                 , Css.paddingLeft (Css.em 0.2)
                 ]
     in
         if index % 2 == 0 then
-            Css.asPairs (Css.backgroundColor (Css.hex "EEE" ) :: always)
+            Css.asPairs (Css.backgroundColor (Css.hex "DDD" ) :: always)
         else
             Css.asPairs always
 
@@ -139,10 +141,14 @@ viewCandidate index candidate =
                 , onClick
                     (SelectCandidate (Just ( candidateAddress.uprn, testId )))
                 ]
-                [ Html.text ("➞ " ++ candidateAddress.address)
-                , text " "
-                , small []
-                [ viewExternalLink " map" (mapUrl candidateAddress.address) ]
+                [ ul
+                    []
+                    [ li [] [ text candidateAddress.name ]
+                    , li [] [ text candidateAddress.parentAddressName ]
+                    , li [] [ text candidateAddress.streetName]
+                    , li [] [ text candidateAddress.streetTown]
+                    -- , viewExternalLink " map" (mapUrl candidateAddress.address)
+                    ]
                 ]
         )
 
@@ -171,10 +177,16 @@ viewAddress animState address =
         testAddressHtml =
             h1
                 [ class "heading-medium" ]
-                [ Html.text (address.test.address)
-                , span [] [ Html.text " - " ]
-                , viewExternalLink "Search" (searchUrl address.test.address)
-                ]
+                (List.concat
+                    [ map
+                        (\line -> p [ style [("margin", "0")] ] [text line])
+                        (String.split "," address.test.address)
+                    , [ span [] [ Html.text " - " ] ]
+                    , [ (viewExternalLink
+                        "Search"
+                        (searchUrl address.test.address)) ]
+                    ]
+                )
     in
         div
             (Animation.render animState
@@ -257,7 +269,7 @@ viewProgressBar remaining max =
             100 * (toFloat (max-remaining+1)) / (toFloat max)
     in
         div
-            []
+            [ style [ ( "height", "40px" ) ] ]
             [ div
                 [ style
                     [ ( "background-color", "#BBB" )

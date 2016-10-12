@@ -19850,9 +19850,9 @@ var _user$project$Address$TestAddress = F2(
 	function (a, b) {
 		return {address: a, id: b};
 	});
-var _user$project$Address$CandidateAddress = F2(
-	function (a, b) {
-		return {address: a, uprn: b};
+var _user$project$Address$CandidateAddress = F5(
+	function (a, b, c, d, e) {
+		return {name: a, parentAddressName: b, streetName: c, streetTown: d, uprn: e};
 	});
 var _user$project$Address$Address = F2(
 	function (a, b) {
@@ -19941,7 +19941,13 @@ var _user$project$View$viewProgressBar = F2(
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
-				[]),
+				[
+					_elm_lang$html$Html_Attributes$style(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							{ctor: '_Tuple2', _0: 'height', _1: '40px'}
+						]))
+				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
 					A2(
@@ -20171,6 +20177,8 @@ var _user$project$View$styleCandidate = function (index) {
 		[
 			_rtfeldman$elm_css$Css$marginLeft(
 			_rtfeldman$elm_css$Css$em(1)),
+			_rtfeldman$elm_css$Css$marginTop(
+			_rtfeldman$elm_css$Css$em(1)),
 			_rtfeldman$elm_css$Css$paddingLeft(
 			_rtfeldman$elm_css$Css$em(0.2))
 		]);
@@ -20180,9 +20188,73 @@ var _user$project$View$styleCandidate = function (index) {
 		A2(
 			_elm_lang$core$List_ops['::'],
 			_rtfeldman$elm_css$Css$backgroundColor(
-				_rtfeldman$elm_css$Css$hex('EEE')),
+				_rtfeldman$elm_css$Css$hex('DDD')),
 			always)) : _rtfeldman$elm_css$Css$asPairs(always);
 };
+var _user$project$View$viewCandidate = F2(
+	function (index, candidate) {
+		var testId = _elm_lang$core$Basics$snd(candidate);
+		var candidateAddress = _elm_lang$core$Basics$fst(candidate);
+		return {
+			ctor: '_Tuple2',
+			_0: candidateAddress.uprn,
+			_1: A4(
+				_jinjor$elm_inline_hover$InlineHover$hover,
+				_user$project$View$styleCandidateAddressHover,
+				_elm_lang$html$Html$li,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$style(
+						_user$project$View$styleCandidate(index)),
+						_elm_lang$html$Html_Events$onClick(
+						_user$project$State$SelectCandidate(
+							_elm_lang$core$Maybe$Just(
+								{ctor: '_Tuple2', _0: candidateAddress.uprn, _1: testId})))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$ul,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(
+								_elm_lang$html$Html$li,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(candidateAddress.name)
+									])),
+								A2(
+								_elm_lang$html$Html$li,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(candidateAddress.parentAddressName)
+									])),
+								A2(
+								_elm_lang$html$Html$li,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(candidateAddress.streetName)
+									])),
+								A2(
+								_elm_lang$html$Html$li,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(candidateAddress.streetTown)
+									]))
+							]))
+					]))
+		};
+	});
 var _user$project$View$mapUrl = function (search) {
 	return A2(
 		_evancz$elm_http$Http$url,
@@ -20209,45 +20281,6 @@ var _user$project$View$viewEmbeddedMap = function (search) {
 		_elm_lang$core$Native_List.fromArray(
 			[]));
 };
-var _user$project$View$viewCandidate = F2(
-	function (index, candidate) {
-		var testId = _elm_lang$core$Basics$snd(candidate);
-		var candidateAddress = _elm_lang$core$Basics$fst(candidate);
-		return {
-			ctor: '_Tuple2',
-			_0: candidateAddress.uprn,
-			_1: A4(
-				_jinjor$elm_inline_hover$InlineHover$hover,
-				_user$project$View$styleCandidateAddressHover,
-				_elm_lang$html$Html$li,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$style(
-						_user$project$View$styleCandidate(index)),
-						_elm_lang$html$Html_Events$onClick(
-						_user$project$State$SelectCandidate(
-							_elm_lang$core$Maybe$Just(
-								{ctor: '_Tuple2', _0: candidateAddress.uprn, _1: testId})))
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text(
-						A2(_elm_lang$core$Basics_ops['++'], '➞ ', candidateAddress.address)),
-						_elm_lang$html$Html$text(' '),
-						A2(
-						_elm_lang$html$Html$small,
-						_elm_lang$core$Native_List.fromArray(
-							[]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								A2(
-								_user$project$View$viewExternalLink,
-								' map',
-								_user$project$View$mapUrl(candidateAddress.address))
-							]))
-					]))
-		};
-	});
 var _user$project$View$searchUrl = function (search) {
 	return A2(
 		_evancz$elm_http$Http$url,
@@ -20280,22 +20313,47 @@ var _user$project$View$viewAddress = F2(
 				[
 					_elm_lang$html$Html_Attributes$class('heading-medium')
 				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html$text(address.test.address),
-					A2(
-					_elm_lang$html$Html$span,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
+			_elm_lang$core$List$concat(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$core$List$map,
+						function (line) {
+							return A2(
+								_elm_lang$html$Html$p,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html_Attributes$style(
+										_elm_lang$core$Native_List.fromArray(
+											[
+												{ctor: '_Tuple2', _0: 'margin', _1: '0'}
+											]))
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(line)
+									]));
+						},
+						A2(_elm_lang$core$String$split, ',', address.test.address)),
+						_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$html$Html$text(' - ')
-						])),
-					A2(
-					_user$project$View$viewExternalLink,
-					'Search',
-					_user$project$View$searchUrl(address.test.address))
-				]));
+							A2(
+							_elm_lang$html$Html$span,
+							_elm_lang$core$Native_List.fromArray(
+								[]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text(' - ')
+								]))
+						]),
+						_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_user$project$View$viewExternalLink,
+							'Search',
+							_user$project$View$searchUrl(address.test.address))
+						])
+					])));
 		var notSureChoice = A4(
 			_jinjor$elm_inline_hover$InlineHover$hover,
 			_user$project$View$styleCandidateAddressHover,
@@ -20516,10 +20574,13 @@ var _user$project$Rest$sendMatch = F3(
 				body));
 	});
 var _user$project$Rest$candidateAddressesDecoder = _elm_lang$core$Json_Decode$list(
-	A3(
-		_elm_lang$core$Json_Decode$object2,
+	A6(
+		_elm_lang$core$Json_Decode$object5,
 		_user$project$Address$CandidateAddress,
-		A2(_elm_lang$core$Json_Decode_ops[':='], 'address', _elm_lang$core$Json_Decode$string),
+		A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
+		A2(_elm_lang$core$Json_Decode_ops[':='], 'parent-address-name', _elm_lang$core$Json_Decode$string),
+		A2(_elm_lang$core$Json_Decode_ops[':='], 'street-name', _elm_lang$core$Json_Decode$string),
+		A2(_elm_lang$core$Json_Decode_ops[':='], 'street-town', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'uprn', _elm_lang$core$Json_Decode$string)));
 var _user$project$Rest$testAddressDecoder = _elm_lang$core$Json_Decode$list(
 	A3(

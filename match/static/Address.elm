@@ -15,7 +15,10 @@ type alias TestAddress =
 
 
 type alias CandidateAddress =
-    { address : String
+    { name : String
+    , parentAddressName : String
+    , streetName : String
+    , streetTown : String
     , uprn : String
     }
 

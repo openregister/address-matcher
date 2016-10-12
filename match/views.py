@@ -5,6 +5,8 @@ from django.db.models import Count
 from random import randint
 from hashlib import md5
 from models import Address, Match, User
+from elasticsearch import Elasticsearch
+
 import random
 
 
@@ -57,16 +59,37 @@ def degraded_address(address):
 
 def brain(request):
     test_address = request.GET.get('q', '')
+
+    queryObject = {
+       "size": 10,
+        "query": {
+            "query_string": {
+                "fields": [
+                    "name",
+                    "parent-address-name",
+                    "street-name",
+                    "street-town"
+                ],
+                "query": test_address
+            }
+        }
+    }
+
+    es = Elasticsearch(['localhost:9200'])
+    result = es.search(index="flattened", body=queryObject)
+
     candidate_addresses = []
-    m = md5()
-    for i in range(0, 9):
-        address = degraded_address(test_address)
-        hash = m.update(address)
-        candidate_addresses.append({
-            'address': address,
-            'uprn': m.hexdigest()[:6]
-        })
-    candidate_addresses.sort(lambda x,y: len(y['address'])-len(x['address']))
+    for candidate in result['hits']['hits']:
+        c = candidate['_source']
+        newCandidate = {
+            'uprn': c['address'],
+            'name': c['name'],
+            'street-name': c['street-name'],
+            'parent-address-name': c['parent-address-name'],
+            'street-town': c['street-town']
+        }
+        candidate_addresses.append(newCandidate)
+
     return JsonResponse(candidate_addresses, safe=False)
 
 

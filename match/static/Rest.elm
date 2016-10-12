@@ -40,8 +40,11 @@ testAddressDecoder =
 candidateAddressesDecoder : Decoder (List CandidateAddress)
 candidateAddressesDecoder =
     (Json.Decode.list
-        (Json.Decode.object2 CandidateAddress
-            ("address" := Json.Decode.string)
+        (Json.Decode.object5 CandidateAddress
+            ("name" := Json.Decode.string)
+            ("parent-address-name" := Json.Decode.string)
+            ("street-name" := Json.Decode.string)
+            ("street-town" := Json.Decode.string)
             ("uprn" := Json.Decode.string)
         )
     )
