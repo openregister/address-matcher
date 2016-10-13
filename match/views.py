@@ -6,6 +6,7 @@ from random import randint
 from hashlib import md5
 from models import Address, Match, User
 from elasticsearch import Elasticsearch
+import os
 
 import random
 
@@ -75,7 +76,8 @@ def brain(request):
         }
     }
 
-    es = Elasticsearch(['localhost:9200'])
+    elasticHost = os.getenv('ELASTICSEARCH_HOST', 'localhost:9200')
+    es = Elasticsearch([elasticHost])
     result = es.search(index="flattened", body=queryObject)
 
     candidate_addresses = []
