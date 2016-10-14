@@ -16153,7 +16153,7 @@ var _user$project$View$viewProgressBar = F2(
 								[
 									{ctor: '_Tuple2', _0: 'position', _1: 'relative'},
 									{ctor: '_Tuple2', _0: 'top', _1: '-20px'},
-									{ctor: '_Tuple2', _0: 'background-color', _1: 'green'},
+									{ctor: '_Tuple2', _0: 'background-color', _1: 'orange'},
 									{ctor: '_Tuple2', _0: 'color', _1: 'white'},
 									{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
 									{ctor: '_Tuple2', _0: 'font-size', _1: '1em'},
@@ -16324,7 +16324,7 @@ var _user$project$View$styleFetchAddressButton = _elm_lang$core$Native_List.from
 var _user$project$View$styleEmbeddedMap = _elm_lang$core$Native_List.fromArray(
 	[
 		{ctor: '_Tuple2', _0: 'border', _1: '0'},
-		{ctor: '_Tuple2', _0: 'margin-bottom', _1: '20px'}
+		{ctor: '_Tuple2', _0: 'margin', _1: '20px 0 20px 0'}
 	]);
 var _user$project$View$styleCandidateAddressHover = _elm_lang$core$Native_List.fromArray(
 	[
@@ -16332,11 +16332,10 @@ var _user$project$View$styleCandidateAddressHover = _elm_lang$core$Native_List.f
 	]);
 var _user$project$View$styleCandidate = _elm_lang$core$Native_List.fromArray(
 	[
-		{ctor: '_Tuple2', _0: 'margin-left', _1: '1em'},
+		{ctor: '_Tuple2', _0: 'margin-left', _1: '50%'},
 		{ctor: '_Tuple2', _0: 'margin-top', _1: '1em'},
-		{ctor: '_Tuple2', _0: 'padding-left', _1: '.2em'},
-		{ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
-		{ctor: '_Tuple2', _0: 'width', _1: '40%'},
+		{ctor: '_Tuple2', _0: 'width', _1: '30%'},
+		{ctor: '_Tuple2', _0: 'padding', _1: '3px'},
 		{ctor: '_Tuple2', _0: 'border', _1: '1px solid black'},
 		{ctor: '_Tuple2', _0: 'background-color', _1: '#DDD'},
 		{ctor: '_Tuple2', _0: 'min-height', _1: '5em'},
@@ -16420,10 +16419,9 @@ var _user$project$View$viewEmbeddedMap = function (search) {
 		_elm_lang$html$Html$iframe,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$width(200),
-				_elm_lang$html$Html_Attributes$height(200),
+				_elm_lang$html$Html_Attributes$width(400),
+				_elm_lang$html$Html_Attributes$height(300),
 				_elm_lang$html$Html_Attributes$style(_user$project$View$styleEmbeddedMap),
-				_elm_lang$html$Html_Attributes$class('column-one-third'),
 				_elm_lang$html$Html_Attributes$src(
 				_user$project$View$mapUrl(
 					A2(_elm_lang$core$Basics_ops['++'], search, ', United Kingdom')))
@@ -16488,7 +16486,16 @@ var _user$project$View$viewAddress = F2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html_Attributes$class('grid-row')
+					_elm_lang$html$Html_Attributes$style(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							{ctor: '_Tuple2', _0: 'position', _1: 'fixed'},
+							{ctor: '_Tuple2', _0: 'max-width', _1: '50%'},
+							{ctor: '_Tuple2', _0: 'z-index', _1: '2'},
+							{ctor: '_Tuple2', _0: 'background', _1: 'white'},
+							{ctor: '_Tuple2', _0: 'border', _1: '2px solid #BBB'},
+							{ctor: '_Tuple2', _0: 'padding', _1: '3px'}
+						]))
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
@@ -16496,11 +16503,11 @@ var _user$project$View$viewAddress = F2(
 					_elm_lang$html$Html$h1,
 					_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$html$Html_Attributes$class('heading-small column-two-thirds'),
+							_elm_lang$html$Html_Attributes$class('heading-medium'),
 							_elm_lang$html$Html_Attributes$style(
 							_elm_lang$core$Native_List.fromArray(
 								[
-									{ctor: '_Tuple2', _0: 'float', _1: 'left'}
+									{ctor: '_Tuple2', _0: 'margin-top', _1: '0'}
 								]))
 						]),
 					_elm_lang$core$List$concat(
@@ -16524,11 +16531,12 @@ var _user$project$View$viewAddress = F2(
 												_elm_lang$html$Html$text(line)
 											]));
 								},
-								A2(_elm_lang$core$String$split, ',', address.test.address))
+								A2(_elm_lang$core$String$split, ',', address.test.address)),
+								_elm_lang$core$Native_List.fromArray(
+								[notSureChoice])
 							]))),
 					_user$project$View$viewEmbeddedMap(
-					_user$project$View$extractPostcode(address.test.address)),
-					notSureChoice
+					_user$project$View$extractPostcode(address.test.address))
 				]));
 		var addTestId = function (ca) {
 			return {ctor: '_Tuple2', _0: ca, _1: address.test.id};
@@ -16552,16 +16560,7 @@ var _user$project$View$viewAddress = F2(
 					A2(
 					_elm_lang$html$Html$div,
 					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$style(
-							_elm_lang$core$Native_List.fromArray(
-								[
-									{ctor: '_Tuple2', _0: 'border', _1: '3px solid #ddd'},
-									{ctor: '_Tuple2', _0: 'height', _1: '500px'},
-									{ctor: '_Tuple2', _0: 'overflow', _1: 'scroll'},
-									{ctor: '_Tuple2', _0: 'margin-top', _1: '1em'}
-								]))
-						]),
+						[]),
 					_elm_lang$core$Native_List.fromArray(
 						[
 							A2(

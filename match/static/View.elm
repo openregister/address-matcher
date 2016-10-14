@@ -58,11 +58,10 @@ mapUrl search =
 
 styleCandidate : List (String, String)
 styleCandidate =
-        [ ( "margin-left", "1em" )
+        [ ( "margin-left", "50%" )
         , ( "margin-top", "1em" )
-        , ( "padding-left", ".2em" )
-        , ( "display", "inline-block" )
-        , ( "width", "40%" )
+        , ( "width", "30%" )
+        , ( "padding", "3px" )
         , ( "border", "1px solid black" )
         , ( "background-color", "#DDD" )
         , ( "min-height", "5em" )
@@ -78,7 +77,7 @@ styleCandidateAddressHover =
 styleEmbeddedMap : List (String, String)
 styleEmbeddedMap =
         [ ( "border", "0" )
-        , ( "margin-bottom", "20px" )
+        , ( "margin", "20px 0 20px 0" )
         ]
 
 styleFetchAddressButton : List (String, String)
@@ -108,10 +107,9 @@ viewExternalLink linkText linkHref =
 viewEmbeddedMap : String -> Html Msg
 viewEmbeddedMap search =
     iframe
-        [ width 200
-        , height 200
+        [ width 400
+        , height 300
         , style styleEmbeddedMap
-        , class "column-one-third"
         , src (mapUrl (search ++ ", United Kingdom"))
         ]
         []
@@ -169,23 +167,32 @@ viewAddress animState address =
                     ]
 
         testAddressHtml =
-            div [ class "grid-row" ]
+            div
+                [ style
+                    [( "position", "fixed" )
+                    , ( "max-width", "50%" )
+                    , ( "z-index", "2" )
+                    , ( "background", "white" )
+                    , ( "border", "2px solid #BBB" )
+                    , ( "padding", "3px" )
+                    ]
+                ]
                 [ h1
-                    [ class "heading-small column-two-thirds"
-                    , style [ ( "float", "left" )]
+                    [ class "heading-medium"
+                    , style [ ( "margin-top", "0" ) ]
                     ]
                     (List.concat
-                        [ map
+                        [ (map
                             (\line -> p [ style [("margin", "0")] ] [text line])
-                            (String.split "," address.test.address)
+                            (String.split "," address.test.address))
                         -- , [ span [] [ Html.text " - " ] ]
                         -- , [ (viewExternalLink
                         --     "Search"
                         --     (searchUrl address.test.address)) ]
+                        , [ notSureChoice ]
                         ]
                     )
                 , viewEmbeddedMap (extractPostcode address.test.address)
-                , notSureChoice
                 ]
     in
         div
@@ -194,13 +201,7 @@ viewAddress animState address =
             )
             [ testAddressHtml
             , div
-                [ style
-                    [ ( "border", "3px solid #ddd" )
-                    , ( "height", "500px" )
-                    , ( "overflow", "scroll" )
-                    , ( "margin-top", "1em" )
-                    ]
-                ]
+                []
                 [ Html.Keyed.ul []
                     (indexedMap viewCandidate (map addTestId address.candidates))
                 ]
@@ -289,7 +290,7 @@ viewProgressBar remaining max =
                 [ style
                     [ ( "position", "relative" )
                     , ( "top", "-20px" )
-                    , ( "background-color", "green" )
+                    , ( "background-color", "orange" )
                     , ( "color", "white" )
                     , ( "font-weight", "bold" )
                     , ( "font-size", "1em" )
