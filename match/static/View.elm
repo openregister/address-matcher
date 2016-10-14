@@ -10,7 +10,6 @@ import InlineHover exposing (hover)
 import Regex exposing (..)
 import Animation
 import Animation.Messenger
-import Css
 import String
 
 import State exposing (..)
@@ -57,41 +56,36 @@ mapUrl search =
 -- Lists of style properties
 
 
-styleCandidate : Int -> List (String, String)
-styleCandidate index =
-    let
-        always =
-                [ Css.marginLeft (Css.em 1)
-                , Css.marginTop (Css.em 1)
-                , Css.paddingLeft (Css.em 0.2)
-                ]
-    in
-        if index % 2 == 0 then
-            Css.asPairs (Css.backgroundColor (Css.hex "DDD" ) :: always)
-        else
-            Css.asPairs always
+styleCandidate : List (String, String)
+styleCandidate =
+        [ ( "margin-left", "1em" )
+        , ( "margin-top", "1em" )
+        , ( "padding-left", ".2em" )
+        , ( "display", "inline-block" )
+        , ( "width", "40%" )
+        , ( "border", "1px solid black" )
+        , ( "background-color", "#DDD" )
+        , ( "min-height", "5em" )
+        , ( "vertical-align", "bottom" )
+        ]
 
 
 styleCandidateAddressHover : List (String, String)
 styleCandidateAddressHover =
-    Css.asPairs
-        [ Css.outline3 (Css.px 3) Css.solid (Css.hex "F00")
-        , Css.borderRadius (Css.px 10)
+        [ ( "outline", "3px solid #F00" )
         ]
 
 styleEmbeddedMap : List (String, String)
 styleEmbeddedMap =
-    Css.asPairs
-        [ Css.border (Css.px 0)
-        , Css.marginBottom (Css.px 20)
+        [ ( "border", "0" )
+        , ( "margin-bottom", "20px" )
         ]
 
 styleFetchAddressButton : List (String, String)
 styleFetchAddressButton =
-    Css.asPairs
-        [ Css.fontSize (Css.px 50)
-        , Css.fontWeight Css.bold
-        , Css.marginTop (Css.px 20)
+        [ ( "font-size", "50px" )
+        , (" font-weight", "bold" )
+        , (" margin-top", "20px" )
         ]
 
 
@@ -114,10 +108,10 @@ viewExternalLink linkText linkHref =
 viewEmbeddedMap : String -> Html Msg
 viewEmbeddedMap search =
     iframe
-        [ width 300
-        , height 400
-        , class "column-one-third"
+        [ width 200
+        , height 200
         , style styleEmbeddedMap
+        , class "column-one-third"
         , src (mapUrl (search ++ ", United Kingdom"))
         ]
         []
@@ -137,7 +131,7 @@ viewCandidate index candidate =
         ,hover
             styleCandidateAddressHover
             li
-                [ style (styleCandidate index)
+                [ style styleCandidate
                 , onClick
                     (SelectCandidate (Just ( candidateAddress.uprn, testId )))
                 ]
@@ -163,8 +157,8 @@ viewAddress animState address =
         notSureChoice =
             hover
                 styleCandidateAddressHover
-                li
-                    [ style (styleCandidate -1)
+                button
+                    [ class "button"
                     , onClick (SelectCandidate Nothing)
                     ]
                     [ span
@@ -175,18 +169,24 @@ viewAddress animState address =
                     ]
 
         testAddressHtml =
-            h1
-                [ class "heading-medium" ]
-                (List.concat
-                    [ map
-                        (\line -> p [ style [("margin", "0")] ] [text line])
-                        (String.split "," address.test.address)
-                    , [ span [] [ Html.text " - " ] ]
-                    , [ (viewExternalLink
-                        "Search"
-                        (searchUrl address.test.address)) ]
+            div [ class "grid-row" ]
+                [ h1
+                    [ class "heading-small column-two-thirds"
+                    , style [ ( "float", "left" )]
                     ]
-                )
+                    (List.concat
+                        [ map
+                            (\line -> p [ style [("margin", "0")] ] [text line])
+                            (String.split "," address.test.address)
+                        -- , [ span [] [ Html.text " - " ] ]
+                        -- , [ (viewExternalLink
+                        --     "Search"
+                        --     (searchUrl address.test.address)) ]
+                        ]
+                    )
+                , viewEmbeddedMap (extractPostcode address.test.address)
+                , notSureChoice
+                ]
     in
         div
             (Animation.render animState
@@ -194,12 +194,15 @@ viewAddress animState address =
             )
             [ testAddressHtml
             , div
-                [ class "grid-row" ]
-                [ Html.Keyed.ul [ class "column-two-thirds" ]
-                    (("pass", notSureChoice)
-                        :: (indexedMap viewCandidate (map addTestId address.candidates))
-                    )
-                , viewEmbeddedMap (extractPostcode address.test.address)
+                [ style
+                    [ ( "border", "3px solid #ddd" )
+                    , ( "height", "500px" )
+                    , ( "overflow", "scroll" )
+                    , ( "margin-top", "1em" )
+                    ]
+                ]
+                [ Html.Keyed.ul []
+                    (indexedMap viewCandidate (map addTestId address.candidates))
                 ]
             ]
 
@@ -244,12 +247,12 @@ viewUsersSection currentUserId users =
                 let
                     message =
                         if currentUserId == 0 then
-                            "Please tell me who you are:"
+                            "Please tell me who you are: "
                         else
-                            "Current user:"
+                            "Current user: "
                 in
                     div []
-                        [ p [] [ Html.text message ]
+                        [ Html.text message
                         , viewUserSelect currentUserId userList
                         ]
 
@@ -269,11 +272,15 @@ viewProgressBar remaining max =
             100 * (toFloat (max-remaining+1)) / (toFloat max)
     in
         div
-            [ style [ ( "height", "40px" ) ] ]
+            [ style
+                [ ( "height", "20px" )
+                , ( "margin-bottom", "5px" )
+                ]
+            ]
             [ div
                 [ style
-                    [ ( "background-color", "#BBB" )
-                    , ( "height", "40px" )
+                    [ ( "background-color", "#DDD" )
+                    , ( "height", "20px" )
                     , ( "width", "100%")
                     ]
                 ]
@@ -281,12 +288,12 @@ viewProgressBar remaining max =
             , div
                 [ style
                     [ ( "position", "relative" )
-                    , ( "top", "-40px" )
+                    , ( "top", "-20px" )
                     , ( "background-color", "green" )
                     , ( "color", "white" )
                     , ( "font-weight", "bold" )
-                    , ( "font-size", "2em" )
-                    , ( "height", "40px" )
+                    , ( "font-size", "1em" )
+                    , ( "height", "20px" )
                     , ( "width", (percent |> toString) ++ "%")
                     , ( "text-align", "center" )
                     ]
@@ -331,10 +338,13 @@ viewAddressSection animState currentUserId addresses =
                         (take 1 listAddresses)
 
             Loading ->
-                p [] [ Html.text "Loading addresses" ]
+                p [] [ Html.text "Loading test addresses" ]
 
-            _ ->
-                p [] [ Html.text "No addresses" ]
+            Failure err ->
+                p [] [ Html.text ("Failed loading addresses: " ++ (toString err)) ]
+
+            NotAsked ->
+                p [] [ Html.text "" ]
 
 
 view : Model -> Html Msg
