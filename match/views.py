@@ -7,6 +7,7 @@ from hashlib import md5
 from models import Address, Match, User
 from elasticsearch import Elasticsearch
 import os
+import json
 
 import random
 
@@ -78,7 +79,7 @@ def brain(request):
 
     elasticHost = os.getenv('ELASTICSEARCH_HOST', 'localhost:9200')
     es = Elasticsearch([elasticHost])
-    result = es.search(index="flattened", body=queryObject)
+    result = es.search(index="flattened", body=json.dumps(queryObject))
 
     candidate_addresses = []
     for candidate in result['hits']['hits']:
