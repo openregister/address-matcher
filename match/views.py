@@ -8,7 +8,7 @@ from models import Address, Match, User
 from elasticsearch import Elasticsearch
 import os
 import json
-
+import re
 import random
 
 
@@ -61,6 +61,10 @@ def degraded_address(address):
 
 def brain(request):
     test_address = request.GET.get('q', '')
+    test_address = re.sub(
+        r'([+-=&|><!(){}\[\]^"~*?:\\/\'])',
+        r'\\\1',
+        test_address)
 
     queryObject = {
        "size": 10,
