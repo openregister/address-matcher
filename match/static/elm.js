@@ -16831,159 +16831,15 @@ var _user$project$Main$updateUrl = function (userId) {
 	return _elm_lang$navigation$Navigation$newUrl(
 		_user$project$Main$userIdToUrl(userId));
 };
-var _user$project$Main$update = F2(
-	function (msg, model) {
-		var _p1 = msg;
-		switch (_p1.ctor) {
-			case 'FetchUsers':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{users: _user$project$Types$Loading}),
-					_1: _user$project$Rest$fetchUsers
-				};
-			case 'FetchUsersOk':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							users: _user$project$Types$Success(_p1._0)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'FetchUsersFail':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							users: _user$project$Types$Failure(_p1._0)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'UserChange':
-				var newUserId = A2(
-					_elm_lang$core$Result$withDefault,
-					0,
-					_elm_lang$core$String$toInt(_p1._0));
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{currentUserId: newUserId}),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_user$project$Main$updateUrl(newUserId),
-							_user$project$Rest$fetchAddresses
-						]));
-			case 'FetchAddresses':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{addresses: _user$project$Types$Loading}),
-					_1: _user$project$Rest$fetchAddresses
-				};
-			case 'FetchAddressesOk':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							addresses: _user$project$Types$Success(_p1._0)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'FetchAddressesFail':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							addresses: _user$project$Types$Failure(_p1._0)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'SelectCandidate':
-				var animationReset = _mdgriffith$elm_style_animation$Animation$set(
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_mdgriffith$elm_style_animation$Animation$left(
-							_mdgriffith$elm_style_animation$Animation$px(0))
-						]));
-				var animationMoveLeft = A2(
-					_mdgriffith$elm_style_animation$Animation$toWith,
-					_mdgriffith$elm_style_animation$Animation$speed(
-						{perSecond: 8000}),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_mdgriffith$elm_style_animation$Animation$left(
-							_mdgriffith$elm_style_animation$Animation$px(-3000))
-						]));
-				var animation = function () {
-					var _p2 = _p1._0;
-					if (_p2.ctor === 'Nothing') {
-						return _elm_lang$core$Native_List.fromArray(
-							[animationMoveLeft, animationReset]);
-					} else {
-						return _elm_lang$core$Native_List.fromArray(
-							[
-								animationMoveLeft,
-								_mdgriffith$elm_style_animation$Animation_Messenger$send(
-								_user$project$State$NextCandidate(
-									{ctor: '_Tuple2', _0: _p2._0._0, _1: _p2._0._1})),
-								animationReset
-							]);
-					}
-				}();
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							animationStyle: A2(_mdgriffith$elm_style_animation$Animation$interrupt, animation, model.animationStyle)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'NextCandidate':
-				var _p3 = _p1._0._1;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							addresses: A2(_user$project$Address$removeAddress, _p3, model.addresses)
-						}),
-					_1: A3(_user$project$Rest$sendMatch, _p1._0._0, _p3, model.currentUserId)
-				};
-			case 'SendMatchOk':
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-			case 'SendMatchFail':
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-			default:
-				var _p4 = A2(_mdgriffith$elm_style_animation$Animation_Messenger$update, _p1._0, model.animationStyle);
-				var newStyle = _p4._0;
-				var cmds = _p4._1;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{animationStyle: newStyle}),
-					_1: cmds
-				};
-		}
-	});
 var _user$project$Main$urlUpdate = F2(
 	function (result, model) {
-		var _p5 = result;
-		if (_p5.ctor === 'Ok') {
+		var _p1 = result;
+		if (_p1.ctor === 'Ok') {
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model,
-					{currentUserId: _p5._0}),
+					{currentUserId: _p1._0}),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
@@ -17018,6 +16874,155 @@ var _user$project$Main$init = function (result) {
 		A4(_user$project$State$Model, userId, _user$project$Types$Loading, _user$project$Types$NotAsked, initialAnimationStyle),
 		initCmd);
 };
+var _user$project$Main$scrollTop = _elm_lang$core$Native_Platform.outgoingPort(
+	'scrollTop',
+	function (v) {
+		return v;
+	});
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p2 = msg;
+		switch (_p2.ctor) {
+			case 'FetchUsers':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{users: _user$project$Types$Loading}),
+					_1: _user$project$Rest$fetchUsers
+				};
+			case 'FetchUsersOk':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							users: _user$project$Types$Success(_p2._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'FetchUsersFail':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							users: _user$project$Types$Failure(_p2._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'UserChange':
+				var newUserId = A2(
+					_elm_lang$core$Result$withDefault,
+					0,
+					_elm_lang$core$String$toInt(_p2._0));
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{currentUserId: newUserId}),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_user$project$Main$updateUrl(newUserId),
+							_user$project$Rest$fetchAddresses
+						]));
+			case 'FetchAddresses':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{addresses: _user$project$Types$Loading}),
+					_1: _user$project$Rest$fetchAddresses
+				};
+			case 'FetchAddressesOk':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							addresses: _user$project$Types$Success(_p2._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'FetchAddressesFail':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							addresses: _user$project$Types$Failure(_p2._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SelectCandidate':
+				var animationReset = _mdgriffith$elm_style_animation$Animation$set(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_mdgriffith$elm_style_animation$Animation$left(
+							_mdgriffith$elm_style_animation$Animation$px(0))
+						]));
+				var animationMoveLeft = A2(
+					_mdgriffith$elm_style_animation$Animation$toWith,
+					_mdgriffith$elm_style_animation$Animation$speed(
+						{perSecond: 8000}),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_mdgriffith$elm_style_animation$Animation$left(
+							_mdgriffith$elm_style_animation$Animation$px(-3000))
+						]));
+				var animation = function () {
+					var _p3 = _p2._0;
+					if (_p3.ctor === 'Nothing') {
+						return _elm_lang$core$Native_List.fromArray(
+							[animationMoveLeft, animationReset]);
+					} else {
+						return _elm_lang$core$Native_List.fromArray(
+							[
+								animationMoveLeft,
+								_mdgriffith$elm_style_animation$Animation_Messenger$send(
+								_user$project$State$NextCandidate(
+									{ctor: '_Tuple2', _0: _p3._0._0, _1: _p3._0._1})),
+								animationReset
+							]);
+					}
+				}();
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							animationStyle: A2(_mdgriffith$elm_style_animation$Animation$interrupt, animation, model.animationStyle)
+						}),
+					_1: _user$project$Main$scrollTop('notused')
+				};
+			case 'NextCandidate':
+				var _p4 = _p2._0._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							addresses: A2(_user$project$Address$removeAddress, _p4, model.addresses)
+						}),
+					_1: A3(_user$project$Rest$sendMatch, _p2._0._0, _p4, model.currentUserId)
+				};
+			case 'SendMatchOk':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'SendMatchFail':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			default:
+				var _p5 = A2(_mdgriffith$elm_style_animation$Animation_Messenger$update, _p2._0, model.animationStyle);
+				var newStyle = _p5._0;
+				var cmds = _p5._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{animationStyle: newStyle}),
+					_1: cmds
+				};
+		}
+	});
 var _user$project$Main$main = {
 	main: A2(
 		_elm_lang$navigation$Navigation$program,

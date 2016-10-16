@@ -1,4 +1,4 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 import String exposing (toInt)
 import Navigation
@@ -24,6 +24,11 @@ main =
         , urlUpdate = urlUpdate
         }
 
+
+
+-- PORTS
+
+port scrollTop : String -> Cmd msg
 
 
 -- INIT
@@ -152,7 +157,7 @@ update msg model =
             in
                 ( { model | animationStyle =
                         (Animation.interrupt animation model.animationStyle) }
-                , Cmd.none
+                , scrollTop "notused"
                 )
 
         NextCandidate ( selectedCandidateUprn, testId ) ->

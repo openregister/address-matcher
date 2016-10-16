@@ -10,6 +10,9 @@
 <script>
     var node = document.getElementById('ui');
     var app = Elm.Main.embed(node);
+    app.ports.scrollTop.subscribe(function(unused) {
+        window,scrollTo(0,0);
+    });
 </script>
 
 {% endblock %}
