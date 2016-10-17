@@ -16356,8 +16356,11 @@ var _user$project$View$viewCandidate = F2(
 						_elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidate),
 						_elm_lang$html$Html_Events$onClick(
 						_user$project$State$SelectCandidate(
-							_elm_lang$core$Maybe$Just(
-								{ctor: '_Tuple2', _0: candidateAddress.uprn, _1: testId})))
+							{
+								ctor: '_Tuple2',
+								_0: _elm_lang$core$Maybe$Just(candidateAddress.uprn),
+								_1: testId
+							}))
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
@@ -16466,9 +16469,8 @@ var _user$project$View$viewAddress = F2(
 					_elm_lang$core$Native_List.fromArray(
 						[
 							{ctor: '_Tuple2', _0: 'position', _1: 'fixed'},
-							{ctor: '_Tuple2', _0: 'max-width', _1: '50%'},
+							{ctor: '_Tuple2', _0: 'max-width', _1: '37%'},
 							{ctor: '_Tuple2', _0: 'min-width', _1: '37%'},
-							{ctor: '_Tuple2', _0: 'width', _1: '50%'},
 							{ctor: '_Tuple2', _0: 'z-index', _1: '2'},
 							{ctor: '_Tuple2', _0: 'background', _1: 'white'},
 							{ctor: '_Tuple2', _0: 'border', _1: '2px solid #BBB'},
@@ -16555,7 +16557,8 @@ var _user$project$View$viewAddress = F2(
 								[
 									_elm_lang$html$Html_Attributes$class('button'),
 									_elm_lang$html$Html_Events$onClick(
-									_user$project$State$SelectCandidate(_elm_lang$core$Maybe$Nothing))
+									_user$project$State$SelectCandidate(
+										{ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: address.test.id}))
 								]),
 							_elm_lang$core$Native_List.fromArray(
 								[
@@ -16960,22 +16963,14 @@ var _user$project$Main$update = F2(
 							_mdgriffith$elm_style_animation$Animation$left(
 							_mdgriffith$elm_style_animation$Animation$px(-3000))
 						]));
-				var animation = function () {
-					var _p3 = _p2._0;
-					if (_p3.ctor === 'Nothing') {
-						return _elm_lang$core$Native_List.fromArray(
-							[animationMoveLeft, animationReset]);
-					} else {
-						return _elm_lang$core$Native_List.fromArray(
-							[
-								animationMoveLeft,
-								_mdgriffith$elm_style_animation$Animation_Messenger$send(
-								_user$project$State$NextCandidate(
-									{ctor: '_Tuple2', _0: _p3._0._0, _1: _p3._0._1})),
-								animationReset
-							]);
-					}
-				}();
+				var animation = _elm_lang$core$Native_List.fromArray(
+					[
+						animationMoveLeft,
+						_mdgriffith$elm_style_animation$Animation_Messenger$send(
+						_user$project$State$NextCandidate(
+							{ctor: '_Tuple2', _0: _p2._0._0, _1: _p2._0._1})),
+						animationReset
+					]);
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -16987,6 +16982,14 @@ var _user$project$Main$update = F2(
 				};
 			case 'NextCandidate':
 				var _p4 = _p2._0._1;
+				var command = function () {
+					var _p3 = _p2._0._0;
+					if (_p3.ctor === 'Nothing') {
+						return _elm_lang$core$Platform_Cmd$none;
+					} else {
+						return A3(_user$project$Rest$sendMatch, _p3._0, _p4, model.currentUserId);
+					}
+				}();
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -16994,7 +16997,7 @@ var _user$project$Main$update = F2(
 						{
 							addresses: A2(_user$project$Address$removeAddress, _p4, model.addresses)
 						}),
-					_1: A3(_user$project$Rest$sendMatch, _p2._0._0, _p4, model.currentUserId)
+					_1: command
 				};
 			case 'SendMatchOk':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};

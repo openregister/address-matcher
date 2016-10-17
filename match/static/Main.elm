@@ -132,7 +132,7 @@ update msg model =
         FetchAddressesFail error ->
             ( { model | addresses = Failure error }, Cmd.none )
 
-        SelectCandidate match ->
+        SelectCandidate ( selectedCandidateUprn, testId ) ->
             let
                 animationMoveLeft =
                     Animation.toWith
@@ -143,17 +143,12 @@ update msg model =
                     Animation.set [ Animation.left (px 0) ]
 
                 animation =
-                    case match of
-                        Nothing ->
-                            [ animationMoveLeft, animationReset ]
-
-                        Just ( selectedCandidateUprn, testId ) ->
-                            [ animationMoveLeft
-                            , Animation.Messenger.send
-                                (NextCandidate
-                                     ( selectedCandidateUprn, testId ))
-                            , animationReset
-                            ]
+                        [ animationMoveLeft
+                        , Animation.Messenger.send
+                            (NextCandidate
+                                    ( selectedCandidateUprn, testId ))
+                        , animationReset
+                        ]
             in
                 ( { model | animationStyle =
                         (Animation.interrupt animation model.animationStyle) }
@@ -161,14 +156,23 @@ update msg model =
                 )
 
         NextCandidate ( selectedCandidateUprn, testId ) ->
-            ( { model
-                | addresses = removeAddress testId model.addresses
-              }
-            , Rest.sendMatch
-                selectedCandidateUprn
-                testId
-                model.currentUserId
-            )
+            let
+                command =
+                    case selectedCandidateUprn of
+                        Nothing ->
+                            Cmd.none
+
+                        Just uprn ->
+                            Rest.sendMatch
+                                uprn
+                                testId
+                                model.currentUserId
+            in
+                ( { model
+                    | addresses = removeAddress testId model.addresses
+                }
+                , command
+                )
 
         SendMatchOk result ->
             ( model, Cmd.none )

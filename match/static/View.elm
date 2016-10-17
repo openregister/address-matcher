@@ -137,7 +137,7 @@ viewCandidate index candidate =
             li
                 [ style styleCandidate
                 , onClick
-                    (SelectCandidate (Just ( candidateAddress.uprn, testId )))
+                    (SelectCandidate ( Just candidateAddress.uprn, testId ))
                 ]
                 [ ul
                     []
@@ -193,7 +193,7 @@ viewAddress animState address =
                     (indexedMap viewCandidate (map addTestId address.candidates))
                 , button
                     [ class "button"
-                    , onClick (SelectCandidate Nothing)
+                    , onClick (SelectCandidate ( Nothing, address.test.id ))
                     ]
                     [ Html.text "Pass ¯\\_(ツ)_/¯" ]
                 ]
