@@ -306,19 +306,7 @@ viewAddressSection animState currentUserId addresses =
             Success listAddresses ->
                 if listAddresses == [] then
                     div []
-                        [ p
-                            [ style
-                                [ ( "font-size", "20px" ) ]
-                            ]
-                            [ Html.text "Your score is 244" ]
-                        , p
-                            [ style
-                                [ ( "font-size", "30px" )
-                                , ( "color", "gold" )
-                                ]
-                            ]
-                            [ Html.text "🏆 You're in first place! 🏆" ]
-                        , button
+                        [ button
                             [ onClick FetchAddresses
                             , style styleFetchAddressButton
                             ]

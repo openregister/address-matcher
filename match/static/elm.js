@@ -16605,35 +16605,6 @@ var _user$project$View$viewAddressSection = F3(
 						_elm_lang$core$Native_List.fromArray(
 							[
 								A2(
-								_elm_lang$html$Html$p,
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html_Attributes$style(
-										_elm_lang$core$Native_List.fromArray(
-											[
-												{ctor: '_Tuple2', _0: 'font-size', _1: '20px'}
-											]))
-									]),
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html$text('Your score is 244')
-									])),
-								A2(
-								_elm_lang$html$Html$p,
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html_Attributes$style(
-										_elm_lang$core$Native_List.fromArray(
-											[
-												{ctor: '_Tuple2', _0: 'font-size', _1: '30px'},
-												{ctor: '_Tuple2', _0: 'color', _1: 'gold'}
-											]))
-									]),
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html$text('🏆 You\'re in first place! 🏆')
-									])),
-								A2(
 								_elm_lang$html$Html$button,
 								_elm_lang$core$Native_List.fromArray(
 									[
