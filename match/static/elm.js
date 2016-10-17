@@ -16318,13 +16318,15 @@ var _user$project$View$viewExternalLink = F2(
 var _user$project$View$styleFetchAddressButton = _elm_lang$core$Native_List.fromArray(
 	[
 		{ctor: '_Tuple2', _0: 'font-size', _1: '50px'},
-		{ctor: '_Tuple2', _0: ' font-weight', _1: 'bold'},
-		{ctor: '_Tuple2', _0: ' margin-top', _1: '20px'}
+		{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
+		{ctor: '_Tuple2', _0: 'margin-top', _1: '20px'}
 	]);
 var _user$project$View$styleEmbeddedMap = _elm_lang$core$Native_List.fromArray(
 	[
+		{ctor: '_Tuple2', _0: 'width', _1: '98%'},
+		{ctor: '_Tuple2', _0: 'height', _1: '98%'},
 		{ctor: '_Tuple2', _0: 'border', _1: '0'},
-		{ctor: '_Tuple2', _0: 'margin', _1: '20px 0 20px 0'}
+		{ctor: '_Tuple2', _0: 'margin', _1: '1%'}
 	]);
 var _user$project$View$styleCandidateAddressHover = _elm_lang$core$Native_List.fromArray(
 	[
@@ -16332,14 +16334,11 @@ var _user$project$View$styleCandidateAddressHover = _elm_lang$core$Native_List.f
 	]);
 var _user$project$View$styleCandidate = _elm_lang$core$Native_List.fromArray(
 	[
-		{ctor: '_Tuple2', _0: 'margin-left', _1: '50%'},
-		{ctor: '_Tuple2', _0: 'margin-top', _1: '1em'},
-		{ctor: '_Tuple2', _0: 'width', _1: '30%'},
+		{ctor: '_Tuple2', _0: 'margin-bottom', _1: '1em'},
 		{ctor: '_Tuple2', _0: 'padding', _1: '3px'},
 		{ctor: '_Tuple2', _0: 'border', _1: '1px solid black'},
 		{ctor: '_Tuple2', _0: 'background-color', _1: '#DDD'},
-		{ctor: '_Tuple2', _0: 'min-height', _1: '5em'},
-		{ctor: '_Tuple2', _0: 'vertical-align', _1: 'bottom'}
+		{ctor: '_Tuple2', _0: 'min-height', _1: '5em'}
 	]);
 var _user$project$View$viewCandidate = F2(
 	function (index, candidate) {
@@ -16404,6 +16403,12 @@ var _user$project$View$viewCandidate = F2(
 					]))
 		};
 	});
+var _user$project$View$styleCandidates = _elm_lang$core$Native_List.fromArray(
+	[
+		{ctor: '_Tuple2', _0: 'margin-left', _1: '60%'},
+		{ctor: '_Tuple2', _0: 'margin-top', _1: '1em'},
+		{ctor: '_Tuple2', _0: 'width', _1: '30%'}
+	]);
 var _user$project$View$mapUrl = function (search) {
 	return A2(
 		_evancz$elm_http$Http$url,
@@ -16419,8 +16424,6 @@ var _user$project$View$viewEmbeddedMap = function (search) {
 		_elm_lang$html$Html$iframe,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$width(400),
-				_elm_lang$html$Html_Attributes$height(300),
 				_elm_lang$html$Html_Attributes$style(_user$project$View$styleEmbeddedMap),
 				_elm_lang$html$Html_Attributes$src(
 				_user$project$View$mapUrl(
@@ -16455,33 +16458,6 @@ var _user$project$View$extractPostcode = function (text) {
 };
 var _user$project$View$viewAddress = F2(
 	function (animState, address) {
-		var notSureChoice = A4(
-			_jinjor$elm_inline_hover$InlineHover$hover,
-			_user$project$View$styleCandidateAddressHover,
-			_elm_lang$html$Html$button,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Attributes$class('button'),
-					_elm_lang$html$Html_Events$onClick(
-					_user$project$State$SelectCandidate(_elm_lang$core$Maybe$Nothing))
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					A2(
-					_elm_lang$html$Html$span,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$style(
-							_elm_lang$core$Native_List.fromArray(
-								[
-									{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'}
-								]))
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html$text('Pass ¯\\_(ツ)_/¯')
-						]))
-				]));
 		var testAddressHtml = A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
@@ -16491,6 +16467,8 @@ var _user$project$View$viewAddress = F2(
 						[
 							{ctor: '_Tuple2', _0: 'position', _1: 'fixed'},
 							{ctor: '_Tuple2', _0: 'max-width', _1: '50%'},
+							{ctor: '_Tuple2', _0: 'min-width', _1: '37%'},
+							{ctor: '_Tuple2', _0: 'width', _1: '50%'},
 							{ctor: '_Tuple2', _0: 'z-index', _1: '2'},
 							{ctor: '_Tuple2', _0: 'background', _1: 'white'},
 							{ctor: '_Tuple2', _0: 'border', _1: '2px solid #BBB'},
@@ -16503,11 +16481,11 @@ var _user$project$View$viewAddress = F2(
 					_elm_lang$html$Html$h1,
 					_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$html$Html_Attributes$class('heading-medium'),
+							_elm_lang$html$Html_Attributes$class('heading-small'),
 							_elm_lang$html$Html_Attributes$style(
 							_elm_lang$core$Native_List.fromArray(
 								[
-									{ctor: '_Tuple2', _0: 'margin-top', _1: '0'}
+									{ctor: '_Tuple2', _0: 'margin', _1: '0 0 .5em 0'}
 								]))
 						]),
 					_elm_lang$core$List$concat(
@@ -16531,9 +16509,7 @@ var _user$project$View$viewAddress = F2(
 												_elm_lang$html$Html$text(line)
 											]));
 								},
-								A2(_elm_lang$core$String$split, ',', address.test.address)),
-								_elm_lang$core$Native_List.fromArray(
-								[notSureChoice])
+								A2(_elm_lang$core$String$split, ',', address.test.address))
 							]))),
 					_user$project$View$viewEmbeddedMap(
 					_user$project$View$extractPostcode(address.test.address))
@@ -16560,7 +16536,9 @@ var _user$project$View$viewAddress = F2(
 					A2(
 					_elm_lang$html$Html$div,
 					_elm_lang$core$Native_List.fromArray(
-						[]),
+						[
+							_elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidates)
+						]),
 					_elm_lang$core$Native_List.fromArray(
 						[
 							A2(
@@ -16570,7 +16548,19 @@ var _user$project$View$viewAddress = F2(
 							A2(
 								_elm_lang$core$List$indexedMap,
 								_user$project$View$viewCandidate,
-								A2(_elm_lang$core$List$map, addTestId, address.candidates)))
+								A2(_elm_lang$core$List$map, addTestId, address.candidates))),
+							A2(
+							_elm_lang$html$Html$button,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$class('button'),
+									_elm_lang$html$Html_Events$onClick(
+									_user$project$State$SelectCandidate(_elm_lang$core$Maybe$Nothing))
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Pass ¯\\_(ツ)_/¯')
+								]))
 						]))
 				]));
 	});

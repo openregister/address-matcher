@@ -55,17 +55,21 @@ mapUrl search =
 
 -- Lists of style properties
 
+styleCandidates : List (String, String)
+styleCandidates =
+        [ ( "margin-left", "60%" )
+        , ( "margin-top", "1em" )
+        , ( "width", "30%" )
+        ]
+
 
 styleCandidate : List (String, String)
 styleCandidate =
-        [ ( "margin-left", "50%" )
-        , ( "margin-top", "1em" )
-        , ( "width", "30%" )
+        [ ( "margin-bottom", "1em" )
         , ( "padding", "3px" )
         , ( "border", "1px solid black" )
         , ( "background-color", "#DDD" )
         , ( "min-height", "5em" )
-        , ( "vertical-align", "bottom" )
         ]
 
 
@@ -76,15 +80,17 @@ styleCandidateAddressHover =
 
 styleEmbeddedMap : List (String, String)
 styleEmbeddedMap =
-        [ ( "border", "0" )
-        , ( "margin", "20px 0 20px 0" )
+        [ ( "width", "98%" )
+        , ( "height", "98%" )
+        , ( "border", "0" )
+        , ( "margin", "1%" )
         ]
 
 styleFetchAddressButton : List (String, String)
 styleFetchAddressButton =
         [ ( "font-size", "50px" )
-        , (" font-weight", "bold" )
-        , (" margin-top", "20px" )
+        , ( "font-weight", "bold" )
+        , ( "margin-top", "20px" )
         ]
 
 
@@ -107,9 +113,9 @@ viewExternalLink linkText linkHref =
 viewEmbeddedMap : String -> Html Msg
 viewEmbeddedMap search =
     iframe
-        [ width 400
-        , height 300
-        , style styleEmbeddedMap
+        [ --width 400
+       -- , height 300
+         style styleEmbeddedMap
         , src (mapUrl (search ++ ", United Kingdom"))
         ]
         []
@@ -152,25 +158,12 @@ viewAddress animState address =
         addTestId ca =
             ( ca, address.test.id )
 
-        notSureChoice =
-            hover
-                styleCandidateAddressHover
-                button
-                    [ class "button"
-                    , onClick (SelectCandidate Nothing)
-                    ]
-                    [ span
-                        [ style
-                            [ ( "font-weight", "bold" ) ]
-                        ]
-                        [ Html.text "Pass ¯\\_(ツ)_/¯" ]
-                    ]
-
         testAddressHtml =
             div
                 [ style
                     [( "position", "fixed" )
-                    , ( "max-width", "50%" )
+                    , ( "max-width", "37%" )
+                    , ( "min-width", "37%" )
                     , ( "z-index", "2" )
                     , ( "background", "white" )
                     , ( "border", "2px solid #BBB" )
@@ -178,18 +171,13 @@ viewAddress animState address =
                     ]
                 ]
                 [ h1
-                    [ class "heading-medium"
-                    , style [ ( "margin-top", "0" ) ]
+                    [ class "heading-small"
+                    , style [ ( "margin", "0 0 .5em 0" ) ]
                     ]
                     (List.concat
                         [ (map
                             (\line -> p [ style [("margin", "0")] ] [text line])
                             (String.split "," address.test.address))
-                        -- , [ span [] [ Html.text " - " ] ]
-                        -- , [ (viewExternalLink
-                        --     "Search"
-                        --     (searchUrl address.test.address)) ]
-                        , [ notSureChoice ]
                         ]
                     )
                 , viewEmbeddedMap (extractPostcode address.test.address)
@@ -200,10 +188,14 @@ viewAddress animState address =
                 ++ [ style [ ( "position", "relative" ) ] ]
             )
             [ testAddressHtml
-            , div
-                []
+            , div [ style styleCandidates ]
                 [ Html.Keyed.ul []
                     (indexedMap viewCandidate (map addTestId address.candidates))
+                , button
+                    [ class "button"
+                    , onClick (SelectCandidate Nothing)
+                    ]
+                    [ Html.text "Pass ¯\\_(ツ)_/¯" ]
                 ]
             ]
 
