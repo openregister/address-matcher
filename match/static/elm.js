@@ -16544,6 +16544,16 @@ var _user$project$View$viewAddress = F2(
 					_elm_lang$core$Native_List.fromArray(
 						[
 							A2(
+							_elm_lang$html$Html$h2,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$class('heading-medium')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Click on the matching address below:')
+								])),
+							A2(
 							_elm_lang$html$Html_Keyed$ul,
 							_elm_lang$core$Native_List.fromArray(
 								[]),
@@ -16604,6 +16614,16 @@ var _user$project$View$viewAddressSection = F3(
 							[]),
 						_elm_lang$core$Native_List.fromArray(
 							[
+								A2(
+								_elm_lang$html$Html$h1,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html_Attributes$class('heading-xlarge')
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('All done!')
+									])),
 								A2(
 								_elm_lang$html$Html$button,
 								_elm_lang$core$Native_List.fromArray(

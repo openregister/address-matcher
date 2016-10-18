@@ -189,7 +189,8 @@ viewAddress animState address =
             )
             [ testAddressHtml
             , div [ style styleCandidates ]
-                [ Html.Keyed.ul []
+                [ h2 [ class "heading-medium" ] [ text "Click on the matching address below:" ]
+                , Html.Keyed.ul []
                     (indexedMap viewCandidate (map addTestId address.candidates))
                 , button
                     [ class "button"
@@ -306,7 +307,8 @@ viewAddressSection animState currentUserId addresses =
             Success listAddresses ->
                 if listAddresses == [] then
                     div []
-                        [ button
+                        [ h1 [ class "heading-xlarge" ] [ text "All done!" ]
+                        , button
                             [ onClick FetchAddresses
                             , style styleFetchAddressButton
                             ]
