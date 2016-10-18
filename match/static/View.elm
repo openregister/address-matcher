@@ -59,7 +59,7 @@ styleCandidates : List (String, String)
 styleCandidates =
         [ ( "margin-left", "60%" )
         , ( "margin-top", "1em" )
-        , ( "width", "30%" )
+        , ( "width", "40%" )
         ]
 
 
@@ -113,9 +113,7 @@ viewExternalLink linkText linkHref =
 viewEmbeddedMap : String -> Html Msg
 viewEmbeddedMap search =
     iframe
-        [ --width 400
-       -- , height 300
-         style styleEmbeddedMap
+        [ style styleEmbeddedMap
         , src (mapUrl (search ++ ", United Kingdom"))
         ]
         []
@@ -161,18 +159,21 @@ viewAddress animState address =
         testAddressHtml =
             div
                 [ style
-                    [( "position", "fixed" )
-                    , ( "max-width", "37%" )
-                    , ( "min-width", "37%" )
+                    [ ( "position", "fixed" )
+                    , ( "max-width", "42%" )
+                    , ( "min-width", "42%" )
+                    , ( "height", "300px" )
                     , ( "z-index", "2" )
                     , ( "background", "white" )
-                    , ( "border", "2px solid #BBB" )
-                    , ( "padding", "3px" )
                     ]
                 ]
                 [ h1
                     [ class "heading-small"
-                    , style [ ( "margin", "0 0 .5em 0" ) ]
+                    , style
+                        [ ( "margin", "0 0 .5em 0" )
+                        , ( "border", "2px solid #BBB" )
+                        , ( "padding", "3px" )
+                        ]
                     ]
                     (List.concat
                         [ (map
@@ -194,6 +195,7 @@ viewAddress animState address =
                     (indexedMap viewCandidate (map addTestId address.candidates))
                 , button
                     [ class "button"
+                    , style [ ( "white-space", "nowrap" ) ]
                     , onClick (SelectCandidate ( Nothing, address.test.id ))
                     ]
                     [ Html.text "Pass ¯\\_(ツ)_/¯" ]

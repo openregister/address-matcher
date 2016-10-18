@@ -16410,7 +16410,7 @@ var _user$project$View$styleCandidates = _elm_lang$core$Native_List.fromArray(
 	[
 		{ctor: '_Tuple2', _0: 'margin-left', _1: '60%'},
 		{ctor: '_Tuple2', _0: 'margin-top', _1: '1em'},
-		{ctor: '_Tuple2', _0: 'width', _1: '30%'}
+		{ctor: '_Tuple2', _0: 'width', _1: '40%'}
 	]);
 var _user$project$View$mapUrl = function (search) {
 	return A2(
@@ -16469,12 +16469,11 @@ var _user$project$View$viewAddress = F2(
 					_elm_lang$core$Native_List.fromArray(
 						[
 							{ctor: '_Tuple2', _0: 'position', _1: 'fixed'},
-							{ctor: '_Tuple2', _0: 'max-width', _1: '37%'},
-							{ctor: '_Tuple2', _0: 'min-width', _1: '37%'},
+							{ctor: '_Tuple2', _0: 'max-width', _1: '42%'},
+							{ctor: '_Tuple2', _0: 'min-width', _1: '42%'},
+							{ctor: '_Tuple2', _0: 'height', _1: '300px'},
 							{ctor: '_Tuple2', _0: 'z-index', _1: '2'},
-							{ctor: '_Tuple2', _0: 'background', _1: 'white'},
-							{ctor: '_Tuple2', _0: 'border', _1: '2px solid #BBB'},
-							{ctor: '_Tuple2', _0: 'padding', _1: '3px'}
+							{ctor: '_Tuple2', _0: 'background', _1: 'white'}
 						]))
 				]),
 			_elm_lang$core$Native_List.fromArray(
@@ -16487,7 +16486,9 @@ var _user$project$View$viewAddress = F2(
 							_elm_lang$html$Html_Attributes$style(
 							_elm_lang$core$Native_List.fromArray(
 								[
-									{ctor: '_Tuple2', _0: 'margin', _1: '0 0 .5em 0'}
+									{ctor: '_Tuple2', _0: 'margin', _1: '0 0 .5em 0'},
+									{ctor: '_Tuple2', _0: 'border', _1: '2px solid #BBB'},
+									{ctor: '_Tuple2', _0: 'padding', _1: '3px'}
 								]))
 						]),
 					_elm_lang$core$List$concat(
@@ -16566,6 +16567,11 @@ var _user$project$View$viewAddress = F2(
 							_elm_lang$core$Native_List.fromArray(
 								[
 									_elm_lang$html$Html_Attributes$class('button'),
+									_elm_lang$html$Html_Attributes$style(
+									_elm_lang$core$Native_List.fromArray(
+										[
+											{ctor: '_Tuple2', _0: 'white-space', _1: 'nowrap'}
+										])),
 									_elm_lang$html$Html_Events$onClick(
 									_user$project$State$SelectCandidate(
 										{ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: address.test.id}))
