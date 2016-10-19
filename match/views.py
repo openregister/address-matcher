@@ -67,16 +67,11 @@ def brain(request):
         test_address)
 
     queryObject = {
-       "size": 10,
+        "size": 10,
+        "_source": ["parent-address-name", "street-name", "street-town", "name", "address"],
         "query": {
-            "query_string": {
-                "fields": [
-                    "name",
-                    "parent-address-name",
-                    "street-name",
-                    "street-town"
-                ],
-                "query": test_address
+            "match": {
+                "_all": test_address
             }
         }
     }
