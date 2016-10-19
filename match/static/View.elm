@@ -23,21 +23,6 @@ postcodeRegex =
     regex "(GIR 0AA)|((([A-Z]\\d+)|(([A-Z]{2}\\d+)|(([A-Z][0-9][A-HJKSTUW])|([A-Z]{2}[0-9][ABEHMNPRVWXY]))))\\s?[0-9][A-Z]{2})"
 
 
-extractPostcode : String -> String
-extractPostcode text =
-    let
-        match =
-            find (AtMost 1) postcodeRegex text
-                |> head
-    in
-        case match of
-            Nothing ->
-                text
-
-            Just m ->
-                m.match
-
-
 searchUrl : String -> String
 searchUrl search =
     url "https://www.google.co.uk/search"
@@ -156,6 +141,9 @@ viewAddress animState address =
         addTestId ca =
             ( ca, address.test.id )
 
+        testNameHtml =
+            p [] [ text address.test.name ]
+
         testAddressHtml =
             div
                 [ style
@@ -167,9 +155,9 @@ viewAddress animState address =
                     , ( "background", "white" )
                     ]
                 ]
-                [ h1
-                    [ class "heading-small"
-                    , style
+                [ testNameHtml
+                , h1
+                    [ style
                         [ ( "margin", "0 0 .5em 0" )
                         , ( "border", "2px solid #BBB" )
                         , ( "padding", "3px" )
@@ -181,7 +169,7 @@ viewAddress animState address =
                             (String.split "," address.test.address))
                         ]
                     )
-                , viewEmbeddedMap (extractPostcode address.test.address)
+                , viewEmbeddedMap address.test.address
                 ]
     in
         div

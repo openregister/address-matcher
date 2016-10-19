@@ -17,5 +17,6 @@ class Command(BaseCommand):
         for row in tsvin:
             Address.objects.create(
                 test_id = row[0],
-                address = ', '.join(row[1:])
+                name = row[1],
+                address = ', '.join(row[2:])
             )

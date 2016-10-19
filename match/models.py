@@ -5,10 +5,11 @@ from datetime import datetime
 
 class Address(models.Model):
     test_id = models.CharField(max_length=50, blank=True)
+    name = models.CharField(max_length=256, blank=True)
     address = models.CharField(max_length=512, blank=True)
 
     def __str__(self):
-        return self.test_id + ' - ' + self.address
+        return "%s (%s)" % (self.name, self.test_id)
 
 class User(models.Model):
     name = models.CharField(max_length=200)

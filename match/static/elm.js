@@ -16023,9 +16023,9 @@ var _user$project$Address$removeAddress = F2(
 			return addresses;
 		}
 	});
-var _user$project$Address$TestAddress = F2(
-	function (a, b) {
-		return {address: a, id: b};
+var _user$project$Address$TestAddress = F3(
+	function (a, b, c) {
+		return {name: a, address: b, id: c};
 	});
 var _user$project$Address$CandidateAddress = F5(
 	function (a, b, c, d, e) {
@@ -16431,32 +16431,16 @@ var _user$project$View$viewEmbeddedMap = function (search) {
 		_elm_lang$core$Native_List.fromArray(
 			[]));
 };
-var _user$project$View$searchUrl = function (search) {
-	return A2(
-		_evancz$elm_http$Http$url,
-		'https://www.google.co.uk/search',
-		_elm_lang$core$Native_List.fromArray(
-			[
-				{ctor: '_Tuple2', _0: 'q', _1: search}
-			]));
-};
-var _user$project$View$postcodeRegex = _elm_lang$core$Regex$regex('(GIR 0AA)|((([A-Z]\\d+)|(([A-Z]{2}\\d+)|(([A-Z][0-9][A-HJKSTUW])|([A-Z]{2}[0-9][ABEHMNPRVWXY]))))\\s?[0-9][A-Z]{2})');
-var _user$project$View$extractPostcode = function (text) {
-	var match = _elm_lang$core$List$head(
-		A3(
-			_elm_lang$core$Regex$find,
-			_elm_lang$core$Regex$AtMost(1),
-			_user$project$View$postcodeRegex,
-			text));
-	var _p1 = match;
-	if (_p1.ctor === 'Nothing') {
-		return text;
-	} else {
-		return _p1._0.match;
-	}
-};
 var _user$project$View$viewAddress = F2(
 	function (animState, address) {
+		var testNameHtml = A2(
+			_elm_lang$html$Html$p,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text(address.test.name)
+				]));
 		var testAddressHtml = A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
@@ -16474,11 +16458,11 @@ var _user$project$View$viewAddress = F2(
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
+					testNameHtml,
 					A2(
 					_elm_lang$html$Html$h1,
 					_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$html$Html_Attributes$class('heading-small'),
 							_elm_lang$html$Html_Attributes$style(
 							_elm_lang$core$Native_List.fromArray(
 								[
@@ -16510,8 +16494,7 @@ var _user$project$View$viewAddress = F2(
 								},
 								A2(_elm_lang$core$String$split, ',', address.test.address))
 							]))),
-					_user$project$View$viewEmbeddedMap(
-					_user$project$View$extractPostcode(address.test.address))
+					_user$project$View$viewEmbeddedMap(address.test.address)
 				]));
 		var addTestId = function (ca) {
 			return {ctor: '_Tuple2', _0: ca, _1: address.test.id};
@@ -16603,12 +16586,12 @@ var _user$project$View$viewAddressSection = F3(
 				_elm_lang$core$Native_List.fromArray(
 					[]));
 		} else {
-			var _p2 = addresses;
-			switch (_p2.ctor) {
+			var _p1 = addresses;
+			switch (_p1.ctor) {
 				case 'Success':
-					var _p3 = _p2._0;
+					var _p2 = _p1._0;
 					return _elm_lang$core$Native_Utils.eq(
-						_p3,
+						_p2,
 						_elm_lang$core$Native_List.fromArray(
 							[])) ? A2(
 						_elm_lang$html$Html$div,
@@ -16640,8 +16623,8 @@ var _user$project$View$viewAddressSection = F3(
 							])) : A3(
 						_user$project$View$viewAddresses,
 						animState,
-						_elm_lang$core$List$length(_p3),
-						A2(_elm_lang$core$List$take, 1, _p3));
+						_elm_lang$core$List$length(_p2),
+						A2(_elm_lang$core$List$take, 1, _p2));
 				case 'Loading':
 					return A2(
 						_elm_lang$html$Html$p,
@@ -16662,7 +16645,7 @@ var _user$project$View$viewAddressSection = F3(
 								A2(
 									_elm_lang$core$Basics_ops['++'],
 									'Failed loading addresses: ',
-									_elm_lang$core$Basics$toString(_p2._0)))
+									_elm_lang$core$Basics$toString(_p1._0)))
 							]));
 				default:
 					return A2(
@@ -16693,6 +16676,16 @@ var _user$project$View$view = function (model) {
 				A3(_user$project$View$viewAddressSection, model.animationStyle, model.currentUserId, model.addresses)
 			]));
 };
+var _user$project$View$searchUrl = function (search) {
+	return A2(
+		_evancz$elm_http$Http$url,
+		'https://www.google.co.uk/search',
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{ctor: '_Tuple2', _0: 'q', _1: search}
+			]));
+};
+var _user$project$View$postcodeRegex = _elm_lang$core$Regex$regex('(GIR 0AA)|((([A-Z]\\d+)|(([A-Z]{2}\\d+)|(([A-Z][0-9][A-HJKSTUW])|([A-Z]{2}[0-9][ABEHMNPRVWXY]))))\\s?[0-9][A-Z]{2})');
 
 var _user$project$Rest$sendMatch = F3(
 	function (uprn, testId, userId) {
@@ -16729,9 +16722,10 @@ var _user$project$Rest$candidateAddressesDecoder = _elm_lang$core$Json_Decode$li
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'street-town', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'uprn', _elm_lang$core$Json_Decode$string)));
 var _user$project$Rest$testAddressDecoder = _elm_lang$core$Json_Decode$list(
-	A3(
-		_elm_lang$core$Json_Decode$object2,
+	A4(
+		_elm_lang$core$Json_Decode$object3,
 		_user$project$Address$TestAddress,
+		A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'address', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int)));
 var _user$project$Rest$jsonGet = function (url) {

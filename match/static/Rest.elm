@@ -30,7 +30,8 @@ fetchUsers =
 testAddressDecoder : Decoder (List TestAddress)
 testAddressDecoder =
     (Json.Decode.list
-        (Json.Decode.object2 TestAddress
+        (Json.Decode.object3 TestAddress
+            ("name" := Json.Decode.string)
             ("address" := Json.Decode.string)
             ("id" := Json.Decode.int)
         )

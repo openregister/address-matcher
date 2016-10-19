@@ -9,7 +9,8 @@ type alias TestAddressId =
 
 
 type alias TestAddress =
-    { address : String
+    { name : String
+    , address : String
     , id : TestAddressId
     }
 
