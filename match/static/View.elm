@@ -135,7 +135,7 @@ viewCandidate index candidate =
             li
                 [ style styleCandidate
                 , onClick
-                    (SelectCandidate ( Just candidateAddress.uprn, testId ))
+                    (SelectCandidate ( candidateAddress.uprn, testId ))
                 ]
                 [ ul
                     []
@@ -196,7 +196,7 @@ viewAddress animState address =
                 , button
                     [ class "button"
                     , style [ ( "white-space", "nowrap" ) ]
-                    , onClick (SelectCandidate ( Nothing, address.test.id ))
+                    , onClick (SelectCandidate ( "_unknown_", address.test.id ))
                     ]
                     [ Html.text "Pass ¯\\_(ツ)_/¯" ]
                 ]

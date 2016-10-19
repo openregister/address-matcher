@@ -7,7 +7,6 @@ import Animation.Messenger
 import State exposing (..)
 import View
 import Rest
-import Maybe
 import Types exposing (..)
 import User exposing (..)
 import Address exposing (..)
@@ -157,22 +156,18 @@ update msg model =
 
         NextCandidate ( selectedCandidateUprn, testId ) ->
             let
-                command =
-                    case selectedCandidateUprn of
-                        Nothing ->
-                            Cmd.none
+                model' =
+                    { model
+                        | addresses = removeAddress testId model.addresses
+                    }
 
-                        Just uprn ->
-                            Rest.sendMatch
-                                uprn
-                                testId
-                                model.currentUserId
+                command =
+                    Rest.sendMatch
+                        selectedCandidateUprn
+                        testId
+                        model.currentUserId
             in
-                ( { model
-                    | addresses = removeAddress testId model.addresses
-                }
-                , command
-                )
+                ( model', command )
 
         SendMatchOk result ->
             ( model, Cmd.none )

@@ -16356,11 +16356,7 @@ var _user$project$View$viewCandidate = F2(
 						_elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidate),
 						_elm_lang$html$Html_Events$onClick(
 						_user$project$State$SelectCandidate(
-							{
-								ctor: '_Tuple2',
-								_0: _elm_lang$core$Maybe$Just(candidateAddress.uprn),
-								_1: testId
-							}))
+							{ctor: '_Tuple2', _0: candidateAddress.uprn, _1: testId}))
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
@@ -16574,7 +16570,7 @@ var _user$project$View$viewAddress = F2(
 										])),
 									_elm_lang$html$Html_Events$onClick(
 									_user$project$State$SelectCandidate(
-										{ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: address.test.id}))
+										{ctor: '_Tuple2', _0: '_unknown_', _1: address.test.id}))
 								]),
 							_elm_lang$core$Native_List.fromArray(
 								[
@@ -16978,32 +16974,22 @@ var _user$project$Main$update = F2(
 					_1: _user$project$Main$scrollTop('notused')
 				};
 			case 'NextCandidate':
-				var _p4 = _p2._0._1;
-				var command = function () {
-					var _p3 = _p2._0._0;
-					if (_p3.ctor === 'Nothing') {
-						return _elm_lang$core$Platform_Cmd$none;
-					} else {
-						return A3(_user$project$Rest$sendMatch, _p3._0, _p4, model.currentUserId);
-					}
-				}();
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							addresses: A2(_user$project$Address$removeAddress, _p4, model.addresses)
-						}),
-					_1: command
-				};
+				var _p3 = _p2._0._1;
+				var command = A3(_user$project$Rest$sendMatch, _p2._0._0, _p3, model.currentUserId);
+				var model$ = _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						addresses: A2(_user$project$Address$removeAddress, _p3, model.addresses)
+					});
+				return {ctor: '_Tuple2', _0: model$, _1: command};
 			case 'SendMatchOk':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'SendMatchFail':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			default:
-				var _p5 = A2(_mdgriffith$elm_style_animation$Animation_Messenger$update, _p2._0, model.animationStyle);
-				var newStyle = _p5._0;
-				var cmds = _p5._1;
+				var _p4 = A2(_mdgriffith$elm_style_animation$Animation_Messenger$update, _p2._0, model.animationStyle);
+				var newStyle = _p4._0;
+				var cmds = _p4._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(

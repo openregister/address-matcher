@@ -28,8 +28,8 @@ type Msg
     | FetchAddresses
     | FetchAddressesOk (List Address)
     | FetchAddressesFail Http.Error
-    | NextCandidate ( Maybe String, TestAddressId )
-    | SelectCandidate ( Maybe String, TestAddressId )
+    | NextCandidate ( String, TestAddressId )
+    | SelectCandidate ( String, TestAddressId )
     | SendMatchFail Http.Error
     | SendMatchOk String
     | Animate Animation.Msg
