@@ -142,7 +142,7 @@ viewAddress animState address =
             ( ca, address.test.id )
 
         testNameHtml =
-            p [] [ text address.test.name ]
+            p [ style [ ( "font-weight", "bold" ) ] ] [ text address.test.name ]
 
         testAddressHtml =
             div

@@ -16436,7 +16436,13 @@ var _user$project$View$viewAddress = F2(
 		var testNameHtml = A2(
 			_elm_lang$html$Html$p,
 			_elm_lang$core$Native_List.fromArray(
-				[]),
+				[
+					_elm_lang$html$Html_Attributes$style(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'}
+						]))
+				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
 					_elm_lang$html$Html$text(address.test.name)
