@@ -16654,7 +16654,7 @@ var _user$project$View$viewAddressSection = F3(
 							[]),
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_elm_lang$html$Html$text('')
+								_elm_lang$html$Html$text('Loading test addresses')
 							]));
 			}
 		}

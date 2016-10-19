@@ -317,7 +317,7 @@ viewAddressSection animState currentUserId addresses =
                 p [] [ Html.text ("Failed loading addresses: " ++ (toString err)) ]
 
             NotAsked ->
-                p [] [ Html.text "" ]
+                p [] [ Html.text "Loading test addresses" ]
 
 
 view : Model -> Html Msg
