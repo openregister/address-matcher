@@ -16451,16 +16451,7 @@ var _user$project$View$viewAddress = F2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html_Attributes$style(
-					_elm_lang$core$Native_List.fromArray(
-						[
-							{ctor: '_Tuple2', _0: 'position', _1: 'fixed'},
-							{ctor: '_Tuple2', _0: 'max-width', _1: '42%'},
-							{ctor: '_Tuple2', _0: 'min-width', _1: '42%'},
-							{ctor: '_Tuple2', _0: 'height', _1: '300px'},
-							{ctor: '_Tuple2', _0: 'z-index', _1: '2'},
-							{ctor: '_Tuple2', _0: 'background', _1: 'white'}
-						]))
+					_elm_lang$html$Html_Attributes$class('test-address')
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[

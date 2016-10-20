@@ -146,15 +146,7 @@ viewAddress animState address =
 
         testAddressHtml =
             div
-                [ style
-                    [ ( "position", "fixed" )
-                    , ( "max-width", "42%" )
-                    , ( "min-width", "42%" )
-                    , ( "height", "300px" )
-                    , ( "z-index", "2" )
-                    , ( "background", "white" )
-                    ]
-                ]
+                [ class "test-address" ]
                 [ testNameHtml
                 , h1
                     [ style
