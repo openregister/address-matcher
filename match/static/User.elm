@@ -15,7 +15,7 @@ type alias UserName =
 
 
 type alias UserRecord =
-    { name : String
+    { name : UserName
     , id : UserId
     }
 
