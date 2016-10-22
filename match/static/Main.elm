@@ -164,9 +164,7 @@ update msg model =
         NextCandidate ( selectedCandidateUprn, testId ) ->
             let
                 model' =
-                    { model
-                        | addresses = removeAddress testId model.addresses
-                    }
+                    { model | addresses = removeAddress testId model.addresses }
 
                 command =
                     Rest.sendMatch

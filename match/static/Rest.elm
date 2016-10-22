@@ -43,10 +43,10 @@ fetchDataSetInfo =
             getInfoAsList
 
 
-testAddressDecoder : Decoder (List TestAddress)
-testAddressDecoder =
+testDecoder : Decoder (List Test)
+testDecoder =
     (Json.Decode.list
-        (Json.Decode.object3 TestAddress
+        (Json.Decode.object3 Test
             ("name" := Json.Decode.string)
             ("address" := Json.Decode.string)
             ("id" := Json.Decode.int)
@@ -54,10 +54,10 @@ testAddressDecoder =
     )
 
 
-candidateAddressesDecoder : Decoder (List CandidateAddress)
+candidateAddressesDecoder : Decoder (List Candidate)
 candidateAddressesDecoder =
     (Json.Decode.list
-        (Json.Decode.object5 CandidateAddress
+        (Json.Decode.object5 Candidate
             ("name" := Json.Decode.string)
             ("parent-address-name" := Json.Decode.string)
             ("street-name" := Json.Decode.string)
@@ -67,14 +67,14 @@ candidateAddressesDecoder =
     )
 
 
-addCandidates : TestAddress -> Task.Task Error Address
-addCandidates testAddress =
+addCandidates : Test -> Task.Task Error Address
+addCandidates test =
     let
         candidatesLookupUrl =
-            url "/match/brain/" [ ( "q", testAddress.address ) ]
+            url "/match/brain/" [ ( "q", test.address ) ]
     in
         Task.map
-            (\candidates -> (Address testAddress candidates))
+            (\candidates -> (Address test candidates))
             (fromJson candidateAddressesDecoder
                 (send defaultSettings (jsonGet candidatesLookupUrl))
             )
@@ -83,17 +83,17 @@ addCandidates testAddress =
 fetchAddresses : Cmd Msg
 fetchAddresses =
     let
-        fetchTests : Task.Task Error (List TestAddress)
+        fetchTests : Task.Task Error (List Test)
         fetchTests =
-            (fromJson testAddressDecoder
+            (fromJson testDecoder
                 (send defaultSettings
                     (jsonGet ("/match/test-addresses/?n=5"))
                 )
             )
 
-        fetchAllCandidates : List TestAddress -> Task.Task Error (List Address)
-        fetchAllCandidates testAddresses =
-            Task.sequence (List.map addCandidates testAddresses)
+        fetchAllCandidates : List Test -> Task.Task Error (List Address)
+        fetchAllCandidates tests =
+            Task.sequence (List.map addCandidates tests)
     in
         Task.perform
             FetchAddressesFail
@@ -101,7 +101,7 @@ fetchAddresses =
             (fetchTests `Task.andThen` fetchAllCandidates)
 
 
-sendMatch : String -> TestAddressId -> UserId -> Cmd Msg
+sendMatch : String -> TestId -> UserId -> Cmd Msg
 sendMatch uprn testId userId =
     let
         body =

@@ -4,18 +4,18 @@ import List exposing (..)
 import Types exposing (..)
 
 
-type alias TestAddressId =
+type alias TestId =
     Int
 
 
-type alias TestAddress =
+type alias Test =
     { name : String
     , address : String
-    , id : TestAddressId
+    , id : TestId
     }
 
 
-type alias CandidateAddress =
+type alias Candidate =
     { name : String
     , parentAddressName : String
     , streetName : String
@@ -25,8 +25,8 @@ type alias CandidateAddress =
 
 
 type alias Address =
-    { test : TestAddress
-    , candidates : List CandidateAddress
+    { test : Test
+    , candidates : List Candidate
     }
 
 
@@ -36,7 +36,7 @@ type alias RemoteAddresses =
 
 
 
-removeAddress : TestAddressId -> RemoteAddresses -> RemoteAddresses
+removeAddress : TestId -> RemoteAddresses -> RemoteAddresses
 removeAddress testId addresses =
     case addresses of
         Success list ->

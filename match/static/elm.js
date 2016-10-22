@@ -16023,11 +16023,11 @@ var _user$project$Address$removeAddress = F2(
 			return addresses;
 		}
 	});
-var _user$project$Address$TestAddress = F3(
+var _user$project$Address$Test = F3(
 	function (a, b, c) {
 		return {name: a, address: b, id: c};
 	});
-var _user$project$Address$CandidateAddress = F5(
+var _user$project$Address$Candidate = F5(
 	function (a, b, c, d, e) {
 		return {name: a, parentAddressName: b, streetName: c, streetTown: d, uprn: e};
 	});
@@ -16352,33 +16352,26 @@ var _user$project$View$viewUsersSection = F2(
 				}()
 				]));
 	});
-var _user$project$View$viewExternalLink = F2(
-	function (linkText, linkHref) {
-		return A2(
-			_elm_lang$html$Html$a,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Attributes$href(linkHref),
-					_elm_lang$html$Html_Attributes$target('blank'),
-					_elm_lang$html$Html_Attributes$style(
-					_elm_lang$core$Native_List.fromArray(
-						[
-							{ctor: '_Tuple2', _0: 'font-size', _1: '80%'}
-						]))
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html$text(linkText),
-					A2(
-					_elm_lang$html$Html$sup,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html$text('⧉')
-						]))
-				]));
-	});
+var _user$project$View$viewPassButton = function (testId) {
+	return A2(
+		_elm_lang$html$Html$button,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('button'),
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						{ctor: '_Tuple2', _0: 'white-space', _1: 'nowrap'}
+					])),
+				_elm_lang$html$Html_Events$onClick(
+				_user$project$State$SelectCandidate(
+					{ctor: '_Tuple2', _0: '_unknown_', _1: testId}))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Pass ¯\\_(ツ)_/¯')
+			]));
+};
 var _user$project$View$styleFetchAddressButton = _elm_lang$core$Native_List.fromArray(
 	[
 		{ctor: '_Tuple2', _0: 'font-size', _1: '50px'},
@@ -16392,7 +16385,7 @@ var _user$project$View$styleEmbeddedMap = _elm_lang$core$Native_List.fromArray(
 		{ctor: '_Tuple2', _0: 'border', _1: '0'},
 		{ctor: '_Tuple2', _0: 'margin', _1: '1%'}
 	]);
-var _user$project$View$styleCandidateAddressHover = _elm_lang$core$Native_List.fromArray(
+var _user$project$View$styleCandidateHover = _elm_lang$core$Native_List.fromArray(
 	[
 		{ctor: '_Tuple2', _0: 'outline', _1: '3px solid #F00'}
 	]);
@@ -16405,22 +16398,22 @@ var _user$project$View$styleCandidate = _elm_lang$core$Native_List.fromArray(
 		{ctor: '_Tuple2', _0: 'min-height', _1: '5em'}
 	]);
 var _user$project$View$viewCandidate = F2(
-	function (index, candidate) {
-		var testId = _elm_lang$core$Basics$snd(candidate);
-		var candidateAddress = _elm_lang$core$Basics$fst(candidate);
+	function (index, candidateTestId) {
+		var testId = _elm_lang$core$Basics$snd(candidateTestId);
+		var candidate = _elm_lang$core$Basics$fst(candidateTestId);
 		return {
 			ctor: '_Tuple2',
-			_0: candidateAddress.uprn,
+			_0: candidate.uprn,
 			_1: A4(
 				_jinjor$elm_inline_hover$InlineHover$hover,
-				_user$project$View$styleCandidateAddressHover,
+				_user$project$View$styleCandidateHover,
 				_elm_lang$html$Html$li,
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidate),
 						_elm_lang$html$Html_Events$onClick(
 						_user$project$State$SelectCandidate(
-							{ctor: '_Tuple2', _0: candidateAddress.uprn, _1: testId}))
+							{ctor: '_Tuple2', _0: candidate.uprn, _1: testId}))
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
@@ -16436,7 +16429,7 @@ var _user$project$View$viewCandidate = F2(
 									[]),
 								_elm_lang$core$Native_List.fromArray(
 									[
-										_elm_lang$html$Html$text(candidateAddress.name)
+										_elm_lang$html$Html$text(candidate.name)
 									])),
 								A2(
 								_elm_lang$html$Html$li,
@@ -16444,7 +16437,7 @@ var _user$project$View$viewCandidate = F2(
 									[]),
 								_elm_lang$core$Native_List.fromArray(
 									[
-										_elm_lang$html$Html$text(candidateAddress.parentAddressName)
+										_elm_lang$html$Html$text(candidate.parentAddressName)
 									])),
 								A2(
 								_elm_lang$html$Html$li,
@@ -16452,7 +16445,7 @@ var _user$project$View$viewCandidate = F2(
 									[]),
 								_elm_lang$core$Native_List.fromArray(
 									[
-										_elm_lang$html$Html$text(candidateAddress.streetName)
+										_elm_lang$html$Html$text(candidate.streetName)
 									])),
 								A2(
 								_elm_lang$html$Html$li,
@@ -16460,7 +16453,7 @@ var _user$project$View$viewCandidate = F2(
 									[]),
 								_elm_lang$core$Native_List.fromArray(
 									[
-										_elm_lang$html$Html$text(candidateAddress.streetTown)
+										_elm_lang$html$Html$text(candidate.streetTown)
 									]))
 							]))
 					]))
@@ -16497,6 +16490,22 @@ var _user$project$View$viewEmbeddedMap = function (search) {
 };
 var _user$project$View$viewAddress = F2(
 	function (animState, address) {
+		var viewTestLine = function (line) {
+			return A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$style(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								{ctor: '_Tuple2', _0: 'margin', _1: '0'}
+							]))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(line)
+					]));
+		};
 		var testNameHtml = A2(
 			_elm_lang$html$Html$p,
 			_elm_lang$core$Native_List.fromArray(
@@ -16511,7 +16520,7 @@ var _user$project$View$viewAddress = F2(
 				[
 					_elm_lang$html$Html$text(address.test.name)
 				]));
-		var testAddressHtml = A2(
+		var testHtml = A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
 				[
@@ -16537,22 +16546,7 @@ var _user$project$View$viewAddress = F2(
 							[
 								A2(
 								_elm_lang$core$List$map,
-								function (line) {
-									return A2(
-										_elm_lang$html$Html$p,
-										_elm_lang$core$Native_List.fromArray(
-											[
-												_elm_lang$html$Html_Attributes$style(
-												_elm_lang$core$Native_List.fromArray(
-													[
-														{ctor: '_Tuple2', _0: 'margin', _1: '0'}
-													]))
-											]),
-										_elm_lang$core$Native_List.fromArray(
-											[
-												_elm_lang$html$Html$text(line)
-											]));
-								},
+								viewTestLine,
 								A2(_elm_lang$core$String$split, ',', address.test.address))
 							]))),
 					_user$project$View$viewEmbeddedMap(address.test.address)
@@ -16575,7 +16569,7 @@ var _user$project$View$viewAddress = F2(
 					])),
 			_elm_lang$core$Native_List.fromArray(
 				[
-					testAddressHtml,
+					testHtml,
 					A2(
 					_elm_lang$html$Html$div,
 					_elm_lang$core$Native_List.fromArray(
@@ -16602,24 +16596,7 @@ var _user$project$View$viewAddress = F2(
 								_elm_lang$core$List$indexedMap,
 								_user$project$View$viewCandidate,
 								A2(_elm_lang$core$List$map, addTestId, address.candidates))),
-							A2(
-							_elm_lang$html$Html$button,
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html_Attributes$class('button'),
-									_elm_lang$html$Html_Attributes$style(
-									_elm_lang$core$Native_List.fromArray(
-										[
-											{ctor: '_Tuple2', _0: 'white-space', _1: 'nowrap'}
-										])),
-									_elm_lang$html$Html_Events$onClick(
-									_user$project$State$SelectCandidate(
-										{ctor: '_Tuple2', _0: '_unknown_', _1: address.test.id}))
-								]),
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html$text('Pass ¯\\_(ツ)_/¯')
-								]))
+							_user$project$View$viewPassButton(address.test.id)
 						]))
 				]));
 	});
@@ -16777,16 +16754,16 @@ var _user$project$Rest$sendMatch = F3(
 var _user$project$Rest$candidateAddressesDecoder = _elm_lang$core$Json_Decode$list(
 	A6(
 		_elm_lang$core$Json_Decode$object5,
-		_user$project$Address$CandidateAddress,
+		_user$project$Address$Candidate,
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'parent-address-name', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'street-name', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'street-town', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'uprn', _elm_lang$core$Json_Decode$string)));
-var _user$project$Rest$testAddressDecoder = _elm_lang$core$Json_Decode$list(
+var _user$project$Rest$testDecoder = _elm_lang$core$Json_Decode$list(
 	A4(
 		_elm_lang$core$Json_Decode$object3,
-		_user$project$Address$TestAddress,
+		_user$project$Address$Test,
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'address', _elm_lang$core$Json_Decode$string),
 		A2(_elm_lang$core$Json_Decode_ops[':='], 'id', _elm_lang$core$Json_Decode$int)));
@@ -16822,18 +16799,18 @@ var _user$project$Rest$fetchDataSetInfo = function () {
 			_user$project$Rest$jsonGet('/match/appinfo/')));
 	return A3(_elm_lang$core$Task$perform, _user$project$State$FetchDataSetInfoFail, _user$project$State$FetchDataSetInfoOk, getInfoAsList);
 }();
-var _user$project$Rest$addCandidates = function (testAddress) {
+var _user$project$Rest$addCandidates = function (test) {
 	var candidatesLookupUrl = A2(
 		_evancz$elm_http$Http$url,
 		'/match/brain/',
 		_elm_lang$core$Native_List.fromArray(
 			[
-				{ctor: '_Tuple2', _0: 'q', _1: testAddress.address}
+				{ctor: '_Tuple2', _0: 'q', _1: test.address}
 			]));
 	return A2(
 		_elm_lang$core$Task$map,
 		function (candidates) {
-			return A2(_user$project$Address$Address, testAddress, candidates);
+			return A2(_user$project$Address$Address, test, candidates);
 		},
 		A2(
 			_evancz$elm_http$Http$fromJson,
@@ -16844,13 +16821,13 @@ var _user$project$Rest$addCandidates = function (testAddress) {
 				_user$project$Rest$jsonGet(candidatesLookupUrl))));
 };
 var _user$project$Rest$fetchAddresses = function () {
-	var fetchAllCandidates = function (testAddresses) {
+	var fetchAllCandidates = function (tests) {
 		return _elm_lang$core$Task$sequence(
-			A2(_elm_lang$core$List$map, _user$project$Rest$addCandidates, testAddresses));
+			A2(_elm_lang$core$List$map, _user$project$Rest$addCandidates, tests));
 	};
 	var fetchTests = A2(
 		_evancz$elm_http$Http$fromJson,
-		_user$project$Rest$testAddressDecoder,
+		_user$project$Rest$testDecoder,
 		A2(
 			_evancz$elm_http$Http$send,
 			_evancz$elm_http$Http$defaultSettings,

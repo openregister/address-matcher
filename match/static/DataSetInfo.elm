@@ -22,13 +22,14 @@ dataSetInfoDecoder =
 
 
 
-dataSetAsListDecoder : Decoder (List (String, String))
+dataSetAsListDecoder : Decoder (List ( String, String ))
 dataSetAsListDecoder =
     Json.Decode.list
         (Json.Decode.object2 (,)
              ("key" := Json.Decode.string)
              ("value" := Json.Decode.string)
         )
+
 
 get : String -> DataSetInfo -> Maybe String
 get key (DataSetInfo info) =
