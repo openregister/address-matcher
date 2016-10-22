@@ -6,7 +6,9 @@ import Json.Decode exposing (Decoder, (:=))
 import List exposing (..)
 import State exposing (..)
 import User exposing (..)
+import DataSetInfo exposing (..)
 import Address exposing (..)
+import Task exposing (andThen)
 
 jsonGet : String -> Request
 jsonGet url =
@@ -25,6 +27,20 @@ fetchUsers =
         (fromJson usersDecoder
             (send defaultSettings (jsonGet ("/match/users/")))
         )
+
+
+fetchDataSetInfo : Cmd Msg
+fetchDataSetInfo =
+    let
+        getInfoAsList =
+            (fromJson dataSetInfoDecoder
+                 (send defaultSettings (jsonGet ("/match/appinfo/")))
+            )
+    in
+        Task.perform
+            FetchDataSetInfoFail
+            FetchDataSetInfoOk
+            getInfoAsList
 
 
 testAddressDecoder : Decoder (List TestAddress)

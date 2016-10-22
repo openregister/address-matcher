@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from rest_framework import routers, serializers, viewsets
-from models import User, Match, Address
+from models import User, Match, Address, AppInfo
 
 from . import views
 
@@ -24,6 +24,12 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class AppInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AppInfo
+        fields = "__all__"
+
+
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -40,11 +46,18 @@ class AddressViewSet(viewsets.ModelViewSet):
     serializer_class = AddressSerializer
 
 
+class AppInfoViewSet(viewsets.ModelViewSet):
+    queryset = AppInfo.objects.all()
+    serializer_class = AppInfoSerializer
+
+
+
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'matches', MatchViewSet)
 router.register(r'addresses', AddressViewSet)
+router.register(r'appinfo', AppInfoViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

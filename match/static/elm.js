@@ -16036,6 +16036,31 @@ var _user$project$Address$Address = F2(
 		return {test: a, candidates: b};
 	});
 
+var _user$project$DataSetInfo$get = F2(
+	function (key, _p0) {
+		var _p1 = _p0;
+		return A2(_elm_lang$core$Dict$get, key, _p1._0);
+	});
+var _user$project$DataSetInfo$dataSetAsListDecoder = _elm_lang$core$Json_Decode$list(
+	A3(
+		_elm_lang$core$Json_Decode$object2,
+		F2(
+			function (v0, v1) {
+				return {ctor: '_Tuple2', _0: v0, _1: v1};
+			}),
+		A2(_elm_lang$core$Json_Decode_ops[':='], 'key', _elm_lang$core$Json_Decode$string),
+		A2(_elm_lang$core$Json_Decode_ops[':='], 'value', _elm_lang$core$Json_Decode$string)));
+var _user$project$DataSetInfo$DataSetInfo = function (a) {
+	return {ctor: 'DataSetInfo', _0: a};
+};
+var _user$project$DataSetInfo$dataSetInfoDecoder = A2(
+	_elm_lang$core$Json_Decode$map,
+	function (_p2) {
+		return _user$project$DataSetInfo$DataSetInfo(
+			_elm_lang$core$Dict$fromList(_p2));
+	},
+	_user$project$DataSetInfo$dataSetAsListDecoder);
+
 var _user$project$User$name = function (_p0) {
 	var _p1 = _p0;
 	return _p1._0.name;
@@ -16075,9 +16100,9 @@ var _user$project$User$userDecoder = _elm_lang$core$Json_Decode$oneOf(
 		]));
 var _user$project$User$usersDecoder = _elm_lang$core$Json_Decode$list(_user$project$User$userDecoder);
 
-var _user$project$State$Model = F4(
-	function (a, b, c, d) {
-		return {currentUserId: a, users: b, addresses: c, animationStyle: d};
+var _user$project$State$Model = F5(
+	function (a, b, c, d, e) {
+		return {currentUserId: a, users: b, addresses: c, dataSetInfo: d, animationStyle: e};
 	});
 var _user$project$State$Animate = function (a) {
 	return {ctor: 'Animate', _0: a};
@@ -16101,6 +16126,13 @@ var _user$project$State$FetchAddressesOk = function (a) {
 	return {ctor: 'FetchAddressesOk', _0: a};
 };
 var _user$project$State$FetchAddresses = {ctor: 'FetchAddresses'};
+var _user$project$State$FetchDataSetInfoFail = function (a) {
+	return {ctor: 'FetchDataSetInfoFail', _0: a};
+};
+var _user$project$State$FetchDataSetInfoOk = function (a) {
+	return {ctor: 'FetchDataSetInfoOk', _0: a};
+};
+var _user$project$State$FetchDataSetInfo = {ctor: 'FetchDataSetInfo'};
 var _user$project$State$UserChange = function (a) {
 	return {ctor: 'UserChange', _0: a};
 };
@@ -16112,6 +16144,38 @@ var _user$project$State$FetchUsersOk = function (a) {
 };
 var _user$project$State$FetchUsers = {ctor: 'FetchUsers'};
 
+var _user$project$View$viewInfoSection = function (info) {
+	return A2(
+		_elm_lang$html$Html$h1,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('heading-large')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				function () {
+				var _p0 = info;
+				switch (_p0.ctor) {
+					case 'NotAsked':
+						return _elm_lang$html$Html$text('Fetching');
+					case 'Loading':
+						return _elm_lang$html$Html$text('Loading infos');
+					case 'Success':
+						return _elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Maybe$withDefault,
+								'No title',
+								A2(_user$project$DataSetInfo$get, 'title', _p0._0)));
+					default:
+						return _elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'Error loading dataset title',
+								_elm_lang$core$Basics$toString(_p0._0)));
+				}
+			}()
+			]));
+};
 var _user$project$View$viewProgressBar = F2(
 	function (remaining, max) {
 		var percent = (100 * _elm_lang$core$Basics$toFloat((max - remaining) + 1)) / _elm_lang$core$Basics$toFloat(max);
@@ -16240,8 +16304,8 @@ var _user$project$View$viewUsersSection = F2(
 			_elm_lang$core$Native_List.fromArray(
 				[
 					function () {
-					var _p0 = users;
-					switch (_p0.ctor) {
+					var _p1 = users;
+					switch (_p1.ctor) {
 						case 'NotAsked':
 							return A2(
 								_elm_lang$html$Html$p,
@@ -16269,7 +16333,7 @@ var _user$project$View$viewUsersSection = F2(
 								_elm_lang$core$Native_List.fromArray(
 									[
 										_elm_lang$html$Html$text(message),
-										A2(_user$project$View$viewUserSelect, currentUserId, _p0._0)
+										A2(_user$project$View$viewUserSelect, currentUserId, _p1._0)
 									]));
 						default:
 							return A2(
@@ -16282,7 +16346,7 @@ var _user$project$View$viewUsersSection = F2(
 										A2(
 											_elm_lang$core$Basics_ops['++'],
 											'Error loading user data: ',
-											_elm_lang$core$Basics$toString(_p0._0)))
+											_elm_lang$core$Basics$toString(_p1._0)))
 									]));
 					}
 				}()
@@ -16457,7 +16521,7 @@ var _user$project$View$viewAddress = F2(
 				[
 					testNameHtml,
 					A2(
-					_elm_lang$html$Html$h1,
+					_elm_lang$html$Html$h2,
 					_elm_lang$core$Native_List.fromArray(
 						[
 							_elm_lang$html$Html_Attributes$style(
@@ -16583,12 +16647,12 @@ var _user$project$View$viewAddressSection = F3(
 				_elm_lang$core$Native_List.fromArray(
 					[]));
 		} else {
-			var _p1 = addresses;
-			switch (_p1.ctor) {
+			var _p2 = addresses;
+			switch (_p2.ctor) {
 				case 'Success':
-					var _p2 = _p1._0;
+					var _p3 = _p2._0;
 					return _elm_lang$core$Native_Utils.eq(
-						_p2,
+						_p3,
 						_elm_lang$core$Native_List.fromArray(
 							[])) ? A2(
 						_elm_lang$html$Html$div,
@@ -16597,10 +16661,10 @@ var _user$project$View$viewAddressSection = F3(
 						_elm_lang$core$Native_List.fromArray(
 							[
 								A2(
-								_elm_lang$html$Html$h1,
+								_elm_lang$html$Html$h2,
 								_elm_lang$core$Native_List.fromArray(
 									[
-										_elm_lang$html$Html_Attributes$class('heading-xlarge')
+										_elm_lang$html$Html_Attributes$class('heading-large')
 									]),
 								_elm_lang$core$Native_List.fromArray(
 									[
@@ -16620,8 +16684,8 @@ var _user$project$View$viewAddressSection = F3(
 							])) : A3(
 						_user$project$View$viewAddresses,
 						animState,
-						_elm_lang$core$List$length(_p2),
-						A2(_elm_lang$core$List$take, 1, _p2));
+						_elm_lang$core$List$length(_p3),
+						A2(_elm_lang$core$List$take, 1, _p3));
 				case 'Loading':
 					return A2(
 						_elm_lang$html$Html$p,
@@ -16642,7 +16706,7 @@ var _user$project$View$viewAddressSection = F3(
 								A2(
 									_elm_lang$core$Basics_ops['++'],
 									'Failed loading addresses: ',
-									_elm_lang$core$Basics$toString(_p1._0)))
+									_elm_lang$core$Basics$toString(_p2._0)))
 							]));
 				default:
 					return A2(
@@ -16670,6 +16734,7 @@ var _user$project$View$view = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(_user$project$View$viewUsersSection, model.currentUserId, model.users),
+				_user$project$View$viewInfoSection(model.dataSetInfo),
 				A3(_user$project$View$viewAddressSection, model.animationStyle, model.currentUserId, model.addresses)
 			]));
 };
@@ -16747,6 +16812,16 @@ var _user$project$Rest$fetchUsers = A3(
 			_evancz$elm_http$Http$send,
 			_evancz$elm_http$Http$defaultSettings,
 			_user$project$Rest$jsonGet('/match/users/'))));
+var _user$project$Rest$fetchDataSetInfo = function () {
+	var getInfoAsList = A2(
+		_evancz$elm_http$Http$fromJson,
+		_user$project$DataSetInfo$dataSetInfoDecoder,
+		A2(
+			_evancz$elm_http$Http$send,
+			_evancz$elm_http$Http$defaultSettings,
+			_user$project$Rest$jsonGet('/match/appinfo/')));
+	return A3(_elm_lang$core$Task$perform, _user$project$State$FetchDataSetInfoFail, _user$project$State$FetchDataSetInfoOk, getInfoAsList);
+}();
 var _user$project$Rest$addCandidates = function (testAddress) {
 	var candidatesLookupUrl = A2(
 		_evancz$elm_http$Http$url,
@@ -16844,11 +16919,11 @@ var _user$project$Main$init = function (result) {
 			]));
 	var userId = A2(_elm_lang$core$Result$withDefault, 0, result);
 	var initCmd = _elm_lang$core$Native_Utils.eq(userId, 0) ? _elm_lang$core$Native_List.fromArray(
-		[_user$project$Rest$fetchUsers]) : _elm_lang$core$Native_List.fromArray(
-		[_user$project$Rest$fetchUsers, _user$project$Rest$fetchAddresses]);
+		[_user$project$Rest$fetchDataSetInfo, _user$project$Rest$fetchUsers]) : _elm_lang$core$Native_List.fromArray(
+		[_user$project$Rest$fetchDataSetInfo, _user$project$Rest$fetchUsers, _user$project$Rest$fetchAddresses]);
 	return A2(
 		_elm_lang$core$Platform_Cmd_ops['!'],
-		A4(_user$project$State$Model, userId, _user$project$Types$Loading, _user$project$Types$NotAsked, initialAnimationStyle),
+		A5(_user$project$State$Model, userId, _user$project$Types$Loading, _user$project$Types$NotAsked, _user$project$Types$Loading, initialAnimationStyle),
 		initCmd);
 };
 var _user$project$Main$scrollTop = _elm_lang$core$Native_Platform.outgoingPort(
@@ -16903,6 +16978,34 @@ var _user$project$Main$update = F2(
 							_user$project$Main$updateUrl(newUserId),
 							_user$project$Rest$fetchAddresses
 						]));
+			case 'FetchDataSetInfo':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{dataSetInfo: _user$project$Types$Loading}),
+					_1: _user$project$Rest$fetchDataSetInfo
+				};
+			case 'FetchDataSetInfoOk':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							dataSetInfo: _user$project$Types$Success(_p2._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'FetchDataSetInfoFail':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							dataSetInfo: _user$project$Types$Failure(_p2._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'FetchAddresses':
 				return {
 					ctor: '_Tuple2',

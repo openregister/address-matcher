@@ -20,8 +20,8 @@ type alias UserRecord =
     }
 
 
-type User
-    = User UserRecord
+type User =
+    User UserRecord
 
 
 type alias RemoteUsers =

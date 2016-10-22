@@ -41,14 +41,14 @@ init result =
 
         initCmd =
             if userId == 0 then
-                [ Rest.fetchUsers ]
+                [ Rest.fetchDataSetInfo, Rest.fetchUsers ]
             else
-                [ Rest.fetchUsers, Rest.fetchAddresses ]
+                [ Rest.fetchDataSetInfo, Rest.fetchUsers, Rest.fetchAddresses ]
 
         initialAnimationStyle =
             Animation.style [ Animation.left (px 0) ]
     in
-        (Model userId Loading NotAsked initialAnimationStyle) ! initCmd
+        (Model userId Loading NotAsked Loading initialAnimationStyle) ! initCmd
 
 
 
@@ -104,9 +104,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         FetchUsers ->
-            ( { model | users = Loading }
-            , Rest.fetchUsers
-            )
+            ( { model | users = Loading }, Rest.fetchUsers )
 
         FetchUsersOk newUserList ->
             ( { model | users = Success newUserList }, Cmd.none )
@@ -121,6 +119,15 @@ update msg model =
             in
                 { model | currentUserId = newUserId }
                     ! [ updateUrl newUserId, Rest.fetchAddresses ]
+
+        FetchDataSetInfo ->
+            ( { model | dataSetInfo = Loading }, Rest.fetchDataSetInfo )
+
+        FetchDataSetInfoOk newDataSetInfo ->
+            ( { model | dataSetInfo = Success newDataSetInfo }, Cmd.none )
+
+        FetchDataSetInfoFail error ->
+            ( { model | dataSetInfo = Failure error }, Cmd.none )
 
         FetchAddresses ->
             ( { model | addresses = Loading }, Rest.fetchAddresses )

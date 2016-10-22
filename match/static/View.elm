@@ -16,6 +16,8 @@ import State exposing (..)
 import Types exposing (..)
 import User exposing (..)
 import Address exposing (..)
+import DataSetInfo exposing (..)
+
 
 
 postcodeRegex : Regex
@@ -148,7 +150,7 @@ viewAddress animState address =
             div
                 [ class "test-address" ]
                 [ testNameHtml
-                , h1
+                , h2
                     [ style
                         [ ( "margin", "0 0 .5em 0" )
                         , ( "border", "2px solid #BBB" )
@@ -289,7 +291,7 @@ viewAddressSection animState currentUserId addresses =
             Success listAddresses ->
                 if listAddresses == [] then
                     div []
-                        [ h1 [ class "heading-xlarge" ] [ text "All done!" ]
+                        [ h2 [ class "heading-large" ] [ text "All done!" ]
                         , button
                             [ onClick FetchAddresses
                             , style styleFetchAddressButton
@@ -312,11 +314,31 @@ viewAddressSection animState currentUserId addresses =
                 p [] [ Html.text "Loading test addresses" ]
 
 
+viewInfoSection : RemoteDataSetInfo -> Html Msg
+viewInfoSection info =
+    h1 [ class "heading-large" ]
+        [ case info of
+            NotAsked ->
+                text "Fetching"
+
+            Loading ->
+                text "Loading infos"
+
+            Success infoDict ->
+                DataSetInfo.get "title" infoDict
+                    |> Maybe.withDefault "No title"
+                    |> text
+
+            Failure error ->
+                text ("Error loading dataset title" ++ (error |> toString))
+        ]
+
 view : Model -> Html Msg
 view model =
     div
         [ style [ ( "font-size", "90%" ) ] ]
         [ viewUsersSection model.currentUserId model.users
+        , viewInfoSection model.dataSetInfo
         , viewAddressSection
             model.animationStyle model.currentUserId model.addresses
         ]
