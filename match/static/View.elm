@@ -42,9 +42,9 @@ mapUrl search =
 
 styleCandidates : List ( String, String )
 styleCandidates =
-    [ ( "margin-left", "60%" )
-    , ( "margin-top", "1em" )
-    , ( "width", "40%" )
+    [ ( "height", "50vh" )
+    , ( "padding", "1em" )
+    , ( "overflow", "scroll" )
     ]
 
 
@@ -66,7 +66,7 @@ styleCandidateHover =
 styleEmbeddedMap : List ( String, String )
 styleEmbeddedMap =
     [ ( "width", "98%" )
-    , ( "height", "98%" )
+    , ( "height", "40vh" )
     , ( "border", "0" )
     , ( "margin", "1%" )
     ]
@@ -126,10 +126,13 @@ viewPassButton : TestId -> Html Msg
 viewPassButton testId =
     button
         [ class "button"
-        , style [ ( "white-space", "nowrap" ) ]
+        , style
+              [ ( "white-space", "nowrap" )
+              , ( "line-height", ".6" )
+              ]
         , onClick (SelectCandidate ( "_unknown_", testId ))
         ]
-        [ text "Pass ¯\\_(ツ)_/¯" ]
+        [ text "Pass" ]
 
 
 
@@ -148,7 +151,7 @@ viewAddress animState address =
 
         testHtml =
             div
-                [ class "test-address" ]
+                [ class "test-address column-one-half" ]
                 [ testNameHtml
                 , h2
                     [ style
@@ -171,18 +174,23 @@ viewAddress animState address =
             (Animation.render animState
                 ++ [ style [ ( "position", "relative" ) ] ]
             )
-            [ testHtml
-            , div [ style styleCandidates ]
-                [ h2
-                    [ class "heading-medium" ]
-                    [ text "Click on the matching address below:" ]
-                , Html.Keyed.ul
-                    []
-                    (indexedMap
-                        viewCandidate
-                        (map addTestId address.candidates)
-                    )
-                , viewPassButton address.test.id
+            [ div
+                [ class "grid-row" ]
+                [ testHtml
+                , div [ class "column-one-half" ]
+                    [ h2
+                        [ class "heading-small" ]
+                        [ text "Select the matching address below, or "
+                        , viewPassButton address.test.id
+                        ]
+                    , Html.Keyed.ul
+                        [ style styleCandidates ]
+                        (indexedMap
+                             viewCandidate
+                             (map addTestId address.candidates)
+                        )
+
+                    ]
                 ]
             ]
 
@@ -327,7 +335,7 @@ viewAddressSection animState currentUserId addresses =
 viewInfoSection : RemoteDataSetInfo -> Html Msg
 viewInfoSection info =
     h1
-        [ class "heading-large" ]
+        [ class "heading-small" ]
         [ case info of
             NotAsked ->
                 text "Fetching"

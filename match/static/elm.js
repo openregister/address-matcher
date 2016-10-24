@@ -16149,7 +16149,7 @@ var _user$project$View$viewInfoSection = function (info) {
 		_elm_lang$html$Html$h1,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$class('heading-large')
+				_elm_lang$html$Html_Attributes$class('heading-small')
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
@@ -16361,7 +16361,8 @@ var _user$project$View$viewPassButton = function (testId) {
 				_elm_lang$html$Html_Attributes$style(
 				_elm_lang$core$Native_List.fromArray(
 					[
-						{ctor: '_Tuple2', _0: 'white-space', _1: 'nowrap'}
+						{ctor: '_Tuple2', _0: 'white-space', _1: 'nowrap'},
+						{ctor: '_Tuple2', _0: 'line-height', _1: '.6'}
 					])),
 				_elm_lang$html$Html_Events$onClick(
 				_user$project$State$SelectCandidate(
@@ -16369,7 +16370,7 @@ var _user$project$View$viewPassButton = function (testId) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html$text('Pass ¯\\_(ツ)_/¯')
+				_elm_lang$html$Html$text('Pass')
 			]));
 };
 var _user$project$View$styleFetchAddressButton = _elm_lang$core$Native_List.fromArray(
@@ -16381,7 +16382,7 @@ var _user$project$View$styleFetchAddressButton = _elm_lang$core$Native_List.from
 var _user$project$View$styleEmbeddedMap = _elm_lang$core$Native_List.fromArray(
 	[
 		{ctor: '_Tuple2', _0: 'width', _1: '98%'},
-		{ctor: '_Tuple2', _0: 'height', _1: '98%'},
+		{ctor: '_Tuple2', _0: 'height', _1: '40vh'},
 		{ctor: '_Tuple2', _0: 'border', _1: '0'},
 		{ctor: '_Tuple2', _0: 'margin', _1: '1%'}
 	]);
@@ -16461,9 +16462,9 @@ var _user$project$View$viewCandidate = F2(
 	});
 var _user$project$View$styleCandidates = _elm_lang$core$Native_List.fromArray(
 	[
-		{ctor: '_Tuple2', _0: 'margin-left', _1: '60%'},
-		{ctor: '_Tuple2', _0: 'margin-top', _1: '1em'},
-		{ctor: '_Tuple2', _0: 'width', _1: '40%'}
+		{ctor: '_Tuple2', _0: 'height', _1: '50vh'},
+		{ctor: '_Tuple2', _0: 'padding', _1: '1em'},
+		{ctor: '_Tuple2', _0: 'overflow', _1: 'scroll'}
 	]);
 var _user$project$View$mapUrl = function (search) {
 	return A2(
@@ -16524,7 +16525,7 @@ var _user$project$View$viewAddress = F2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html_Attributes$class('test-address')
+					_elm_lang$html$Html_Attributes$class('test-address column-one-half')
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
@@ -16569,34 +16570,45 @@ var _user$project$View$viewAddress = F2(
 					])),
 			_elm_lang$core$Native_List.fromArray(
 				[
-					testHtml,
 					A2(
 					_elm_lang$html$Html$div,
 					_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidates)
+							_elm_lang$html$Html_Attributes$class('grid-row')
 						]),
 					_elm_lang$core$Native_List.fromArray(
 						[
+							testHtml,
 							A2(
-							_elm_lang$html$Html$h2,
+							_elm_lang$html$Html$div,
 							_elm_lang$core$Native_List.fromArray(
 								[
-									_elm_lang$html$Html_Attributes$class('heading-medium')
+									_elm_lang$html$Html_Attributes$class('column-one-half')
 								]),
 							_elm_lang$core$Native_List.fromArray(
 								[
-									_elm_lang$html$Html$text('Click on the matching address below:')
-								])),
-							A2(
-							_elm_lang$html$Html_Keyed$ul,
-							_elm_lang$core$Native_List.fromArray(
-								[]),
-							A2(
-								_elm_lang$core$List$indexedMap,
-								_user$project$View$viewCandidate,
-								A2(_elm_lang$core$List$map, addTestId, address.candidates))),
-							_user$project$View$viewPassButton(address.test.id)
+									A2(
+									_elm_lang$html$Html$h2,
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_elm_lang$html$Html_Attributes$class('heading-small')
+										]),
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_elm_lang$html$Html$text('Select the matching address below, or '),
+											_user$project$View$viewPassButton(address.test.id)
+										])),
+									A2(
+									_elm_lang$html$Html_Keyed$ul,
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidates)
+										]),
+									A2(
+										_elm_lang$core$List$indexedMap,
+										_user$project$View$viewCandidate,
+										A2(_elm_lang$core$List$map, addTestId, address.candidates)))
+								]))
 						]))
 				]));
 	});
