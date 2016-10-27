@@ -96,3 +96,10 @@ matcher/match/static/elm.js
 
 elm-stuff
 
+# Vagrant stuff
+.vagrant
+
+# Address list and am-es go stuff
+flattened.tsv*
+am-es-import
+
