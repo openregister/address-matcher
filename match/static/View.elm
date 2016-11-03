@@ -94,8 +94,8 @@ viewEmbeddedMap search =
         []
 
 
-viewCandidate : Int -> ( Candidate, TestId ) -> ( String, Html Msg )
-viewCandidate index candidateTestId =
+viewCandidate : ( Candidate, TestId ) -> Html Msg
+viewCandidate candidateTestId =
     let
         candidate =
             fst candidateTestId
@@ -103,8 +103,7 @@ viewCandidate index candidateTestId =
         testId =
             snd candidateTestId
     in
-        ( candidate.uprn
-        , hover
+        hover
             styleCandidateHover
             li
                 [ style styleCandidate
@@ -119,7 +118,6 @@ viewCandidate index candidateTestId =
                     , li [] [ text candidate.streetTown ]
                     ]
                 ]
-        )
 
 
 viewPassButton : TestId -> Html Msg
@@ -177,18 +175,19 @@ viewAddress animState address =
             [ div
                 [ class "grid-row" ]
                 [ testHtml
-                , div [ class "column-one-half" ]
-                    [ h2
+                , Html.Keyed.node "div"
+                    [ class "column-one-half" ]
+                    [ ( (toString address.test.id) ++ "h2", h2
                         [ class "heading-small" ]
                         [ text "Select the matching address below, or "
                         , viewPassButton address.test.id
-                        ]
-                    , Html.Keyed.ul
+                        ])
+                    , ( (toString address.test.id) ++ "ul", ul
                         [ style styleCandidates ]
-                        (indexedMap
+                        (map
                              viewCandidate
                              (map addTestId address.candidates)
-                        )
+                        ))
 
                     ]
                 ]

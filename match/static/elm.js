@@ -16398,68 +16398,63 @@ var _user$project$View$styleCandidate = _elm_lang$core$Native_List.fromArray(
 		{ctor: '_Tuple2', _0: 'background-color', _1: '#DDD'},
 		{ctor: '_Tuple2', _0: 'min-height', _1: '5em'}
 	]);
-var _user$project$View$viewCandidate = F2(
-	function (index, candidateTestId) {
-		var testId = _elm_lang$core$Basics$snd(candidateTestId);
-		var candidate = _elm_lang$core$Basics$fst(candidateTestId);
-		return {
-			ctor: '_Tuple2',
-			_0: candidate.uprn,
-			_1: A4(
-				_jinjor$elm_inline_hover$InlineHover$hover,
-				_user$project$View$styleCandidateHover,
-				_elm_lang$html$Html$li,
+var _user$project$View$viewCandidate = function (candidateTestId) {
+	var testId = _elm_lang$core$Basics$snd(candidateTestId);
+	var candidate = _elm_lang$core$Basics$fst(candidateTestId);
+	return A4(
+		_jinjor$elm_inline_hover$InlineHover$hover,
+		_user$project$View$styleCandidateHover,
+		_elm_lang$html$Html$li,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidate),
+				_elm_lang$html$Html_Events$onClick(
+				_user$project$State$SelectCandidate(
+					{ctor: '_Tuple2', _0: candidate.uprn, _1: testId}))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$ul,
 				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidate),
-						_elm_lang$html$Html_Events$onClick(
-						_user$project$State$SelectCandidate(
-							{ctor: '_Tuple2', _0: candidate.uprn, _1: testId}))
-					]),
+					[]),
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
-						_elm_lang$html$Html$ul,
+						_elm_lang$html$Html$li,
 						_elm_lang$core$Native_List.fromArray(
 							[]),
 						_elm_lang$core$Native_List.fromArray(
 							[
-								A2(
-								_elm_lang$html$Html$li,
-								_elm_lang$core$Native_List.fromArray(
-									[]),
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html$text(candidate.name)
-									])),
-								A2(
-								_elm_lang$html$Html$li,
-								_elm_lang$core$Native_List.fromArray(
-									[]),
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html$text(candidate.parentAddressName)
-									])),
-								A2(
-								_elm_lang$html$Html$li,
-								_elm_lang$core$Native_List.fromArray(
-									[]),
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html$text(candidate.streetName)
-									])),
-								A2(
-								_elm_lang$html$Html$li,
-								_elm_lang$core$Native_List.fromArray(
-									[]),
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html$text(candidate.streetTown)
-									]))
+								_elm_lang$html$Html$text(candidate.name)
+							])),
+						A2(
+						_elm_lang$html$Html$li,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(candidate.parentAddressName)
+							])),
+						A2(
+						_elm_lang$html$Html$li,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(candidate.streetName)
+							])),
+						A2(
+						_elm_lang$html$Html$li,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(candidate.streetTown)
 							]))
 					]))
-		};
-	});
+			]));
+};
 var _user$project$View$styleCandidates = _elm_lang$core$Native_List.fromArray(
 	[
 		{ctor: '_Tuple2', _0: 'height', _1: '50vh'},
@@ -16579,35 +16574,50 @@ var _user$project$View$viewAddress = F2(
 					_elm_lang$core$Native_List.fromArray(
 						[
 							testHtml,
-							A2(
-							_elm_lang$html$Html$div,
+							A3(
+							_elm_lang$html$Html_Keyed$node,
+							'div',
 							_elm_lang$core$Native_List.fromArray(
 								[
 									_elm_lang$html$Html_Attributes$class('column-one-half')
 								]),
 							_elm_lang$core$Native_List.fromArray(
 								[
-									A2(
-									_elm_lang$html$Html$h2,
-									_elm_lang$core$Native_List.fromArray(
-										[
-											_elm_lang$html$Html_Attributes$class('heading-small')
-										]),
-									_elm_lang$core$Native_List.fromArray(
-										[
-											_elm_lang$html$Html$text('Select the matching address below, or '),
-											_user$project$View$viewPassButton(address.test.id)
-										])),
-									A2(
-									_elm_lang$html$Html_Keyed$ul,
-									_elm_lang$core$Native_List.fromArray(
-										[
-											_elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidates)
-										]),
-									A2(
-										_elm_lang$core$List$indexedMap,
-										_user$project$View$viewCandidate,
-										A2(_elm_lang$core$List$map, addTestId, address.candidates)))
+									{
+									ctor: '_Tuple2',
+									_0: A2(
+										_elm_lang$core$Basics_ops['++'],
+										_elm_lang$core$Basics$toString(address.test.id),
+										'h2'),
+									_1: A2(
+										_elm_lang$html$Html$h2,
+										_elm_lang$core$Native_List.fromArray(
+											[
+												_elm_lang$html$Html_Attributes$class('heading-small')
+											]),
+										_elm_lang$core$Native_List.fromArray(
+											[
+												_elm_lang$html$Html$text('Select the matching address below, or '),
+												_user$project$View$viewPassButton(address.test.id)
+											]))
+								},
+									{
+									ctor: '_Tuple2',
+									_0: A2(
+										_elm_lang$core$Basics_ops['++'],
+										_elm_lang$core$Basics$toString(address.test.id),
+										'ul'),
+									_1: A2(
+										_elm_lang$html$Html$ul,
+										_elm_lang$core$Native_List.fromArray(
+											[
+												_elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidates)
+											]),
+										A2(
+											_elm_lang$core$List$map,
+											_user$project$View$viewCandidate,
+											A2(_elm_lang$core$List$map, addTestId, address.candidates)))
+								}
 								]))
 						]))
 				]));
