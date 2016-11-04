@@ -40,21 +40,16 @@ mapUrl search =
 -- Lists of style properties
 
 
-styleCandidates : List ( String, String )
-styleCandidates =
-    [ ( "height", "50vh" )
-    , ( "padding", "1em" )
-    , ( "overflow", "scroll" )
-    ]
-
-
 styleCandidate : List ( String, String )
 styleCandidate =
-    [ ( "margin-bottom", "1em" )
+    [ ( "display", "inline-block" )
+    , ( "width", "30%" )
+    , ( "margin", ".1em" )
     , ( "padding", "3px" )
     , ( "border", "1px solid black" )
     , ( "background-color", "#DDD" )
-    , ( "min-height", "5em" )
+    , ( "height", "7em" )
+    , ( "overflow-y", "scroll" )
     ]
 
 
@@ -66,9 +61,9 @@ styleCandidateHover =
 styleEmbeddedMap : List ( String, String )
 styleEmbeddedMap =
     [ ( "width", "98%" )
-    , ( "height", "40vh" )
+    , ( "height", "15em" )
     , ( "border", "0" )
-    , ( "margin", "1%" )
+    , ( "margin", "1em 0 0 0" )
     ]
 
 
@@ -140,23 +135,25 @@ viewAddress animState address =
 
         testHtml =
             div
-                [ class "test-address column-one-half" ]
-                [ testNameHtml
-                , h2
-                    [ style
-                        [ ( "margin", "0 0 .5em 0" )
-                        , ( "border", "2px solid #BBB" )
-                        , ( "padding", "3px" )
+                [ class "test-address" ]
+                [ div []
+                    [ testNameHtml
+                    , h2
+                        [ style
+                            [ --( "margin", "0 0 .5em 0" )
+--                            , ( "border", "2px solid #BBB" )
+--                            , ( "padding", "3px" )
+                            ]
                         ]
+                        (List.concat
+                            [ (map
+                                viewTestLine
+                                (String.split "," address.test.address)
+                              )
+                            ]
+                        )
+                    , viewEmbeddedMap address.test.address
                     ]
-                    (List.concat
-                        [ (map
-                            viewTestLine
-                            (String.split "," address.test.address)
-                          )
-                        ]
-                    )
-                , viewEmbeddedMap address.test.address
                 ]
     in
         div
@@ -167,14 +164,18 @@ viewAddress animState address =
                 [ class "grid-row" ]
                 [ testHtml
                 , Html.Keyed.node "div"
-                    [ class "column-one-half" ]
+                    [ style
+                          [ ( "float", "right" )
+                          , ( "width", "70%" )
+                          ]
+                    ]
                     [ ( (toString address.test.id) ++ "h2", h2
                         [ class "heading-small" ]
                         [ text "Select the matching address below, or "
                         , viewPassButton address.test.id
                         ])
                     , ( (toString address.test.id) ++ "ul", ul
-                        [ style styleCandidates ]
+                        []
                         (map
                              viewCandidate
                              (map addTestId address.candidates)

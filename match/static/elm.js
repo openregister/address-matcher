@@ -16376,9 +16376,9 @@ var _user$project$View$viewPassButton = function (testId) {
 var _user$project$View$styleEmbeddedMap = _elm_lang$core$Native_List.fromArray(
 	[
 		{ctor: '_Tuple2', _0: 'width', _1: '98%'},
-		{ctor: '_Tuple2', _0: 'height', _1: '40vh'},
+		{ctor: '_Tuple2', _0: 'height', _1: '15em'},
 		{ctor: '_Tuple2', _0: 'border', _1: '0'},
-		{ctor: '_Tuple2', _0: 'margin', _1: '1%'}
+		{ctor: '_Tuple2', _0: 'margin', _1: '1em 0 0 0'}
 	]);
 var _user$project$View$styleCandidateHover = _elm_lang$core$Native_List.fromArray(
 	[
@@ -16386,11 +16386,14 @@ var _user$project$View$styleCandidateHover = _elm_lang$core$Native_List.fromArra
 	]);
 var _user$project$View$styleCandidate = _elm_lang$core$Native_List.fromArray(
 	[
-		{ctor: '_Tuple2', _0: 'margin-bottom', _1: '1em'},
+		{ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+		{ctor: '_Tuple2', _0: 'width', _1: '30%'},
+		{ctor: '_Tuple2', _0: 'margin', _1: '.1em'},
 		{ctor: '_Tuple2', _0: 'padding', _1: '3px'},
 		{ctor: '_Tuple2', _0: 'border', _1: '1px solid black'},
 		{ctor: '_Tuple2', _0: 'background-color', _1: '#DDD'},
-		{ctor: '_Tuple2', _0: 'min-height', _1: '5em'}
+		{ctor: '_Tuple2', _0: 'height', _1: '7em'},
+		{ctor: '_Tuple2', _0: 'overflow-y', _1: 'scroll'}
 	]);
 var _user$project$View$viewCandidate = function (candidateTestId) {
 	var testId = _elm_lang$core$Basics$snd(candidateTestId);
@@ -16449,12 +16452,6 @@ var _user$project$View$viewCandidate = function (candidateTestId) {
 					]))
 			]));
 };
-var _user$project$View$styleCandidates = _elm_lang$core$Native_List.fromArray(
-	[
-		{ctor: '_Tuple2', _0: 'height', _1: '50vh'},
-		{ctor: '_Tuple2', _0: 'padding', _1: '1em'},
-		{ctor: '_Tuple2', _0: 'overflow', _1: 'scroll'}
-	]);
 var _user$project$View$mapUrl = function (search) {
 	return A2(
 		_evancz$elm_http$Http$url,
@@ -16514,32 +16511,35 @@ var _user$project$View$viewAddress = F2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html_Attributes$class('test-address column-one-half')
+					_elm_lang$html$Html_Attributes$class('test-address')
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
-					testNameHtml,
 					A2(
-					_elm_lang$html$Html$h2,
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
 					_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$html$Html_Attributes$style(
+							testNameHtml,
+							A2(
+							_elm_lang$html$Html$h2,
 							_elm_lang$core$Native_List.fromArray(
 								[
-									{ctor: '_Tuple2', _0: 'margin', _1: '0 0 .5em 0'},
-									{ctor: '_Tuple2', _0: 'border', _1: '2px solid #BBB'},
-									{ctor: '_Tuple2', _0: 'padding', _1: '3px'}
-								]))
-						]),
-					_elm_lang$core$List$concat(
-						_elm_lang$core$Native_List.fromArray(
-							[
-								A2(
-								_elm_lang$core$List$map,
-								viewTestLine,
-								A2(_elm_lang$core$String$split, ',', address.test.address))
-							]))),
-					_user$project$View$viewEmbeddedMap(address.test.address)
+									_elm_lang$html$Html_Attributes$style(
+									_elm_lang$core$Native_List.fromArray(
+										[]))
+								]),
+							_elm_lang$core$List$concat(
+								_elm_lang$core$Native_List.fromArray(
+									[
+										A2(
+										_elm_lang$core$List$map,
+										viewTestLine,
+										A2(_elm_lang$core$String$split, ',', address.test.address))
+									]))),
+							_user$project$View$viewEmbeddedMap(address.test.address)
+						]))
 				]));
 		var addTestId = function (ca) {
 			return {ctor: '_Tuple2', _0: ca, _1: address.test.id};
@@ -16573,7 +16573,12 @@ var _user$project$View$viewAddress = F2(
 							'div',
 							_elm_lang$core$Native_List.fromArray(
 								[
-									_elm_lang$html$Html_Attributes$class('column-one-half')
+									_elm_lang$html$Html_Attributes$style(
+									_elm_lang$core$Native_List.fromArray(
+										[
+											{ctor: '_Tuple2', _0: 'float', _1: 'right'},
+											{ctor: '_Tuple2', _0: 'width', _1: '70%'}
+										]))
 								]),
 							_elm_lang$core$Native_List.fromArray(
 								[
@@ -16604,9 +16609,7 @@ var _user$project$View$viewAddress = F2(
 									_1: A2(
 										_elm_lang$html$Html$ul,
 										_elm_lang$core$Native_List.fromArray(
-											[
-												_elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidates)
-											]),
+											[]),
 										A2(
 											_elm_lang$core$List$map,
 											_user$project$View$viewCandidate,
