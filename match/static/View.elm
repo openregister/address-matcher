@@ -44,9 +44,9 @@ styleCandidate : List ( String, String )
 styleCandidate =
     [ ( "display", "inline-block" )
     , ( "width", "30%" )
-    , ( "margin", ".1em" )
+    , ( "margin", ".1em .4em 0 0" )
     , ( "padding", "3px" )
-    , ( "border", "1px solid black" )
+    , ( "border-radius", "10px" )
     , ( "background-color", "#DDD" )
     , ( "height", "7em" )
     , ( "overflow-y", "auto" )
@@ -166,7 +166,7 @@ viewAddress animState address =
                 , Html.Keyed.node "div"
                     [ style
                           [ ( "float", "right" )
-                          , ( "width", "70%" )
+                          , ( "width", "69%" )
                           ]
                     ]
                     [ ( (toString address.test.id) ++ "h2", h2

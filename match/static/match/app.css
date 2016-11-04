@@ -2,4 +2,6 @@
   width: 29%;
   margin-top: 1em;
   float: left;
+  border: 1px solid black;
+  padding-left: .2em;
 }

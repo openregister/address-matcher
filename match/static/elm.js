@@ -16388,9 +16388,9 @@ var _user$project$View$styleCandidate = _elm_lang$core$Native_List.fromArray(
 	[
 		{ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
 		{ctor: '_Tuple2', _0: 'width', _1: '30%'},
-		{ctor: '_Tuple2', _0: 'margin', _1: '.1em'},
+		{ctor: '_Tuple2', _0: 'margin', _1: '.1em .4em 0 0'},
 		{ctor: '_Tuple2', _0: 'padding', _1: '3px'},
-		{ctor: '_Tuple2', _0: 'border', _1: '1px solid black'},
+		{ctor: '_Tuple2', _0: 'border-radius', _1: '10px'},
 		{ctor: '_Tuple2', _0: 'background-color', _1: '#DDD'},
 		{ctor: '_Tuple2', _0: 'height', _1: '7em'},
 		{ctor: '_Tuple2', _0: 'overflow-y', _1: 'auto'}
@@ -16577,7 +16577,7 @@ var _user$project$View$viewAddress = F2(
 									_elm_lang$core$Native_List.fromArray(
 										[
 											{ctor: '_Tuple2', _0: 'float', _1: 'right'},
-											{ctor: '_Tuple2', _0: 'width', _1: '70%'}
+											{ctor: '_Tuple2', _0: 'width', _1: '69%'}
 										]))
 								]),
 							_elm_lang$core$Native_List.fromArray(
