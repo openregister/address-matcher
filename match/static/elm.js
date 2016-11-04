@@ -16393,7 +16393,7 @@ var _user$project$View$styleCandidate = _elm_lang$core$Native_List.fromArray(
 		{ctor: '_Tuple2', _0: 'border', _1: '1px solid black'},
 		{ctor: '_Tuple2', _0: 'background-color', _1: '#DDD'},
 		{ctor: '_Tuple2', _0: 'height', _1: '7em'},
-		{ctor: '_Tuple2', _0: 'overflow-y', _1: 'scroll'}
+		{ctor: '_Tuple2', _0: 'overflow-y', _1: 'auto'}
 	]);
 var _user$project$View$viewCandidate = function (candidateTestId) {
 	var testId = _elm_lang$core$Basics$snd(candidateTestId);

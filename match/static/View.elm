@@ -49,7 +49,7 @@ styleCandidate =
     , ( "border", "1px solid black" )
     , ( "background-color", "#DDD" )
     , ( "height", "7em" )
-    , ( "overflow-y", "scroll" )
+    , ( "overflow-y", "auto" )
     ]
 
 
