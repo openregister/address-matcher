@@ -18,22 +18,29 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 
+def count_matches(min_matches):
+    # return the number of addresses
+    # query: select count(*) from (select test_address_id, count(id) from match_match group by test_address_id) as derived where count = matches;
+    return;
+
+
+
 def scores(request):
     matches = Match.objects.all()
     users = User.objects.all()
     addresses = Address.objects.all()
 
     stats = {}
-    stats['nb_matches'] = Match.objects.count()
     stats['users'] = []
     for user in users:
         user_stats = { 'name': user.name, 'user_id': user.pk}
         user_matches = Match.objects.filter(user__id = user.pk)
         nb_user_matches = len(user_matches)
-
         user_stats['nb_matches'] = nb_user_matches
         user_stats['score'] = user_score(nb_user_matches)
-        stats['users'].append(user_stats)
+        if user_stats['score'] > 0:
+            stats['users'].append(user_stats)
+
     stats['users'].sort(key=lambda x: x['score'], reverse=True)
 
     stats['nb_addresses'] = Address.objects.count()
@@ -41,7 +48,6 @@ def scores(request):
     stats['nb_addresses_matched'] = len(matches.annotate(
         Count('test_address__id', distinct=True)))
 
-    stats['addresses'] = []
 
     template = loader.get_template('scores.html')
 
