@@ -10,6 +10,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # read a file and copy its contents as test users
 
+        User.objects.all().delete()
+
         tsvin = csv.reader(sys.stdin, delimiter='\t')
 
         for row in tsvin:
