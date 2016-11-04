@@ -16373,12 +16373,6 @@ var _user$project$View$viewPassButton = function (testId) {
 				_elm_lang$html$Html$text('Pass')
 			]));
 };
-var _user$project$View$styleFetchAddressButton = _elm_lang$core$Native_List.fromArray(
-	[
-		{ctor: '_Tuple2', _0: 'font-size', _1: '50px'},
-		{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
-		{ctor: '_Tuple2', _0: 'margin-top', _1: '20px'}
-	]);
 var _user$project$View$styleEmbeddedMap = _elm_lang$core$Native_List.fromArray(
 	[
 		{ctor: '_Tuple2', _0: 'width', _1: '98%'},
@@ -16674,11 +16668,34 @@ var _user$project$View$viewAddressSection = F3(
 								_elm_lang$core$Native_List.fromArray(
 									[
 										_elm_lang$html$Html_Events$onClick(_user$project$State$FetchAddresses),
-										_elm_lang$html$Html_Attributes$style(_user$project$View$styleFetchAddressButton)
+										_elm_lang$html$Html_Attributes$class('button')
 									]),
 								_elm_lang$core$Native_List.fromArray(
 									[
 										_elm_lang$html$Html$text('Give me more!')
+									])),
+								A2(
+								_elm_lang$html$Html$p,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html_Attributes$style(
+										_elm_lang$core$Native_List.fromArray(
+											[
+												{ctor: '_Tuple2', _0: 'padding-top', _1: '1em'}
+											]))
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										A2(
+										_elm_lang$html$Html$a,
+										_elm_lang$core$Native_List.fromArray(
+											[
+												_elm_lang$html$Html_Attributes$href('/match/scores/')
+											]),
+										_elm_lang$core$Native_List.fromArray(
+											[
+												_elm_lang$html$Html$text('See all scores')
+											]))
 									]))
 							])) : A3(
 						_user$project$View$viewAddresses,

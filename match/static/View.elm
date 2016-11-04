@@ -72,15 +72,6 @@ styleEmbeddedMap =
     ]
 
 
-styleFetchAddressButton : List ( String, String )
-styleFetchAddressButton =
-    [ ( "font-size", "50px" )
-    , ( "font-weight", "bold" )
-    , ( "margin-top", "20px" )
-    ]
-
-
-
 -- HTML Generating Functions
 
 
@@ -311,9 +302,14 @@ viewAddressSection animState currentUserId addresses =
                         [ h2 [ class "heading-large" ] [ text "All done!" ]
                         , button
                             [ onClick FetchAddresses
-                            , style styleFetchAddressButton
+                            , class "button"
                             ]
                             [ text "Give me more!" ]
+                        , p [ style [ ( "padding-top", "1em" ) ] ]
+                            [ a
+                                [ href "/match/scores/" ]
+                                [ text "See all scores" ]
+                            ]
                         ]
                 else
                     viewAddresses
