@@ -54,17 +54,6 @@ def scores(request):
     return HttpResponse(template.render(stats, request))
 
 
-def randomBool(dummy):
-    rnd = randint(0,100)
-    return rnd > 50
-
-
-def degraded_address(address):
-    words = address.split()
-    missing_words = filter(randomBool, words)
-    return ' '.join(missing_words)
-
-
 def brain(request):
     test_address = request.GET.get('q', '')
     test_address = re.sub(
