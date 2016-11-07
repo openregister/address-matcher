@@ -20,9 +20,20 @@ def index(request):
 
 def count_matches(min_matches):
     # return the number of addresses
-    # query: select count(*) from (select test_address_id, count(id) from match_match group by test_address_id) as derived where count = matches;
-    return;
+    addresses = Address.objects.all()
+    matches = Match.objects.all()
 
+    count_matches = {}
+    for match in matches:
+        try:
+            count_matches[match.test_address_id] = \
+                count_matches[match.test_address_id] + 1
+        except KeyError:
+            count_matches[match.test_address_id] = 1
+
+    print count_matches
+
+    return len({k: v for k, v in count_matches.iteritems() if v >= min_matches})
 
 
 def scores(request):
@@ -48,6 +59,9 @@ def scores(request):
     stats['nb_addresses_matched'] = len(matches.annotate(
         Count('test_address__id', distinct=True)))
 
+    stats['count0'] = len(addresses);
+    stats['count1'] = count_matches(1);
+    stats['count2'] = count_matches(2);
 
     template = loader.get_template('scores.html')
 
