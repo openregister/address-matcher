@@ -18,7 +18,5 @@ from django.contrib import admin
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    url(r'^$', RedirectView.as_view(url="/match/main")),
-    url(r'^admin/', admin.site.urls),
-    url(r'^match/', include('match.urls'))
+    url(r'^.*$', RedirectView.as_view(url='https://address-matcher2.herokuapp.com', permanent=True), name='index')
 ]
