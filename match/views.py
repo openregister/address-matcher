@@ -18,22 +18,39 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 
-def count_matches(min_matches):
-    # return the number of addresses
+def count_matches():
+    # compute how many times each address is referred to in matches
     addresses = Address.objects.all()
     matches = Match.objects.all()
 
+    # dictionary: address_id -> int (reference count)
     count_matches = {}
+
+    for address in addresses:
+        count_matches[address.id] = 0;
+
     for match in matches:
-        try:
-            count_matches[match.test_address_id] = \
-                count_matches[match.test_address_id] + 1
-        except KeyError:
-            count_matches[match.test_address_id] = 1
+        count_matches[match.test_address_id] = count_matches[match.test_address_id] + 1
 
-    print count_matches
+    return count_matches
 
-    return len({k: v for k, v in count_matches.iteritems() if v >= min_matches})
+
+def occurrence_dict(counts):
+    # generate dictionary that gives the number of addresses
+    # for each occurrence count:
+    # count -> how many addresses have that count
+    addresses = Address.objects.all()
+    matches = Match.objects.all()
+
+    occurrence_nbaddresses = {}
+    for occurrence in range(0, len(matches)):
+        occurrence_nbaddresses[occurrence] = \
+            len({k: v for k, v in counts.iteritems() if v == occurrence})
+
+
+    non_zero = {k: v for k, v in occurrence_nbaddresses.iteritems() if v != 0}
+
+    return non_zero
 
 
 def scores(request):
@@ -56,12 +73,10 @@ def scores(request):
 
     stats['nb_addresses'] = Address.objects.count()
     stats['nb_matches'] = Match.objects.count()
-    stats['nb_addresses_matched'] = len(matches.annotate(
-        Count('test_address__id', distinct=True)))
 
-    stats['count0'] = len(addresses);
-    stats['count1'] = count_matches(1);
-    stats['count2'] = count_matches(2);
+    stats['occurrences'] = occurrence_dict(count_matches())
+    stats['nb_pass'] = len(Match.objects.filter(uprn__exact = "_unknown_"))
+
 
     template = loader.get_template('scores.html')
 
