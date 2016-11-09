@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.db.models import Count
+from django.utils.safestring import mark_safe
 from random import randint
 from hashlib import md5
 from models import Address, Match, User
@@ -47,10 +48,18 @@ def occurrence_dict(counts):
         occurrence_nbaddresses[occurrence] = \
             len({k: v for k, v in counts.iteritems() if v == occurrence})
 
+    non_zero = [["Addresses with " + str(k) + " matches", v] for k, v in occurrence_nbaddresses.iteritems() if v != 0]
 
-    non_zero = {k: v for k, v in occurrence_nbaddresses.iteritems() if v != 0}
+    # keys = sorted(non_zero.keys())
+    # max_key = max(keys) + 1
+    # occurrence_array = [0 for x in range(max_key)]
+    # for i in range(max_key):
+    #     occurrence_array[i] = non_zero[i]
 
-    return non_zero
+    # return occurrence_array
+
+    return mark_safe(json.dumps(non_zero))
+
 
 
 def scores(request):
