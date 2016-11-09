@@ -128,7 +128,13 @@ viewAddress animState address =
             ( ca, address.test.id )
 
         testNameHtml =
-            p [ style [ ( "font-weight", "bold" ) ] ] [ text address.test.name ]
+            p
+                [ style
+                      [ ( "font-weight", "bold" )
+                      , ( "margin-bottom", "0" )
+                      ]
+                ]
+                [ text address.test.name ]
 
         viewTestLine line =
             p [ style [ ( "margin", "0" ) ] ] [ text line ]

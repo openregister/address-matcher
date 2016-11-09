@@ -16500,7 +16500,8 @@ var _user$project$View$viewAddress = F2(
 					_elm_lang$html$Html_Attributes$style(
 					_elm_lang$core$Native_List.fromArray(
 						[
-							{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'}
+							{ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
+							{ctor: '_Tuple2', _0: 'margin-bottom', _1: '0'}
 						]))
 				]),
 			_elm_lang$core$Native_List.fromArray(
