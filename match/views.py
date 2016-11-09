@@ -50,13 +50,6 @@ def occurrence_dict(counts):
 
     non_zero = [["Addresses with " + str(k) + " matches", v] for k, v in occurrence_nbaddresses.iteritems() if v != 0]
 
-    # keys = sorted(non_zero.keys())
-    # max_key = max(keys) + 1
-    # occurrence_array = [0 for x in range(max_key)]
-    # for i in range(max_key):
-    #     occurrence_array[i] = non_zero[i]
-
-    # return occurrence_array
 
     return mark_safe(json.dumps(non_zero))
 
@@ -85,7 +78,7 @@ def scores(request):
 
     stats['occurrences'] = occurrence_dict(count_matches())
     stats['nb_pass'] = len(Match.objects.filter(uprn__exact = "_unknown_"))
-
+    stats['nb_pass_ratio'] = round(100*float(stats['nb_pass']) / stats['nb_matches'])
 
     template = loader.get_template('scores.html')
 
