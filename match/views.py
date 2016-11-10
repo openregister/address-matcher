@@ -53,8 +53,6 @@ def occurrence_dict(counts):
 
     return mark_safe(json.dumps(non_zero))
 
-
-
 def scores(request):
     matches = Match.objects.all()
     users = User.objects.all()
@@ -78,7 +76,9 @@ def scores(request):
 
     stats['occurrences'] = occurrence_dict(count_matches())
     stats['nb_pass'] = len(Match.objects.filter(uprn__exact = "_unknown_"))
-    stats['nb_pass_ratio'] = round(100*float(stats['nb_pass']) / stats['nb_matches'])
+
+    stats['nb_pass_ratio'] = round(100*float(stats['nb_pass']) / stats['nb_matches']) if stats['nb_matches'] > 0 else 0
+
 
     template = loader.get_template('scores.html')
 
