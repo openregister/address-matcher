@@ -35,6 +35,15 @@ def count_matches():
 
     return count_matches
 
+def wordy_match(nb_matches):
+    if nb_matches == 0:
+        return "Addresses not matched"
+    elif nb_matches == 1:
+        return "Addresses matched once"
+    elif nb_matches == 2:
+        return "Addresses matched twice"
+    else:
+        return "Addresses matched " + str(k) + " times"
 
 def occurrence_dict(counts):
     # generate dictionary that gives the number of addresses
@@ -48,7 +57,7 @@ def occurrence_dict(counts):
         occurrence_nbaddresses[occurrence] = \
             len({k: v for k, v in counts.iteritems() if v == occurrence})
 
-    non_zero = [["Addresses with " + str(k) + " matches", v] for k, v in occurrence_nbaddresses.iteritems() if v != 0]
+    non_zero = [[wordy_match(k), v] for k, v in occurrence_nbaddresses.iteritems() if v != 0]
 
 
     return mark_safe(json.dumps(non_zero))
