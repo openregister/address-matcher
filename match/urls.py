@@ -67,6 +67,7 @@ urlpatterns = [
     url(r'^test-addresses/$', views.random_test_addresses, name='test-addresses'),
     url(r'^main/$', views.index, name='main'),
     url(r'^scores/$', views.scores, name='scores'),
+    url(r'^scores.json$', views.scores_json),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

@@ -60,13 +60,13 @@ def occurrence_dict(counts):
     non_zero = [[wordy_match(k), v] for k, v in occurrence_nbaddresses.iteritems() if v != 0]
 
 
-    return mark_safe(json.dumps(non_zero))
+    return non_zero
 
-def scores(request):
+
+def make_stats():
     matches = Match.objects.all()
     users = User.objects.all()
     addresses = Address.objects.all()
-
     stats = {}
     stats['users'] = []
     for user in users:
@@ -77,21 +77,25 @@ def scores(request):
         user_stats['score'] = user_score(nb_user_matches)
         if user_stats['score'] > 0:
             stats['users'].append(user_stats)
-
     stats['users'].sort(key=lambda x: x['score'], reverse=True)
-
     stats['nb_addresses'] = Address.objects.count()
     stats['nb_matches'] = Match.objects.count()
-
     stats['occurrences'] = occurrence_dict(count_matches())
     stats['nb_pass'] = len(Match.objects.filter(uprn__exact = "_unknown_"))
-
     stats['nb_pass_ratio'] = round(100*float(stats['nb_pass']) / stats['nb_matches']) if stats['nb_matches'] > 0 else 0
+    return stats;
 
 
+
+def scores(request):
     template = loader.get_template('scores.html')
-
+    stats = make_stats()
+    stats['occurrences'] = mark_safe(json.dumps(stats['occurrences']))
     return HttpResponse(template.render(stats, request))
+
+
+def scores_json(request):
+    return JsonResponse(make_stats())
 
 
 def brain(request):
