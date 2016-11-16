@@ -1,6 +1,7 @@
-module DataSetInfo exposing (..)
+module DataSetInfo exposing
+    (DataSetInfo, RemoteDataSetInfo, dataSetInfoDecoder, get)
 
-import Json.Decode exposing (Decoder, (:=))
+import Json.Decode exposing (..)
 import Dict exposing (..)
 import Types exposing (WebData)
 
@@ -25,9 +26,9 @@ dataSetInfoDecoder =
 dataSetAsListDecoder : Decoder (List ( String, String ))
 dataSetAsListDecoder =
     Json.Decode.list
-        (Json.Decode.object2 (,)
-             ("key" := Json.Decode.string)
-             ("value" := Json.Decode.string)
+        (Json.Decode.map2 (,)
+             (field "key" Json.Decode.string)
+             (field "value" Json.Decode.string)
         )
 
 

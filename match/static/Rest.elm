@@ -2,54 +2,46 @@ module Rest exposing (..)
 
 import Task exposing (perform)
 import Http exposing (..)
-import Json.Decode exposing (Decoder, (:=))
+import Json.Decode exposing (Decoder)
 import List exposing (..)
+import Task exposing (andThen)
 import State exposing (..)
 import User exposing (..)
-import DataSetInfo exposing (..)
 import Address exposing (..)
-import Task exposing (andThen)
+import DataSetInfo exposing (..)
 
-jsonGet : String -> Request
-jsonGet url =
-    { verb = "GET"
-    , headers = [ ( "Accept", "application/json" ) ]
-    , url = url
-    , body = Http.empty
-    }
+jsonGetRequest : String -> Decoder a -> Request a
+jsonGetRequest url decoder =
+    request
+      { method = "GET"
+      , headers = [ header "Accept" "application/json" ]
+      , expect = expectJson decoder
+      , url = url
+      , body = emptyBody
+      , timeout = Nothing
+      , withCredentials = False
+      }
 
 
 fetchUsers : Cmd Msg
 fetchUsers =
-    Task.perform
-        FetchUsersFail
-        FetchUsersOk
-        (fromJson usersDecoder
-            (send defaultSettings (jsonGet ("/match/users/")))
-        )
+    send FetchUsersReturn (jsonGetRequest "/match/users/" User.usersDecoder)
 
 
 fetchDataSetInfo : Cmd Msg
 fetchDataSetInfo =
-    let
-        getInfoAsList =
-            (fromJson dataSetInfoDecoder
-                 (send defaultSettings (jsonGet ("/match/appinfo/")))
-            )
-    in
-        Task.perform
-            FetchDataSetInfoFail
-            FetchDataSetInfoOk
-            getInfoAsList
+    send
+        FetchDataSetInfoReturn
+        (jsonGetRequest "/match/appinfo/" DataSetInfo.dataSetInfoDecoder)
 
 
 testDecoder : Decoder (List Test)
 testDecoder =
     (Json.Decode.list
-        (Json.Decode.object3 Test
-            ("name" := Json.Decode.string)
-            ("address" := Json.Decode.string)
-            ("id" := Json.Decode.int)
+        (Json.Decode.map3 Test
+            (Json.Decode.field "name" Json.Decode.string)
+            (Json.Decode.field "address" Json.Decode.string)
+            (Json.Decode.field "id" Json.Decode.int)
         )
     )
 
@@ -57,12 +49,12 @@ testDecoder =
 candidateAddressesDecoder : Decoder (List Candidate)
 candidateAddressesDecoder =
     (Json.Decode.list
-        (Json.Decode.object5 Candidate
-            ("name" := Json.Decode.string)
-            ("parent-address-name" := Json.Decode.string)
-            ("street-name" := Json.Decode.string)
-            ("street-town" := Json.Decode.string)
-            ("uprn" := Json.Decode.string)
+        (Json.Decode.map5 Candidate
+            (Json.Decode.field "name" Json.Decode.string)
+            (Json.Decode.field "parent-address-name" Json.Decode.string)
+            (Json.Decode.field "street-name" Json.Decode.string)
+            (Json.Decode.field "street-town" Json.Decode.string)
+            (Json.Decode.field "uprn" Json.Decode.string)
         )
     )
 
@@ -70,48 +62,41 @@ candidateAddressesDecoder =
 addCandidates : Test -> Task.Task Error Address
 addCandidates test =
     let
-        candidatesLookupUrl =
-            url "/match/brain/" [ ( "q", test.address ) ]
+        candidatesLookupUrl = "/match/brain/?q=" ++ (encodeUri test.address)
     in
         Task.map
             (\candidates -> (Address test candidates))
-            (fromJson candidateAddressesDecoder
-                (send defaultSettings (jsonGet candidatesLookupUrl))
-            )
+            (jsonGetRequest candidatesLookupUrl candidateAddressesDecoder |> toTask)
 
 
 fetchAddresses : Cmd Msg
 fetchAddresses =
     let
-        fetchTests : Task.Task Error (List Test)
+        fetchTests : Request (List Test)
         fetchTests =
-            (fromJson testDecoder
-                (send defaultSettings
-                    (jsonGet ("/match/test-addresses/?n=5"))
-                )
-            )
+            jsonGetRequest "/match/test-addresses/?n=5" testDecoder
 
         fetchAllCandidates : List Test -> Task.Task Error (List Address)
         fetchAllCandidates tests =
             Task.sequence (List.map addCandidates tests)
     in
-        Task.perform
-            FetchAddressesFail
-            FetchAddressesOk
-            (fetchTests `Task.andThen` fetchAllCandidates)
+        Task.attempt
+            FetchAddressesReturn
+            (fetchTests
+                |> toTask
+                |> andThen fetchAllCandidates)
 
 
 sendMatch : String -> TestId -> UserId -> Cmd Msg
 sendMatch uprn testId userId =
     let
         body =
-            multipart
-                [ stringData "uprn" uprn
-                , stringData "test_address" (toString testId)
-                , stringData "user" (toString userId)
+            multipartBody
+                [ stringPart "uprn" uprn
+                , stringPart "test_address" (toString testId)
+                , stringPart "user" (toString userId)
                 ]
+        request =
+            post "/match/matches/" body (Json.Decode.succeed "")
     in
-        Task.perform
-            SendMatchFail
-            SendMatchOk
-            (post (Json.Decode.succeed "") "/match/matches/" body)
+        send SendMatchReturn request

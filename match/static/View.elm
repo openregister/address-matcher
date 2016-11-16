@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.Keyed
-import Http exposing (..)
+import Http exposing (encodeUri)
 import List exposing (..)
 import InlineHover exposing (hover)
 import Regex exposing (..)
@@ -25,15 +25,12 @@ postcodeRegex =
 
 searchUrl : String -> String
 searchUrl search =
-    url "https://www.google.co.uk/search" [ ( "q", search ) ]
+    "https://www.google.co.uk/search?q=" ++ (encodeUri search)
 
 
 mapUrl : String -> String
 mapUrl search =
-    url "https://www.google.com/maps/embed/v1/place"
-        [ ( "key", "AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc" )
-        , ( "q", search )
-        ]
+    "https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=" ++ (encodeUri search)
 
 
 
@@ -84,10 +81,10 @@ viewCandidate : ( Candidate, TestId ) -> Html Msg
 viewCandidate candidateTestId =
     let
         candidate =
-            fst candidateTestId
+            Tuple.first candidateTestId
 
         testId =
-            snd candidateTestId
+            Tuple.second candidateTestId
     in
         hover
             styleCandidateHover
@@ -152,7 +149,7 @@ viewAddress animState address =
                             ]
                         ]
                         (List.concat
-                            [ (map
+                            [ (List.map
                                 viewTestLine
                                 (String.split "," address.test.address)
                               )
@@ -182,9 +179,9 @@ viewAddress animState address =
                         ])
                     , ( (toString address.test.id) ++ "ul", ul
                         []
-                        (map
+                        (List.map
                              viewCandidate
-                             (map addTestId address.candidates)
+                             (List.map addTestId address.candidates)
                         ))
 
                     ]
@@ -196,7 +193,7 @@ viewAddresses : Animation.Messenger.State Msg -> Int -> List Address -> Html Msg
 viewAddresses animState numberRemaining addresses =
     div []
         ((viewProgressBar numberRemaining 5)
-            :: (map (viewAddress animState) addresses)
+            :: (List.map (viewAddress animState) addresses)
         )
 
 
@@ -213,7 +210,7 @@ viewUserSelect : UserId -> List User -> Html Msg
 viewUserSelect currentUserId users =
     select [ onInput UserChange ]
         ((option [] [ text "Select a user" ])
-            :: (map (viewUserOption currentUserId) users)
+            :: (List.map (viewUserOption currentUserId) users)
         )
 
 

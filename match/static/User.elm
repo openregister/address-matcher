@@ -1,9 +1,9 @@
 module User exposing
     (User, RemoteUsers, UserId, UserName, usersDecoder, id, name)
 
-import Json.Decode exposing (Decoder, (:=))
+import Json.Decode exposing (..)
 import Types exposing (WebData)
-import List exposing (..)
+import List exposing (filter, head)
 
 
 type alias UserId =
@@ -46,17 +46,17 @@ name (User { id, name }) =
 
 userRecordDecoder : Decoder UserRecord
 userRecordDecoder =
-    Json.Decode.object2 UserRecord
-        ("name" := Json.Decode.string)
-        ("id" := Json.Decode.int)
+    map2 UserRecord
+        (field "name" string)
+        (field "id" int)
 
 
 userDecoder : Decoder User
 userDecoder =
-    Json.Decode.oneOf
-        [ Json.Decode.map User userRecordDecoder ]
+    oneOf
+        [ map User userRecordDecoder ]
 
 
 usersDecoder : Decoder (List User)
 usersDecoder =
-    Json.Decode.list userDecoder
+    list userDecoder

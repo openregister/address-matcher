@@ -1,7 +1,8 @@
 port module Main exposing (..)
 
 import String exposing (toInt)
-import Navigation
+import Navigation exposing (Location)
+import UrlParser exposing (..)
 import Animation exposing (px)
 import Animation.Messenger
 import State exposing (..)
@@ -13,16 +14,20 @@ import Address exposing (..)
 
 
 
-main : Program Never
+main : Program Never Model Msg
 main =
-    Navigation.program urlParser
+    Navigation.program
+        locationMessage
         { init = init
         , view = View.view
         , update = update
         , subscriptions = subscriptions
-        , urlUpdate = urlUpdate
         }
 
+
+locationMessage: Location -> Msg
+locationMessage location =
+    UrlChange location
 
 
 -- PORTS
@@ -33,11 +38,11 @@ port scrollTop : String -> Cmd msg
 -- INIT
 
 
-init : Result String UserId -> ( Model, Cmd Msg )
-init result =
+init : Location -> ( Model, Cmd Msg )
+init location =
     let
         userId =
-            Result.withDefault 0 result
+            userIdFromLocation location
 
         initCmd =
             if userId == 0 then
@@ -49,6 +54,12 @@ init result =
             Animation.style [ Animation.left (px 0) ]
     in
         (Model userId Loading NotAsked Loading initialAnimationStyle) ! initCmd
+
+
+userIdFromLocation : Location -> UserId
+userIdFromLocation location =
+    parseHash (s "userId" </> int) location
+        |> Maybe.withDefault 0
 
 
 
@@ -66,35 +77,12 @@ subscriptions model =
 
 userIdToUrl : UserId -> String
 userIdToUrl userId =
-    "#" ++ (toString userId)
+    "#userId/" ++ (toString userId)
 
 
 updateUrl : UserId -> Cmd Msg
 updateUrl userId =
     Navigation.newUrl (userIdToUrl userId)
-
-
-fromUrl : String -> Result String UserId
-fromUrl url =
-    String.toInt (String.dropLeft 1 url)
-
-
-urlParser : Navigation.Parser (Result String UserId)
-urlParser =
-    Navigation.makeParser (fromUrl << .hash)
-
-
-urlUpdate : Result String UserId -> Model -> ( Model, Cmd Msg )
-urlUpdate result model =
-    case result of
-        Ok newUserId ->
-            ( { model | currentUserId = newUserId }, Cmd.none )
-
-        Err _ ->
-            ( model
-            , Navigation.modifyUrl (userIdToUrl model.currentUserId)
-            )
-
 
 
 -- UPDATE
@@ -103,13 +91,20 @@ urlUpdate result model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+
+        UrlChange location ->
+            (
+                { model | currentUserId = userIdFromLocation location },
+                Cmd.none
+            )
+
         FetchUsers ->
             ( { model | users = Loading }, Rest.fetchUsers )
 
-        FetchUsersOk newUserList ->
+        FetchUsersReturn (Ok newUserList) ->
             ( { model | users = Success newUserList }, Cmd.none )
 
-        FetchUsersFail error ->
+        FetchUsersReturn (Err error) ->
             ( { model | users = Failure error }, Cmd.none )
 
         UserChange newUserIdAsText ->
@@ -123,19 +118,19 @@ update msg model =
         FetchDataSetInfo ->
             ( { model | dataSetInfo = Loading }, Rest.fetchDataSetInfo )
 
-        FetchDataSetInfoOk newDataSetInfo ->
+        FetchDataSetInfoReturn (Ok newDataSetInfo) ->
             ( { model | dataSetInfo = Success newDataSetInfo }, Cmd.none )
 
-        FetchDataSetInfoFail error ->
+        FetchDataSetInfoReturn (Err error) ->
             ( { model | dataSetInfo = Failure error }, Cmd.none )
 
         FetchAddresses ->
             ( { model | addresses = Loading }, Rest.fetchAddresses )
 
-        FetchAddressesOk newAddresses ->
+        FetchAddressesReturn (Ok newAddresses) ->
             ( { model | addresses = Success newAddresses }, Cmd.none )
 
-        FetchAddressesFail error ->
+        FetchAddressesReturn (Err error) ->
             ( { model | addresses = Failure error }, Cmd.none )
 
         SelectCandidate ( selectedCandidateUprn, testId ) ->
@@ -163,7 +158,7 @@ update msg model =
 
         NextCandidate ( selectedCandidateUprn, testId ) ->
             let
-                model' =
+                newModel =
                     { model | addresses = removeAddress testId model.addresses }
 
                 command =
@@ -172,12 +167,12 @@ update msg model =
                         testId
                         model.currentUserId
             in
-                ( model', command )
+                ( newModel, command )
 
-        SendMatchOk result ->
+        SendMatchReturn (Ok result) ->
             ( model, Cmd.none )
 
-        SendMatchFail error ->
+        SendMatchReturn (Err error) ->
             ( model, Cmd.none )
 
         Animate animMsg ->

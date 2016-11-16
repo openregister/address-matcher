@@ -1,6 +1,7 @@
 module State exposing (..)
 
 import Http exposing (..)
+import Navigation exposing (Location)
 import User exposing (..)
 import DataSetInfo exposing (..)
 import Address exposing (..)
@@ -23,18 +24,15 @@ type alias Model =
 
 
 type Msg
-    = FetchUsers
-    | FetchUsersOk (List User)
-    | FetchUsersFail Http.Error
-    | UserChange String
+    = UrlChange Location
+    | FetchUsers
+    | FetchUsersReturn (Result Http.Error (List User))
     | FetchDataSetInfo
-    | FetchDataSetInfoOk DataSetInfo
-    | FetchDataSetInfoFail Http.Error
+    | FetchDataSetInfoReturn (Result Http.Error DataSetInfo)
     | FetchAddresses
-    | FetchAddressesOk (List Address)
-    | FetchAddressesFail Http.Error
+    | FetchAddressesReturn (Result Http.Error (List Address))
+    | UserChange String
     | NextCandidate ( String, TestId )
     | SelectCandidate ( String, TestId )
-    | SendMatchFail Http.Error
-    | SendMatchOk String
+    | SendMatchReturn (Result Http.Error String)
     | Animate Animation.Msg
