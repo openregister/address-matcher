@@ -13,7 +13,6 @@ import User exposing (..)
 import Address exposing (..)
 
 
-
 main : Program Never Model Msg
 main =
     Navigation.program
@@ -25,14 +24,17 @@ main =
         }
 
 
-locationMessage: Location -> Msg
+locationMessage : Location -> Msg
 locationMessage location =
     UrlChange location
 
 
+
 -- PORTS
 
+
 port scrollTop : String -> Cmd msg
+
 
 
 -- INIT
@@ -85,17 +87,16 @@ updateUrl userId =
     Navigation.newUrl (userIdToUrl userId)
 
 
+
 -- UPDATE
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-
         UrlChange location ->
-            (
-                { model | currentUserId = userIdFromLocation location },
-                Cmd.none
+            ( { model | currentUserId = userIdFromLocation location }
+            , Cmd.none
             )
 
         FetchUsers ->
@@ -144,15 +145,18 @@ update msg model =
                     Animation.set [ Animation.left (px 0) ]
 
                 animation =
-                        [ animationMoveLeft
-                        , Animation.Messenger.send
-                            (NextCandidate
-                                    ( selectedCandidateUprn, testId ))
-                        , animationReset
-                        ]
+                    [ animationMoveLeft
+                    , Animation.Messenger.send
+                        (NextCandidate
+                            ( selectedCandidateUprn, testId )
+                        )
+                    , animationReset
+                    ]
             in
-                ( { model | animationStyle =
-                        (Animation.interrupt animation model.animationStyle) }
+                ( { model
+                    | animationStyle =
+                        (Animation.interrupt animation model.animationStyle)
+                  }
                 , scrollTop "notused"
                 )
 

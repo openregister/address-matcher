@@ -10,17 +10,18 @@ import User exposing (..)
 import Address exposing (..)
 import DataSetInfo exposing (..)
 
+
 jsonGetRequest : String -> Decoder a -> Request a
 jsonGetRequest url decoder =
     request
-      { method = "GET"
-      , headers = [ header "Accept" "application/json" ]
-      , expect = expectJson decoder
-      , url = url
-      , body = emptyBody
-      , timeout = Nothing
-      , withCredentials = False
-      }
+        { method = "GET"
+        , headers = [ header "Accept" "application/json" ]
+        , expect = expectJson decoder
+        , url = url
+        , body = emptyBody
+        , timeout = Nothing
+        , withCredentials = False
+        }
 
 
 fetchUsers : Cmd Msg
@@ -62,7 +63,8 @@ candidateAddressesDecoder =
 addCandidates : Test -> Task.Task Error Address
 addCandidates test =
     let
-        candidatesLookupUrl = "/match/brain/?q=" ++ (encodeUri test.address)
+        candidatesLookupUrl =
+            "/match/brain/?q=" ++ (encodeUri test.address)
     in
         Task.map
             (\candidates -> (Address test candidates))
@@ -84,7 +86,8 @@ fetchAddresses =
             FetchAddressesReturn
             (fetchTests
                 |> toTask
-                |> andThen fetchAllCandidates)
+                |> andThen fetchAllCandidates
+            )
 
 
 sendMatch : String -> TestId -> UserId -> Cmd Msg
@@ -96,6 +99,7 @@ sendMatch uprn testId userId =
                 , stringPart "test_address" (toString testId)
                 , stringPart "user" (toString userId)
                 ]
+
         request =
             post "/match/matches/" body (Json.Decode.succeed "")
     in

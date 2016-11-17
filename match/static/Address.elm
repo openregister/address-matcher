@@ -34,8 +34,6 @@ type alias RemoteAddresses =
     WebData (List Address)
 
 
-
-
 removeAddress : TestId -> RemoteAddresses -> RemoteAddresses
 removeAddress testId addresses =
     case addresses of

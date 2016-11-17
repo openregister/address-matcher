@@ -17535,12 +17535,7 @@ var _user$project$View$viewAddress = F2(
 							ctor: '::',
 							_0: A2(
 								_elm_lang$html$Html$h2,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$style(
-										{ctor: '[]'}),
-									_1: {ctor: '[]'}
-								},
+								{ctor: '[]'},
 								_elm_lang$core$List$concat(
 									{
 										ctor: '::',

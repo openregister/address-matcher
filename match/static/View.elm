@@ -64,8 +64,8 @@ styleEmbeddedMap =
     ]
 
 
--- HTML Generating Functions
 
+-- HTML Generating Functions
 
 
 viewEmbeddedMap : String -> Html Msg
@@ -89,18 +89,18 @@ viewCandidate candidateTestId =
         hover
             styleCandidateHover
             li
-                [ style styleCandidate
-                , onClick
-                      (SelectCandidate ( candidate.uprn, testId ))
+            [ style styleCandidate
+            , onClick
+                (SelectCandidate ( candidate.uprn, testId ))
+            ]
+            [ ul
+                []
+                [ li [] [ text candidate.name ]
+                , li [] [ text candidate.parentAddressName ]
+                , li [] [ text candidate.streetName ]
+                , li [] [ text candidate.streetTown ]
                 ]
-                [ ul
-                    []
-                    [ li [] [ text candidate.name ]
-                    , li [] [ text candidate.parentAddressName ]
-                    , li [] [ text candidate.streetName ]
-                    , li [] [ text candidate.streetTown ]
-                    ]
-                ]
+            ]
 
 
 viewPassButton : TestId -> Html Msg
@@ -108,13 +108,12 @@ viewPassButton testId =
     button
         [ class "button"
         , style
-              [ ( "white-space", "nowrap" )
-              , ( "line-height", ".6" )
-              ]
+            [ ( "white-space", "nowrap" )
+            , ( "line-height", ".6" )
+            ]
         , onClick (SelectCandidate ( "_unknown_", testId ))
         ]
         [ text "Pass" ]
-
 
 
 viewAddress : Animation.Messenger.State Msg -> Address -> Html Msg
@@ -127,9 +126,9 @@ viewAddress animState address =
         testNameHtml =
             p
                 [ style
-                      [ ( "font-weight", "bold" )
-                      , ( "margin-bottom", "0" )
-                      ]
+                    [ ( "font-weight", "bold" )
+                    , ( "margin-bottom", "0" )
+                    ]
                 ]
                 [ text address.test.name ]
 
@@ -142,12 +141,7 @@ viewAddress animState address =
                 [ div []
                     [ testNameHtml
                     , h2
-                        [ style
-                            [ --( "margin", "0 0 .5em 0" )
---                            , ( "border", "2px solid #BBB" )
---                            , ( "padding", "3px" )
-                            ]
-                        ]
+                        []
                         (List.concat
                             [ (List.map
                                 viewTestLine
@@ -168,22 +162,25 @@ viewAddress animState address =
                 [ testHtml
                 , Html.Keyed.node "div"
                     [ style
-                          [ ( "float", "right" )
-                          , ( "width", "69%" )
-                          ]
+                        [ ( "float", "right" )
+                        , ( "width", "69%" )
+                        ]
                     ]
-                    [ ( (toString address.test.id) ++ "h2", h2
-                        [ class "heading-small" ]
-                        [ text "Select the matching address below, or "
-                        , viewPassButton address.test.id
-                        ])
-                    , ( (toString address.test.id) ++ "ul", ul
-                        []
-                        (List.map
-                             viewCandidate
-                             (List.map addTestId address.candidates)
-                        ))
-
+                    [ ( (toString address.test.id) ++ "h2"
+                      , h2
+                            [ class "heading-small" ]
+                            [ text "Select the matching address below, or "
+                            , viewPassButton address.test.id
+                            ]
+                      )
+                    , ( (toString address.test.id) ++ "ul"
+                      , ul
+                            []
+                            (List.map
+                                viewCandidate
+                                (List.map addTestId address.candidates)
+                            )
+                      )
                     ]
                 ]
             ]
@@ -290,8 +287,8 @@ viewProgressBar remaining max =
             ]
 
 
-viewAddressSection
-    :  Animation.Messenger.State Msg
+viewAddressSection :
+    Animation.Messenger.State Msg
     -> UserId
     -> RemoteAddresses
     -> Html Msg

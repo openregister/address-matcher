@@ -1,5 +1,4 @@
-module User exposing
-    (User, RemoteUsers, UserId, UserName, usersDecoder, id, name)
+module User exposing (User, RemoteUsers, UserId, UserName, usersDecoder, id, name)
 
 import Json.Decode exposing (..)
 import Types exposing (WebData)
@@ -20,8 +19,8 @@ type alias UserRecord =
     }
 
 
-type User =
-    User UserRecord
+type User
+    = User UserRecord
 
 
 type alias RemoteUsers =
