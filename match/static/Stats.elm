@@ -13,8 +13,8 @@ type Stats
 
 
 users : Stats -> List UserStats
-users (Stats { nbPassRatio, nbAddresses, nbPass, users, occurrences }) =
-    users
+users (Stats s) =
+    s.users
 
 
 nbPassRatio : Stats -> Float

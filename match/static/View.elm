@@ -18,6 +18,7 @@ import Address exposing (..)
 import DataSetInfo exposing (..)
 import Stats exposing (..)
 
+
 postcodeRegex : Regex
 postcodeRegex =
     regex "(GIR 0AA)|((([A-Z]\\d+)|(([A-Z]{2}\\d+)|(([A-Z][0-9][A-HJKSTUW])|([A-Z]{2}[0-9][ABEHMNPRVWXY]))))\\s?[0-9][A-Z]{2})"
@@ -30,7 +31,8 @@ searchUrl search =
 
 mapUrl : String -> String
 mapUrl search =
-    "https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q=" ++ (encodeUri search)
+    "https://www.google.com/maps/embed/v1/place?key=AIzaSyAJTbvZlhyNCaRDef08HD-OYC_CTPwk2Vc&q="
+        ++ (encodeUri search)
 
 
 
@@ -71,8 +73,11 @@ styleEmbeddedMap =
 viewOccurrence : Occurrence -> Html Msg
 viewOccurrence occurrence =
     li []
-        [ text (occurrence.typeOfOccurrence ++
-            ": " ++ (toString (occurrence.occurrenceValue)))
+        [ text
+            (occurrence.typeOfOccurrence
+                ++ ": "
+                ++ (toString (occurrence.occurrenceValue))
+            )
         ]
 
 
@@ -96,11 +101,10 @@ viewTopUser : UserId -> UserStats -> Html Msg
 viewTopUser currentUserId userStats =
     li
         []
-        [
-            if userStats.userId == currentUserId then
-                strong [] [ text ("You: " ++ (toString userStats.score)) ]
-            else
-                text (userStats.name ++ ": " ++ (toString userStats.score))
+        [ if userStats.userId == currentUserId then
+            strong [] [ text ("You: " ++ (toString userStats.score)) ]
+          else
+            text (userStats.name ++ ": " ++ (toString userStats.score))
         ]
 
 
@@ -126,10 +130,11 @@ viewRemoteStats remoteStats currentUserId =
     div
         []
         [ case remoteStats of
-              Success stats ->
-                  viewStats stats currentUserId
-              _ ->
-                  div [] [ text "Not available" ]
+            Success stats ->
+                viewStats stats currentUserId
+
+            _ ->
+                div [] [ text "Not available" ]
         ]
 
 

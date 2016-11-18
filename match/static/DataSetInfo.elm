@@ -1,4 +1,10 @@
-module DataSetInfo exposing (DataSetInfo, RemoteDataSetInfo, dataSetInfoDecoder, get)
+module DataSetInfo
+    exposing
+        ( DataSetInfo
+        , RemoteDataSetInfo
+        , dataSetInfoDecoder
+        , get
+        )
 
 import Json.Decode exposing (..)
 import Dict exposing (..)

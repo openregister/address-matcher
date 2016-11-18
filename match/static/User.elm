@@ -1,4 +1,13 @@
-module User exposing (User, RemoteUsers, UserId, UserName, usersDecoder, id, name)
+module User
+    exposing
+        ( User
+        , RemoteUsers
+        , UserId
+        , UserName
+        , usersDecoder
+        , id
+        , name
+        )
 
 import Json.Decode exposing (..)
 import Types exposing (WebData)

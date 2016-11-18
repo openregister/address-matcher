@@ -48,7 +48,8 @@ init location =
         initialAnimationStyle =
             Animation.style [ Animation.left (px 0) ]
     in
-        (Model userId Loading NotAsked Loading initialAnimationStyle NotAsked) ! initCmd
+        (Model userId Loading NotAsked Loading initialAnimationStyle NotAsked)
+            ! initCmd
 
 
 userIdFromLocation : Location -> UserId

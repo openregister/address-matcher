@@ -11,6 +11,7 @@ import Address exposing (..)
 import DataSetInfo exposing (..)
 import Stats exposing (..)
 
+
 jsonGetRequest : String -> Decoder a -> Request a
 jsonGetRequest url decoder =
     request
@@ -26,11 +27,16 @@ jsonGetRequest url decoder =
 
 fetchUsers : Cmd Msg
 fetchUsers =
-    send FetchUsersReturn (jsonGetRequest "/match/users/" User.usersDecoder)
+    send
+        FetchUsersReturn
+        (jsonGetRequest "/match/users/" User.usersDecoder)
+
 
 fetchStats : Cmd Msg
 fetchStats =
-    send FetchStatsReturn (jsonGetRequest "/match/scores.json" Stats.statsDecoder)
+    send
+        FetchStatsReturn
+        (jsonGetRequest "/match/scores.json" Stats.statsDecoder)
 
 
 fetchDataSetInfo : Cmd Msg
@@ -72,7 +78,9 @@ addCandidates test =
     in
         Task.map
             (\candidates -> (Address test candidates))
-            (jsonGetRequest candidatesLookupUrl candidateAddressesDecoder |> toTask)
+            (jsonGetRequest candidatesLookupUrl candidateAddressesDecoder
+                |> toTask
+            )
 
 
 fetchAddresses : Cmd Msg
