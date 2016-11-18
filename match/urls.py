@@ -63,7 +63,6 @@ router.register(r'appinfo', AppInfoViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     url(r'^brain/$', views.brain, name='brain'),
-    url(r'^stats/$', views.stats, name='stats'),
     url(r'^test-addresses/$', views.random_test_addresses, name='test-addresses'),
     url(r'^main/$', views.index, name='main'),
     url(r'^scores/$', views.scores, name='scores'),

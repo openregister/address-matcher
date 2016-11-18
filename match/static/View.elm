@@ -16,7 +16,7 @@ import Types exposing (..)
 import User exposing (..)
 import Address exposing (..)
 import DataSetInfo exposing (..)
-
+import Stats exposing (..)
 
 postcodeRegex : Regex
 postcodeRegex =
@@ -66,6 +66,71 @@ styleEmbeddedMap =
 
 
 -- HTML Generating Functions
+
+
+viewOccurrence : Occurrence -> Html Msg
+viewOccurrence occurrence =
+    li []
+        [ text (occurrence.typeOfOccurrence ++
+            ": " ++ (toString (occurrence.occurrenceValue)))
+        ]
+
+
+viewAddressStats : Stats -> Html Msg
+viewAddressStats stats =
+    div
+        [ class "address-stats" ]
+        [ h2 [ class "heading-small" ] [ text "Address stats" ]
+        , ul []
+            [ li [] [ text ((toString (nbAddresses stats)) ++ " addresses") ]
+            , li [] [ text ((toString (nbMatches stats)) ++ " matches") ]
+            , li [] [ text ((toString (nbPass stats)) ++ " matches failed") ]
+            ]
+        , h2 [ class "heading-small" ] [ text "Match coverage" ]
+        , ul []
+            (List.map viewOccurrence (occurrences stats))
+        ]
+
+
+viewTopUser : UserId -> UserStats -> Html Msg
+viewTopUser currentUserId userStats =
+    li
+        []
+        [
+            if userStats.userId == currentUserId then
+                strong [] [ text ("You: " ++ (toString userStats.score)) ]
+            else
+                text (userStats.name ++ ": " ++ (toString userStats.score))
+        ]
+
+
+viewTopUsers : List UserStats -> UserId -> Html Msg
+viewTopUsers usersStats currentUserId =
+    div
+        [ class "user-stats" ]
+        [ h2 [ class "heading-small" ] [ text "Top users" ]
+        , ul [] (List.map (viewTopUser currentUserId) usersStats)
+        ]
+
+
+viewStats : Stats -> UserId -> Html Msg
+viewStats stats currentUserId =
+    div [ class "stats" ]
+        [ viewTopUsers (users stats) currentUserId
+        , viewAddressStats stats
+        ]
+
+
+viewRemoteStats : RemoteStats -> UserId -> Html Msg
+viewRemoteStats remoteStats currentUserId =
+    div
+        []
+        [ case remoteStats of
+              Success stats ->
+                  viewStats stats currentUserId
+              _ ->
+                  div [] [ text "Not available" ]
+        ]
 
 
 viewEmbeddedMap : String -> Html Msg
@@ -287,20 +352,17 @@ viewProgressBar remaining max =
             ]
 
 
-viewAddressSection :
-    Animation.Messenger.State Msg
-    -> UserId
-    -> RemoteAddresses
-    -> Html Msg
-viewAddressSection animState currentUserId addresses =
-    if currentUserId == 0 then
+viewAddressSection : Model -> Html Msg
+viewAddressSection model =
+    if model.currentUserId == 0 then
         p [] []
     else
-        case addresses of
+        case model.addresses of
             Success listAddresses ->
-                if listAddresses == [] then
+                if (length listAddresses) == 0 then
                     div []
-                        [ h2 [ class "heading-large" ] [ text "All done!" ]
+                        [ h2 [ class "heading-large" ] [ text "Well done!" ]
+                        , viewRemoteStats model.stats model.currentUserId
                         , button
                             [ onClick FetchAddresses
                             , class "button"
@@ -309,12 +371,12 @@ viewAddressSection animState currentUserId addresses =
                         , p [ style [ ( "padding-top", "1em" ) ] ]
                             [ a
                                 [ href "/match/scores/" ]
-                                [ text "See all scores" ]
+                                [ text "See all stats" ]
                             ]
                         ]
                 else
                     viewAddresses
-                        animState
+                        model.animationStyle
                         (length listAddresses)
                         (take 1 listAddresses)
 
@@ -355,8 +417,5 @@ view model =
         [ style [ ( "font-size", "90%" ) ] ]
         [ viewUsersSection model.currentUserId model.users
         , viewInfoSection model.dataSetInfo
-        , viewAddressSection
-            model.animationStyle
-            model.currentUserId
-            model.addresses
+        , viewAddressSection model
         ]

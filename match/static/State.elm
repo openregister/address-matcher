@@ -7,6 +7,7 @@ import DataSetInfo exposing (..)
 import Address exposing (..)
 import Animation exposing (..)
 import Animation.Messenger
+import Stats exposing (RemoteStats, Stats)
 
 
 -- Model
@@ -20,6 +21,7 @@ type alias Model =
     , addresses : RemoteAddresses
     , dataSetInfo : RemoteDataSetInfo
     , animationStyle : Animation.Messenger.State Msg
+    , stats : RemoteStats
     }
 
 
@@ -29,6 +31,7 @@ type Msg
     | FetchUsersReturn (Result Http.Error (List User))
     | FetchDataSetInfo
     | FetchDataSetInfoReturn (Result Http.Error DataSetInfo)
+    | FetchStatsReturn (Result Http.Error Stats)
     | FetchAddresses
     | FetchAddressesReturn (Result Http.Error (List Address))
     | UserChange String

@@ -37,13 +37,13 @@ def count_matches():
 
 def wordy_match(nb_matches):
     if nb_matches == 0:
-        return "Addresses not matched"
+        return "Addresses not yet matched"
     elif nb_matches == 1:
         return "Addresses matched once"
     elif nb_matches == 2:
         return "Addresses matched twice"
     else:
-        return "Addresses matched " + str(k) + " times"
+        return "Addresses matched " + str(nb_matches) + " times"
 
 def occurrence_dict(counts):
     # generate dictionary that gives the number of addresses
@@ -151,18 +151,3 @@ def random_test_addresses(request):
 
 def user_score(nb_matches):
     return nb_matches
-
-def stats(request):
-    stats = {}
-    stats['nb_matches'] = Match.objects.count()
-    stats['users'] = []
-    for user in User.objects.all():
-        user_stats = { 'name': user.name, 'user_id': user.pk}
-        user_matches = Match.objects.filter(user__id = user.pk)
-        nb_user_matches = len(user_matches)
-
-        user_stats['nb_matches'] = nb_user_matches
-        user_stats['score'] = user_score(nb_user_matches)
-        stats['users'].append(user_stats)
-
-    return JsonResponse(stats)

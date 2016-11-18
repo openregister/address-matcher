@@ -5,3 +5,23 @@
   border: 1px solid black;
   padding-left: .2em;
 }
+
+.stats {
+  height: 300px;
+  overflow-y: auto;
+}
+
+.user-stats {
+  float: left;
+  width: 50%;
+}
+
+.address-stats {
+  float: right;
+  width: 50%;
+}
+
+strong {
+  color: red;
+  font-weight: bold;
+}

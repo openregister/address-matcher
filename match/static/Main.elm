@@ -1,4 +1,4 @@
-port module Main exposing (..)
+module Main exposing (..)
 
 import String exposing (toInt)
 import Navigation exposing (Location)
@@ -30,13 +30,6 @@ locationMessage location =
 
 
 
--- PORTS
-
-
-port scrollTop : String -> Cmd msg
-
-
-
 -- INIT
 
 
@@ -55,7 +48,7 @@ init location =
         initialAnimationStyle =
             Animation.style [ Animation.left (px 0) ]
     in
-        (Model userId Loading NotAsked Loading initialAnimationStyle) ! initCmd
+        (Model userId Loading NotAsked Loading initialAnimationStyle NotAsked) ! initCmd
 
 
 userIdFromLocation : Location -> UserId
@@ -134,6 +127,12 @@ update msg model =
         FetchAddressesReturn (Err error) ->
             ( { model | addresses = Failure error }, Cmd.none )
 
+        FetchStatsReturn (Ok newStats) ->
+            ( { model | stats = Success newStats }, Cmd.none )
+
+        FetchStatsReturn (Err error) ->
+            ( { model | stats = Failure error }, Cmd.none )
+
         SelectCandidate ( selectedCandidateUprn, testId ) ->
             let
                 animationMoveLeft =
@@ -157,7 +156,7 @@ update msg model =
                     | animationStyle =
                         (Animation.interrupt animation model.animationStyle)
                   }
-                , scrollTop "notused"
+                , Cmd.none
                 )
 
         NextCandidate ( selectedCandidateUprn, testId ) ->
@@ -165,16 +164,25 @@ update msg model =
                 newModel =
                     { model | addresses = removeAddress testId model.addresses }
 
-                command =
+                sendMatchCmd : Cmd Msg
+                sendMatchCmd =
                     Rest.sendMatch
                         selectedCandidateUprn
                         testId
                         model.currentUserId
             in
-                ( newModel, command )
+                ( newModel, sendMatchCmd )
 
         SendMatchReturn (Ok result) ->
-            ( model, Cmd.none )
+            let
+                command : Cmd Msg
+                command =
+                    if remoteAddressCount model.addresses == 0 then
+                        Rest.fetchStats
+                    else
+                        Cmd.none
+            in
+                ( model, command )
 
         SendMatchReturn (Err error) ->
             ( model, Cmd.none )

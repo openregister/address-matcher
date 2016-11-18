@@ -34,6 +34,16 @@ type alias RemoteAddresses =
     WebData (List Address)
 
 
+remoteAddressCount : RemoteAddresses -> Int
+remoteAddressCount remoteAddresses =
+    case remoteAddresses of
+        Success list ->
+            List.length list
+
+        _ ->
+            0
+
+
 removeAddress : TestId -> RemoteAddresses -> RemoteAddresses
 removeAddress testId addresses =
     case addresses of

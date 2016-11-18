@@ -9,7 +9,7 @@ import State exposing (..)
 import User exposing (..)
 import Address exposing (..)
 import DataSetInfo exposing (..)
-
+import Stats exposing (..)
 
 jsonGetRequest : String -> Decoder a -> Request a
 jsonGetRequest url decoder =
@@ -27,6 +27,10 @@ jsonGetRequest url decoder =
 fetchUsers : Cmd Msg
 fetchUsers =
     send FetchUsersReturn (jsonGetRequest "/match/users/" User.usersDecoder)
+
+fetchStats : Cmd Msg
+fetchStats =
+    send FetchStatsReturn (jsonGetRequest "/match/scores.json" Stats.statsDecoder)
 
 
 fetchDataSetInfo : Cmd Msg
