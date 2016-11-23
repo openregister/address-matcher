@@ -9,7 +9,6 @@ import List exposing (..)
 import InlineHover exposing (hover)
 import Regex exposing (..)
 import Animation
-import Animation.Messenger
 import String
 import State exposing (..)
 import Types exposing (..)
@@ -86,22 +85,28 @@ viewOccurrence occurrence =
         ]
 
 
-viewAddressStats : Stats -> Html Msg
-viewAddressStats stats =
+viewAddressStats : RemoteStats -> Html Msg
+viewAddressStats remoteStats =
     div
         [ generator "viewAddressStats"
         , class "address-stats"
         ]
-        [ h2 [ class "heading-small" ] [ text "Address stats" ]
-        , ul []
-            [ li [] [ text ((toString (nbAddresses stats)) ++ " addresses") ]
-            , li [] [ text ((toString (nbMatches stats)) ++ " matches") ]
-            , li [] [ text ((toString (nbPass stats)) ++ " matches failed") ]
-            ]
-        , h2 [ class "heading-small" ] [ text "Match coverage" ]
-        , ul []
-            (List.map viewOccurrence (occurrences stats))
-        ]
+        (case remoteStats of
+            Success stats ->
+                [ h2 [ class "heading-small" ] [ text "Address stats" ]
+                , ul []
+                    [ li [] [ text ((toString (nbAddresses stats)) ++ " addresses") ]
+                    , li [] [ text ((toString (nbMatches stats)) ++ " matches") ]
+                    , li [] [ text ((toString (nbPass stats)) ++ " matches failed") ]
+                    ]
+                , h2 [ class "heading-small" ] [ text "Match coverage" ]
+                , ul []
+                    (List.map viewOccurrence (occurrences stats))
+                ]
+
+            _ ->
+                [ p [] [ text "No stats available" ] ]
+        )
 
 
 viewTopUser : UserId -> UserStats -> Html Msg
@@ -115,35 +120,37 @@ viewTopUser currentUserId userStats =
         ]
 
 
-viewTopUsers : List UserStats -> UserId -> Html Msg
-viewTopUsers usersStats currentUserId =
+viewTopUsers : Model -> Html Msg
+viewTopUsers model =
     div
         [ generator "viewTopUsers"
         , class "user-stats"
         ]
-        [ h2 [ class "heading-small" ] [ text "Top users" ]
-        , ul [] (List.map (viewTopUser currentUserId) usersStats)
-        ]
-
-
-viewStats : Stats -> UserId -> Html Msg
-viewStats stats currentUserId =
-    div [ class "stats" ]
-        [ viewTopUsers (users stats) currentUserId
-        , viewAddressStats stats
-        ]
-
-
-viewRemoteStats : RemoteStats -> UserId -> Html Msg
-viewRemoteStats remoteStats currentUserId =
-    div
-        [ generator "viewRemoteStats" ]
-        [ case remoteStats of
+    [ h2 [ class "heading-small" ] [ text "Top users" ]
+    , div
+        [ class "user-stats-inner" ]
+        [ case model.stats of
             Success stats ->
-                viewStats stats currentUserId
+                ul
+                    []
+                    (List.map
+                         (viewTopUser model.currentUserId)
+                         (users stats)
+                    )
 
             _ ->
                 div [] [ text "Not available" ]
+        ]
+    ]
+
+
+viewStats : Model -> Html Msg
+viewStats model =
+    div
+        [ generator "viewStats"
+        , class "stats"
+        ]
+        [ viewAddressStats model.stats
         ]
 
 
@@ -256,12 +263,11 @@ viewCandidates testId candidates =
           )
         ]
 
-
-viewAddress : Animation.Messenger.State Msg -> Address -> Html Msg
-viewAddress animState address =
+viewCard : Model -> Address -> Html Msg
+viewCard model address =
     div
-        (Animation.render animState
-            ++ [ generator "viewAddress"
+        (Animation.render model.animationStyle
+            ++ [ generator "viewCard"
                , style [ ( "position", "relative" ) ]
                ]
         )
@@ -273,14 +279,14 @@ viewAddress animState address =
         ]
 
 
-viewAddresses : Animation.Messenger.State Msg -> Int -> List Address -> Html Msg
-viewAddresses animState numberRemaining addresses =
+viewMatcher : Model -> Int -> Address -> Html Msg
+viewMatcher model numberRemaining address =
     div
-        [ generator "viewAddresses"
+        [ generator "viewMatcher"
         ]
-        ((viewProgressBar numberRemaining 5)
-            :: (List.map (viewAddress animState) addresses)
-        )
+        [ viewProgressBar numberRemaining 5
+        , viewCard model address
+        ]
 
 
 viewUserOption : UserId -> User -> Html Msg
@@ -303,13 +309,13 @@ viewUserSelect currentUserId users =
         )
 
 
-viewUsersSection : UserId -> RemoteUsers -> Html Msg
-viewUsersSection currentUserId users =
+viewUsersSection : Model -> Html Msg
+viewUsersSection model =
     div
         [ generator "viewUsersSection"
         , style [ ( "margin-bottom", "20px" ) ]
         ]
-        [ case users of
+        [ case model.users of
             NotAsked ->
                 p [] [ text "Users not fetched " ]
 
@@ -319,14 +325,14 @@ viewUsersSection currentUserId users =
             Success userList ->
                 let
                     message =
-                        if currentUserId == 0 then
+                        if model.currentUserId == 0 then
                             "Please tell me who you are: "
                         else
                             "Current user: "
                 in
                     div []
                         [ text message
-                        , viewUserSelect currentUserId userList
+                        , viewUserSelect model.currentUserId userList
                         ]
 
             Failure error ->
@@ -382,35 +388,42 @@ viewProgressBar remaining max =
             ]
 
 
-viewAddressSection : Model -> Html Msg
-viewAddressSection model =
+viewFinishedSection : Model -> Html Msg
+viewFinishedSection model =
+    div [ generator "viewFinishedSection" ]
+        [ h2 [ class "heading-large" ] [ text "Well done!" ]
+        , viewStats model
+        , button
+              [ onClick FetchAddresses
+              , class "button"
+              ]
+              [ text "Give me more!" ]
+        , p [ style [ ( "padding-top", "1em" ) ] ]
+            [ a
+                [ href "/match/scores/" ]
+                [ text "See all stats" ]
+            ]
+        ]
+
+
+viewMatcherSection : Model -> Html Msg
+viewMatcherSection model =
     div
-        [ generator "viewAddressSection" ]
+        [ generator "viewMatcherSection" ]
         [ if model.currentUserId == 0 then
             p [] []
           else
             case model.addresses of
                 Success listAddresses ->
-                    if (length listAddresses) == 0 then
-                        div []
-                            [ h2 [ class "heading-large" ] [ text "Well done!" ]
-                            , viewRemoteStats model.stats model.currentUserId
-                            , button
-                                [ onClick FetchAddresses
-                                , class "button"
-                                ]
-                                [ text "Give me more!" ]
-                            , p [ style [ ( "padding-top", "1em" ) ] ]
-                                [ a
-                                    [ href "/match/scores/" ]
-                                    [ text "See all stats" ]
-                                ]
-                            ]
-                    else
-                        viewAddresses
-                            model.animationStyle
-                            (length listAddresses)
-                            (take 1 listAddresses)
+                    case head listAddresses of
+                        Nothing ->
+                            viewFinishedSection model
+
+                        Just address ->
+                            viewMatcher
+                                model
+                                (length listAddresses)
+                                address
 
                 Loading ->
                     p [] [ text "Loading test addresses" ]
@@ -423,13 +436,13 @@ viewAddressSection model =
         ]
 
 
-viewInfoSection : RemoteDataSetInfo -> Html Msg
-viewInfoSection info =
+viewInfoSection : Model -> Html Msg
+viewInfoSection model =
     h1
         [ generator "viewInfoSection"
         , class "heading-small"
         ]
-        [ case info of
+        [ case model.dataSetInfo of
             NotAsked ->
                 text "Fetching"
 
@@ -452,7 +465,8 @@ view model =
         [ generator "view"
         , style [ ( "font-size", "90%" ) ]
         ]
-        [ viewUsersSection model.currentUserId model.users
-        , viewInfoSection model.dataSetInfo
-        , viewAddressSection model
+        [ viewUsersSection model
+        , viewInfoSection model
+        , viewMatcherSection model
+        , viewTopUsers model
         ]

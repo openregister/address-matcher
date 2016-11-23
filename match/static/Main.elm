@@ -41,9 +41,13 @@ init location =
 
         initCmd =
             if userId == 0 then
-                [ Rest.fetchDataSetInfo, Rest.fetchUsers ]
+                [ Rest.fetchDataSetInfo, Rest.fetchStats, Rest.fetchUsers ]
             else
-                [ Rest.fetchDataSetInfo, Rest.fetchUsers, Rest.fetchAddresses ]
+                [ Rest.fetchDataSetInfo
+                , Rest.fetchStats
+                , Rest.fetchUsers
+                , Rest.fetchAddresses
+                ]
 
         initialAnimationStyle =
             Animation.style [ Animation.left (px 0) ]

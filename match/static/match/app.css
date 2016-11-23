@@ -12,8 +12,18 @@
 }
 
 .user-stats {
-  float: left;
-  width: 50%;
+  position: fixed;
+  right: 10px;
+  top: 20px;
+  margin: 3px;
+  border: 1px solid black;
+  padding: 0 1em 1em 1em;
+  background: white;
+}
+
+.user-stats-inner {
+  height: 8em;
+  overflow-y: auto;
 }
 
 .address-stats {
