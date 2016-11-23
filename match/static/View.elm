@@ -35,6 +35,11 @@ mapUrl search =
         ++ (encodeUri search)
 
 
+generator : String -> Attribute msg
+generator name =
+    attribute "data-elm-generator" name
+
+
 
 -- Lists of style properties
 
@@ -84,7 +89,9 @@ viewOccurrence occurrence =
 viewAddressStats : Stats -> Html Msg
 viewAddressStats stats =
     div
-        [ class "address-stats" ]
+        [ generator "viewAddressStats"
+        , class "address-stats"
+        ]
         [ h2 [ class "heading-small" ] [ text "Address stats" ]
         , ul []
             [ li [] [ text ((toString (nbAddresses stats)) ++ " addresses") ]
@@ -111,7 +118,9 @@ viewTopUser currentUserId userStats =
 viewTopUsers : List UserStats -> UserId -> Html Msg
 viewTopUsers usersStats currentUserId =
     div
-        [ class "user-stats" ]
+        [ generator "viewTopUsers"
+        , class "user-stats"
+        ]
         [ h2 [ class "heading-small" ] [ text "Top users" ]
         , ul [] (List.map (viewTopUser currentUserId) usersStats)
         ]
@@ -128,7 +137,7 @@ viewStats stats currentUserId =
 viewRemoteStats : RemoteStats -> UserId -> Html Msg
 viewRemoteStats remoteStats currentUserId =
     div
-        []
+        [ generator "viewRemoteStats" ]
         [ case remoteStats of
             Success stats ->
                 viewStats stats currentUserId
@@ -141,7 +150,8 @@ viewRemoteStats remoteStats currentUserId =
 viewEmbeddedMap : String -> Html Msg
 viewEmbeddedMap search =
     iframe
-        [ style styleEmbeddedMap
+        [ generator "viewEmbeddedMap"
+        , style styleEmbeddedMap
         , src (mapUrl (search ++ ", United Kingdom"))
         ]
         []
@@ -159,7 +169,8 @@ viewCandidate candidateTestId =
         hover
             styleCandidateHover
             li
-            [ style styleCandidate
+            [ generator "viewCandidate"
+            , style styleCandidate
             , onClick
                 (SelectCandidate ( candidate.uprn, testId ))
             ]
@@ -186,13 +197,14 @@ viewPassButton testId =
         [ text "Pass" ]
 
 
-viewAddress : Animation.Messenger.State Msg -> Address -> Html Msg
-viewAddress animState address =
-    let
-        addTestId : Candidate -> ( Candidate, TestId )
-        addTestId ca =
-            ( ca, address.test.id )
+viewTestLine : String -> Html Msg
+viewTestLine line =
+    p [ style [ ( "margin", "0" ) ] ] [ text line ]
 
+
+viewTest : Test -> Html Msg
+viewTest test =
+    let
         testNameHtml =
             p
                 [ style
@@ -200,65 +212,72 @@ viewAddress animState address =
                     , ( "margin-bottom", "0" )
                     ]
                 ]
-                [ text address.test.name ]
-
-        viewTestLine line =
-            p [ style [ ( "margin", "0" ) ] ] [ text line ]
-
-        testHtml =
-            div
-                [ class "test-address" ]
-                [ div []
-                    [ testNameHtml
-                    , h2
-                        []
-                        (List.concat
-                            [ (List.map
-                                viewTestLine
-                                (String.split "," address.test.address)
-                              )
-                            ]
-                        )
-                    , viewEmbeddedMap address.test.address
-                    ]
-                ]
+                [ text test.name ]
     in
         div
-            (Animation.render animState
-                ++ [ style [ ( "position", "relative" ) ] ]
-            )
-            [ div
-                [ class "grid-row" ]
-                [ testHtml
-                , Html.Keyed.node "div"
-                    [ style
-                        [ ( "float", "right" )
-                        , ( "width", "69%" )
-                        ]
-                    ]
-                    [ ( (toString address.test.id) ++ "h2"
-                      , h2
-                            [ class "heading-small" ]
-                            [ text "Select the matching address below, or "
-                            , viewPassButton address.test.id
-                            ]
-                      )
-                    , ( (toString address.test.id) ++ "ul"
-                      , ul
-                            []
-                            (List.map
-                                viewCandidate
-                                (List.map addTestId address.candidates)
-                            )
+            [ generator "viewTest"
+            , class "test-address" ]
+            [ testNameHtml
+             , h2
+                []
+                (List.concat
+                    [ (List.map
+                        viewTestLine
+                        (String.split "," test.address)
                       )
                     ]
-                ]
+                )
+            , viewEmbeddedMap test.address
             ]
+
+viewCandidates : TestId -> List Candidate -> Html Msg
+viewCandidates testId candidates =
+    Html.Keyed.node "div"
+        [ generator "viewCandidates"
+        , style
+            [ ( "float", "right" )
+            , ( "width", "69%" )
+            ]
+        ]
+        [ ( (toString testId) ++ "h2"
+          , h2
+                [ class "heading-small" ]
+                [ text "Select the matching address below, or "
+                , viewPassButton testId
+                ]
+          )
+        , ( (toString testId) ++ "ul"
+          , ul
+                []
+                (List.map
+                    viewCandidate
+                    (List.map (\c -> (c, testId)) candidates)
+                )
+          )
+        ]
+
+
+viewAddress : Animation.Messenger.State Msg -> Address -> Html Msg
+viewAddress animState address =
+    div
+        (Animation.render animState
+            ++ [ generator "viewAddress"
+               , style [ ( "position", "relative" ) ]
+               ]
+        )
+        [ div
+            [ class "grid-row" ]
+            [ viewTest address.test
+            , viewCandidates address.test.id address.candidates
+            ]
+        ]
 
 
 viewAddresses : Animation.Messenger.State Msg -> Int -> List Address -> Html Msg
 viewAddresses animState numberRemaining addresses =
-    div []
+    div
+        [ generator "viewAddresses"
+        ]
         ((viewProgressBar numberRemaining 5)
             :: (List.map (viewAddress animState) addresses)
         )
@@ -275,7 +294,10 @@ viewUserOption currentUserId user =
 
 viewUserSelect : UserId -> List User -> Html Msg
 viewUserSelect currentUserId users =
-    select [ onInput UserChange ]
+    select
+        [ generator "viewUserSelect"
+        , onInput UserChange
+        ]
         ((option [] [ text "Select a user" ])
             :: (List.map (viewUserOption currentUserId) users)
         )
@@ -284,7 +306,9 @@ viewUserSelect currentUserId users =
 viewUsersSection : UserId -> RemoteUsers -> Html Msg
 viewUsersSection currentUserId users =
     div
-        [ style [ ( "margin-bottom", "20px" ) ] ]
+        [ generator "viewUsersSection"
+        , style [ ( "margin-bottom", "20px" ) ]
+        ]
         [ case users of
             NotAsked ->
                 p [] [ text "Users not fetched " ]
@@ -321,7 +345,8 @@ viewProgressBar remaining max =
             100 * (toFloat (max - remaining + 1)) / (toFloat max)
     in
         div
-            [ style
+            [ generator "viewProgressBar"
+            , style
                 [ ( "height", "20px" )
                 , ( "margin-bottom", "5px" )
                 ]
@@ -359,46 +384,51 @@ viewProgressBar remaining max =
 
 viewAddressSection : Model -> Html Msg
 viewAddressSection model =
-    if model.currentUserId == 0 then
-        p [] []
-    else
-        case model.addresses of
-            Success listAddresses ->
-                if (length listAddresses) == 0 then
-                    div []
-                        [ h2 [ class "heading-large" ] [ text "Well done!" ]
-                        , viewRemoteStats model.stats model.currentUserId
-                        , button
-                            [ onClick FetchAddresses
-                            , class "button"
+    div
+        [ generator "viewAddressSection" ]
+        [ if model.currentUserId == 0 then
+            p [] []
+          else
+            case model.addresses of
+                Success listAddresses ->
+                    if (length listAddresses) == 0 then
+                        div []
+                            [ h2 [ class "heading-large" ] [ text "Well done!" ]
+                            , viewRemoteStats model.stats model.currentUserId
+                            , button
+                                [ onClick FetchAddresses
+                                , class "button"
+                                ]
+                                [ text "Give me more!" ]
+                            , p [ style [ ( "padding-top", "1em" ) ] ]
+                                [ a
+                                    [ href "/match/scores/" ]
+                                    [ text "See all stats" ]
+                                ]
                             ]
-                            [ text "Give me more!" ]
-                        , p [ style [ ( "padding-top", "1em" ) ] ]
-                            [ a
-                                [ href "/match/scores/" ]
-                                [ text "See all stats" ]
-                            ]
-                        ]
-                else
-                    viewAddresses
-                        model.animationStyle
-                        (length listAddresses)
-                        (take 1 listAddresses)
+                    else
+                        viewAddresses
+                            model.animationStyle
+                            (length listAddresses)
+                            (take 1 listAddresses)
 
-            Loading ->
-                p [] [ text "Loading test addresses" ]
+                Loading ->
+                    p [] [ text "Loading test addresses" ]
 
-            Failure err ->
-                p [] [ text ("Failed loading addresses: " ++ (toString err)) ]
+                Failure err ->
+                    p [] [ text ("Failed loading addresses: " ++ (toString err)) ]
 
-            NotAsked ->
-                p [] [ text "Loading test addresses" ]
+                NotAsked ->
+                    p [] [ text "Loading test addresses" ]
+        ]
 
 
 viewInfoSection : RemoteDataSetInfo -> Html Msg
 viewInfoSection info =
     h1
-        [ class "heading-small" ]
+        [ generator "viewInfoSection"
+        , class "heading-small"
+        ]
         [ case info of
             NotAsked ->
                 text "Fetching"
@@ -419,7 +449,9 @@ viewInfoSection info =
 view : Model -> Html Msg
 view model =
     div
-        [ style [ ( "font-size", "90%" ) ] ]
+        [ generator "view"
+        , style [ ( "font-size", "90%" ) ]
+        ]
         [ viewUsersSection model.currentUserId model.users
         , viewInfoSection model.dataSetInfo
         , viewAddressSection model

@@ -17109,155 +17109,6 @@ var _user$project$State$UrlChange = function (a) {
 	return {ctor: 'UrlChange', _0: a};
 };
 
-var _user$project$View$viewInfoSection = function (info) {
-	return A2(
-		_elm_lang$html$Html$h1,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('heading-small'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: function () {
-				var _p0 = info;
-				switch (_p0.ctor) {
-					case 'NotAsked':
-						return _elm_lang$html$Html$text('Fetching');
-					case 'Loading':
-						return _elm_lang$html$Html$text('Loading infos');
-					case 'Success':
-						return _elm_lang$html$Html$text(
-							A2(
-								_elm_lang$core$Maybe$withDefault,
-								'No title',
-								A2(_user$project$DataSetInfo$get, 'title', _p0._0)));
-					default:
-						return _elm_lang$html$Html$text(
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								'Error loading dataset title',
-								_elm_lang$core$Basics$toString(_p0._0)));
-				}
-			}(),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$View$viewProgressBar = F2(
-	function (remaining, max) {
-		var percent = (100 * _elm_lang$core$Basics$toFloat((max - remaining) + 1)) / _elm_lang$core$Basics$toFloat(max);
-		return A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$style(
-					{
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'height', _1: '20px'},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '5px'},
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$style(
-							{
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'background-color', _1: '#DDD'},
-								_1: {
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'height', _1: '20px'},
-									_1: {
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
-										_1: {ctor: '[]'}
-									}
-								}
-							}),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('-'),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$style(
-								{
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
-									_1: {
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'top', _1: '-20px'},
-										_1: {
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 'background-color', _1: 'orange'},
-											_1: {
-												ctor: '::',
-												_0: {ctor: '_Tuple2', _0: 'color', _1: 'white'},
-												_1: {
-													ctor: '::',
-													_0: {ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
-													_1: {
-														ctor: '::',
-														_0: {ctor: '_Tuple2', _0: 'font-size', _1: '1em'},
-														_1: {
-															ctor: '::',
-															_0: {ctor: '_Tuple2', _0: 'height', _1: '20px'},
-															_1: {
-																ctor: '::',
-																_0: {
-																	ctor: '_Tuple2',
-																	_0: 'width',
-																	_1: A2(
-																		_elm_lang$core$Basics_ops['++'],
-																		_elm_lang$core$Basics$toString(percent),
-																		'%')
-																},
-																_1: {
-																	ctor: '::',
-																	_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'center'},
-																	_1: {ctor: '[]'}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									_elm_lang$core$Basics$toString((max + 1) - remaining),
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										'/',
-										_elm_lang$core$Basics$toString(max)))),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				}
-			});
-	});
 var _user$project$View$viewUserOption = F2(
 	function (currentUserId, user) {
 		return A2(
@@ -17283,100 +17134,25 @@ var _user$project$View$viewUserOption = F2(
 				_1: {ctor: '[]'}
 			});
 	});
-var _user$project$View$viewUserSelect = F2(
-	function (currentUserId, users) {
-		return A2(
-			_elm_lang$html$Html$select,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Events$onInput(_user$project$State$UserChange),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$option,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Select a user'),
-						_1: {ctor: '[]'}
-					}),
-				_1: A2(
-					_elm_lang$core$List$map,
-					_user$project$View$viewUserOption(currentUserId),
-					users)
-			});
-	});
-var _user$project$View$viewUsersSection = F2(
-	function (currentUserId, users) {
-		return A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$style(
-					{
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '20px'},
-						_1: {ctor: '[]'}
-					}),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: function () {
-					var _p1 = users;
-					switch (_p1.ctor) {
-						case 'NotAsked':
-							return A2(
-								_elm_lang$html$Html$p,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Users not fetched '),
-									_1: {ctor: '[]'}
-								});
-						case 'Loading':
-							return A2(
-								_elm_lang$html$Html$p,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Loading users'),
-									_1: {ctor: '[]'}
-								});
-						case 'Success':
-							var message = _elm_lang$core$Native_Utils.eq(currentUserId, 0) ? 'Please tell me who you are: ' : 'Current user: ';
-							return A2(
-								_elm_lang$html$Html$div,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(message),
-									_1: {
-										ctor: '::',
-										_0: A2(_user$project$View$viewUserSelect, currentUserId, _p1._0),
-										_1: {ctor: '[]'}
-									}
-								});
-						default:
-							return A2(
-								_elm_lang$html$Html$p,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											'Error loading user data: ',
-											_elm_lang$core$Basics$toString(_p1._0))),
-									_1: {ctor: '[]'}
-								});
-					}
-				}(),
-				_1: {ctor: '[]'}
-			});
-	});
+var _user$project$View$viewTestLine = function (line) {
+	return A2(
+		_elm_lang$html$Html$p,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'margin', _1: '0'},
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(line),
+			_1: {ctor: '[]'}
+		});
+};
 var _user$project$View$viewPassButton = function (testId) {
 	return A2(
 		_elm_lang$html$Html$button,
@@ -17439,42 +17215,6 @@ var _user$project$View$viewTopUser = F2(
 				_1: {ctor: '[]'}
 			});
 	});
-var _user$project$View$viewTopUsers = F2(
-	function (usersStats, currentUserId) {
-		return A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('user-stats'),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$h2,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('heading-small'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Top users'),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$ul,
-						{ctor: '[]'},
-						A2(
-							_elm_lang$core$List$map,
-							_user$project$View$viewTopUser(currentUserId),
-							usersStats)),
-					_1: {ctor: '[]'}
-				}
-			});
-	});
 var _user$project$View$viewOccurrence = function (occurrence) {
 	return A2(
 		_elm_lang$html$Html$li,
@@ -17492,13 +17232,75 @@ var _user$project$View$viewOccurrence = function (occurrence) {
 			_1: {ctor: '[]'}
 		});
 };
+var _user$project$View$styleEmbeddedMap = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'width', _1: '98%'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'height', _1: '15em'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'border', _1: '0'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'margin', _1: '1em 0 0 0'},
+				_1: {ctor: '[]'}
+			}
+		}
+	}
+};
+var _user$project$View$styleCandidateHover = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'outline', _1: '3px solid #F00'},
+	_1: {ctor: '[]'}
+};
+var _user$project$View$styleCandidate = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'width', _1: '30%'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'margin', _1: '.1em .4em 0 0'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'padding', _1: '3px'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'border-radius', _1: '10px'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'background-color', _1: '#DDD'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'height', _1: '7em'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'overflow-y', _1: 'auto'},
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
+var _user$project$View$generator = function (name) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'data-elm-generator', name);
+};
 var _user$project$View$viewAddressStats = function (stats) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('address-stats'),
-			_1: {ctor: '[]'}
+			_0: _user$project$View$generator('viewAddressStats'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('address-stats'),
+				_1: {ctor: '[]'}
+			}
 		},
 		{
 			ctor: '::',
@@ -17597,6 +17399,46 @@ var _user$project$View$viewAddressStats = function (stats) {
 			}
 		});
 };
+var _user$project$View$viewTopUsers = F2(
+	function (usersStats, currentUserId) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _user$project$View$generator('viewTopUsers'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('user-stats'),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h2,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('heading-small'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Top users'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$ul,
+						{ctor: '[]'},
+						A2(
+							_elm_lang$core$List$map,
+							_user$project$View$viewTopUser(currentUserId),
+							usersStats)),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
 var _user$project$View$viewStats = F2(
 	function (stats, currentUserId) {
 		return A2(
@@ -17623,13 +17465,17 @@ var _user$project$View$viewRemoteStats = F2(
 	function (remoteStats, currentUserId) {
 		return A2(
 			_elm_lang$html$Html$div,
-			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _user$project$View$generator('viewRemoteStats'),
+				_1: {ctor: '[]'}
+			},
 			{
 				ctor: '::',
 				_0: function () {
-					var _p2 = remoteStats;
-					if (_p2.ctor === 'Success') {
-						return A2(_user$project$View$viewStats, _p2._0, currentUserId);
+					var _p0 = remoteStats;
+					if (_p0.ctor === 'Success') {
+						return A2(_user$project$View$viewStats, _p0._0, currentUserId);
 					} else {
 						return A2(
 							_elm_lang$html$Html$div,
@@ -17644,61 +17490,6 @@ var _user$project$View$viewRemoteStats = F2(
 				_1: {ctor: '[]'}
 			});
 	});
-var _user$project$View$styleEmbeddedMap = {
-	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'width', _1: '98%'},
-	_1: {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'height', _1: '15em'},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'border', _1: '0'},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'margin', _1: '1em 0 0 0'},
-				_1: {ctor: '[]'}
-			}
-		}
-	}
-};
-var _user$project$View$styleCandidateHover = {
-	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'outline', _1: '3px solid #F00'},
-	_1: {ctor: '[]'}
-};
-var _user$project$View$styleCandidate = {
-	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
-	_1: {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'width', _1: '30%'},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'margin', _1: '.1em .4em 0 0'},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'padding', _1: '3px'},
-				_1: {
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'border-radius', _1: '10px'},
-					_1: {
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'background-color', _1: '#DDD'},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'height', _1: '7em'},
-							_1: {
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'overflow-y', _1: 'auto'},
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-};
 var _user$project$View$viewCandidate = function (candidateTestId) {
 	var testId = _elm_lang$core$Tuple$second(candidateTestId);
 	var candidate = _elm_lang$core$Tuple$first(candidateTestId);
@@ -17708,13 +17499,17 @@ var _user$project$View$viewCandidate = function (candidateTestId) {
 		_elm_lang$html$Html$li,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidate),
+			_0: _user$project$View$generator('viewCandidate'),
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$html$Html_Events$onClick(
-					_user$project$State$SelectCandidate(
-						{ctor: '_Tuple2', _0: candidate.uprn, _1: testId})),
-				_1: {ctor: '[]'}
+				_0: _elm_lang$html$Html_Attributes$style(_user$project$View$styleCandidate),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						_user$project$State$SelectCandidate(
+							{ctor: '_Tuple2', _0: candidate.uprn, _1: testId})),
+					_1: {ctor: '[]'}
+				}
 			}
 		},
 		{
@@ -17770,6 +17565,338 @@ var _user$project$View$viewCandidate = function (candidateTestId) {
 			_1: {ctor: '[]'}
 		});
 };
+var _user$project$View$viewCandidates = F2(
+	function (testId, candidates) {
+		return A3(
+			_elm_lang$html$Html_Keyed$node,
+			'div',
+			{
+				ctor: '::',
+				_0: _user$project$View$generator('viewCandidates'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'float', _1: 'right'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'width', _1: '69%'},
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(testId),
+						'h2'),
+					_1: A2(
+						_elm_lang$html$Html$h2,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('heading-small'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Select the matching address below, or '),
+							_1: {
+								ctor: '::',
+								_0: _user$project$View$viewPassButton(testId),
+								_1: {ctor: '[]'}
+							}
+						})
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(testId),
+							'ul'),
+						_1: A2(
+							_elm_lang$html$Html$ul,
+							{ctor: '[]'},
+							A2(
+								_elm_lang$core$List$map,
+								_user$project$View$viewCandidate,
+								A2(
+									_elm_lang$core$List$map,
+									function (c) {
+										return {ctor: '_Tuple2', _0: c, _1: testId};
+									},
+									candidates)))
+					},
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _user$project$View$viewUserSelect = F2(
+	function (currentUserId, users) {
+		return A2(
+			_elm_lang$html$Html$select,
+			{
+				ctor: '::',
+				_0: _user$project$View$generator('viewUserSelect'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onInput(_user$project$State$UserChange),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$option,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Select a user'),
+						_1: {ctor: '[]'}
+					}),
+				_1: A2(
+					_elm_lang$core$List$map,
+					_user$project$View$viewUserOption(currentUserId),
+					users)
+			});
+	});
+var _user$project$View$viewUsersSection = F2(
+	function (currentUserId, users) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _user$project$View$generator('viewUsersSection'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '20px'},
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: function () {
+					var _p1 = users;
+					switch (_p1.ctor) {
+						case 'NotAsked':
+							return A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Users not fetched '),
+									_1: {ctor: '[]'}
+								});
+						case 'Loading':
+							return A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Loading users'),
+									_1: {ctor: '[]'}
+								});
+						case 'Success':
+							var message = _elm_lang$core$Native_Utils.eq(currentUserId, 0) ? 'Please tell me who you are: ' : 'Current user: ';
+							return A2(
+								_elm_lang$html$Html$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(message),
+									_1: {
+										ctor: '::',
+										_0: A2(_user$project$View$viewUserSelect, currentUserId, _p1._0),
+										_1: {ctor: '[]'}
+									}
+								});
+						default:
+							return A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'Error loading user data: ',
+											_elm_lang$core$Basics$toString(_p1._0))),
+									_1: {ctor: '[]'}
+								});
+					}
+				}(),
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$View$viewProgressBar = F2(
+	function (remaining, max) {
+		var percent = (100 * _elm_lang$core$Basics$toFloat((max - remaining) + 1)) / _elm_lang$core$Basics$toFloat(max);
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _user$project$View$generator('viewProgressBar'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'height', _1: '20px'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '5px'},
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'background-color', _1: '#DDD'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'height', _1: '20px'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('-'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'top', _1: '-20px'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'background-color', _1: 'orange'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'color', _1: 'white'},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'font-size', _1: '1em'},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 'height', _1: '20px'},
+															_1: {
+																ctor: '::',
+																_0: {
+																	ctor: '_Tuple2',
+																	_0: 'width',
+																	_1: A2(
+																		_elm_lang$core$Basics_ops['++'],
+																		_elm_lang$core$Basics$toString(percent),
+																		'%')
+																},
+																_1: {
+																	ctor: '::',
+																	_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'center'},
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_elm_lang$core$Basics$toString((max + 1) - remaining),
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'/',
+										_elm_lang$core$Basics$toString(max)))),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _user$project$View$viewInfoSection = function (info) {
+	return A2(
+		_elm_lang$html$Html$h1,
+		{
+			ctor: '::',
+			_0: _user$project$View$generator('viewInfoSection'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('heading-small'),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: function () {
+				var _p2 = info;
+				switch (_p2.ctor) {
+					case 'NotAsked':
+						return _elm_lang$html$Html$text('Fetching');
+					case 'Loading':
+						return _elm_lang$html$Html$text('Loading infos');
+					case 'Success':
+						return _elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Maybe$withDefault,
+								'No title',
+								A2(_user$project$DataSetInfo$get, 'title', _p2._0)));
+					default:
+						return _elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'Error loading dataset title',
+								_elm_lang$core$Basics$toString(_p2._0)));
+				}
+			}(),
+			_1: {ctor: '[]'}
+		});
+};
 var _user$project$View$mapUrl = function (search) {
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
@@ -17781,100 +17908,81 @@ var _user$project$View$viewEmbeddedMap = function (search) {
 		_elm_lang$html$Html$iframe,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(_user$project$View$styleEmbeddedMap),
+			_0: _user$project$View$generator('viewEmbeddedMap'),
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$src(
-					_user$project$View$mapUrl(
-						A2(_elm_lang$core$Basics_ops['++'], search, ', United Kingdom'))),
-				_1: {ctor: '[]'}
+				_0: _elm_lang$html$Html_Attributes$style(_user$project$View$styleEmbeddedMap),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$src(
+						_user$project$View$mapUrl(
+							A2(_elm_lang$core$Basics_ops['++'], search, ', United Kingdom'))),
+					_1: {ctor: '[]'}
+				}
 			}
 		},
 		{ctor: '[]'});
 };
-var _user$project$View$viewAddress = F2(
-	function (animState, address) {
-		var viewTestLine = function (line) {
-			return A2(
-				_elm_lang$html$Html$p,
+var _user$project$View$viewTest = function (test) {
+	var testNameHtml = A2(
+		_elm_lang$html$Html$p,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$style(
-						{
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'margin', _1: '0'},
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(line),
-					_1: {ctor: '[]'}
-				});
-		};
-		var testNameHtml = A2(
-			_elm_lang$html$Html$p,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$style(
-					{
+					_0: {ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
+					_1: {
 						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '0'},
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(address.test.name),
-				_1: {ctor: '[]'}
-			});
-		var testHtml = A2(
-			_elm_lang$html$Html$div,
-			{
+						_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '0'},
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(test.name),
+			_1: {ctor: '[]'}
+		});
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$View$generator('viewTest'),
+			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html_Attributes$class('test-address'),
 				_1: {ctor: '[]'}
-			},
-			{
+			}
+		},
+		{
+			ctor: '::',
+			_0: testNameHtml,
+			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$div,
+					_elm_lang$html$Html$h2,
 					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: testNameHtml,
-						_1: {
+					_elm_lang$core$List$concat(
+						{
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$h2,
-								{ctor: '[]'},
-								_elm_lang$core$List$concat(
-									{
-										ctor: '::',
-										_0: A2(
-											_elm_lang$core$List$map,
-											viewTestLine,
-											A2(_elm_lang$core$String$split, ',', address.test.address)),
-										_1: {ctor: '[]'}
-									})),
-							_1: {
-								ctor: '::',
-								_0: _user$project$View$viewEmbeddedMap(address.test.address),
-								_1: {ctor: '[]'}
-							}
-						}
-					}),
-				_1: {ctor: '[]'}
-			});
-		var addTestId = function (ca) {
-			return {ctor: '_Tuple2', _0: ca, _1: address.test.id};
-		};
+								_elm_lang$core$List$map,
+								_user$project$View$viewTestLine,
+								A2(_elm_lang$core$String$split, ',', test.address)),
+							_1: {ctor: '[]'}
+						})),
+				_1: {
+					ctor: '::',
+					_0: _user$project$View$viewEmbeddedMap(test.address),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+var _user$project$View$viewAddress = F2(
+	function (animState, address) {
 		return A2(
 			_elm_lang$html$Html$div,
 			A2(
@@ -17882,13 +17990,17 @@ var _user$project$View$viewAddress = F2(
 				_mdgriffith$elm_style_animation$Animation$render(animState),
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$style(
-						{
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
+					_0: _user$project$View$generator('viewAddress'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
 				}),
 			{
 				ctor: '::',
@@ -17901,70 +18013,10 @@ var _user$project$View$viewAddress = F2(
 					},
 					{
 						ctor: '::',
-						_0: testHtml,
+						_0: _user$project$View$viewTest(address.test),
 						_1: {
 							ctor: '::',
-							_0: A3(
-								_elm_lang$html$Html_Keyed$node,
-								'div',
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$style(
-										{
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 'float', _1: 'right'},
-											_1: {
-												ctor: '::',
-												_0: {ctor: '_Tuple2', _0: 'width', _1: '69%'},
-												_1: {ctor: '[]'}
-											}
-										}),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: {
-										ctor: '_Tuple2',
-										_0: A2(
-											_elm_lang$core$Basics_ops['++'],
-											_elm_lang$core$Basics$toString(address.test.id),
-											'h2'),
-										_1: A2(
-											_elm_lang$html$Html$h2,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('heading-small'),
-												_1: {ctor: '[]'}
-											},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Select the matching address below, or '),
-												_1: {
-													ctor: '::',
-													_0: _user$project$View$viewPassButton(address.test.id),
-													_1: {ctor: '[]'}
-												}
-											})
-									},
-									_1: {
-										ctor: '::',
-										_0: {
-											ctor: '_Tuple2',
-											_0: A2(
-												_elm_lang$core$Basics_ops['++'],
-												_elm_lang$core$Basics$toString(address.test.id),
-												'ul'),
-											_1: A2(
-												_elm_lang$html$Html$ul,
-												{ctor: '[]'},
-												A2(
-													_elm_lang$core$List$map,
-													_user$project$View$viewCandidate,
-													A2(_elm_lang$core$List$map, addTestId, address.candidates)))
-										},
-										_1: {ctor: '[]'}
-									}
-								}),
+							_0: A2(_user$project$View$viewCandidates, address.test.id, address.candidates),
 							_1: {ctor: '[]'}
 						}
 					}),
@@ -17975,7 +18027,11 @@ var _user$project$View$viewAddresses = F3(
 	function (animState, numberRemaining, addresses) {
 		return A2(
 			_elm_lang$html$Html$div,
-			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _user$project$View$generator('viewAddresses'),
+				_1: {ctor: '[]'}
+			},
 			{
 				ctor: '::',
 				_0: A2(_user$project$View$viewProgressBar, numberRemaining, 5),
@@ -17986,141 +18042,158 @@ var _user$project$View$viewAddresses = F3(
 			});
 	});
 var _user$project$View$viewAddressSection = function (model) {
-	if (_elm_lang$core$Native_Utils.eq(model.currentUserId, 0)) {
-		return A2(
-			_elm_lang$html$Html$p,
-			{ctor: '[]'},
-			{ctor: '[]'});
-	} else {
-		var _p3 = model.addresses;
-		switch (_p3.ctor) {
-			case 'Success':
-				var _p4 = _p3._0;
-				return _elm_lang$core$Native_Utils.eq(
-					_elm_lang$core$List$length(_p4),
-					0) ? A2(
-					_elm_lang$html$Html$div,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$h2,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('heading-large'),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Well done!'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(_user$project$View$viewRemoteStats, model.stats, model.currentUserId),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$button,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(_user$project$State$FetchAddresses),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('button'),
-											_1: {ctor: '[]'}
-										}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Give me more!'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$View$generator('viewAddressSection'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: function () {
+				if (_elm_lang$core$Native_Utils.eq(model.currentUserId, 0)) {
+					return A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{ctor: '[]'});
+				} else {
+					var _p3 = model.addresses;
+					switch (_p3.ctor) {
+						case 'Success':
+							var _p4 = _p3._0;
+							return _elm_lang$core$Native_Utils.eq(
+								_elm_lang$core$List$length(_p4),
+								0) ? A2(
+								_elm_lang$html$Html$div,
+								{ctor: '[]'},
+								{
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$p,
+										_elm_lang$html$Html$h2,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$style(
-												{
-													ctor: '::',
-													_0: {ctor: '_Tuple2', _0: 'padding-top', _1: '1em'},
-													_1: {ctor: '[]'}
-												}),
+											_0: _elm_lang$html$Html_Attributes$class('heading-large'),
 											_1: {ctor: '[]'}
 										},
 										{
 											ctor: '::',
+											_0: _elm_lang$html$Html$text('Well done!'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(_user$project$View$viewRemoteStats, model.stats, model.currentUserId),
+										_1: {
+											ctor: '::',
 											_0: A2(
-												_elm_lang$html$Html$a,
+												_elm_lang$html$Html$button,
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$href('/match/scores/'),
-													_1: {ctor: '[]'}
+													_0: _elm_lang$html$Html_Events$onClick(_user$project$State$FetchAddresses),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('button'),
+														_1: {ctor: '[]'}
+													}
 												},
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html$text('See all stats'),
+													_0: _elm_lang$html$Html$text('Give me more!'),
 													_1: {ctor: '[]'}
 												}),
-											_1: {ctor: '[]'}
-										}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$p,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$style(
+															{
+																ctor: '::',
+																_0: {ctor: '_Tuple2', _0: 'padding-top', _1: '1em'},
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$a,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$href('/match/scores/'),
+																_1: {ctor: '[]'}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('See all stats'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}) : A3(
+								_user$project$View$viewAddresses,
+								model.animationStyle,
+								_elm_lang$core$List$length(_p4),
+								A2(_elm_lang$core$List$take, 1, _p4));
+						case 'Loading':
+							return A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Loading test addresses'),
 									_1: {ctor: '[]'}
-								}
-							}
-						}
-					}) : A3(
-					_user$project$View$viewAddresses,
-					model.animationStyle,
-					_elm_lang$core$List$length(_p4),
-					A2(_elm_lang$core$List$take, 1, _p4));
-			case 'Loading':
-				return A2(
-					_elm_lang$html$Html$p,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Loading test addresses'),
-						_1: {ctor: '[]'}
-					});
-			case 'Failure':
-				return A2(
-					_elm_lang$html$Html$p,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								'Failed loading addresses: ',
-								_elm_lang$core$Basics$toString(_p3._0))),
-						_1: {ctor: '[]'}
-					});
-			default:
-				return A2(
-					_elm_lang$html$Html$p,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Loading test addresses'),
-						_1: {ctor: '[]'}
-					});
-		}
-	}
+								});
+						case 'Failure':
+							return A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'Failed loading addresses: ',
+											_elm_lang$core$Basics$toString(_p3._0))),
+									_1: {ctor: '[]'}
+								});
+						default:
+							return A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Loading test addresses'),
+									_1: {ctor: '[]'}
+								});
+					}
+				}
+			}(),
+			_1: {ctor: '[]'}
+		});
 };
 var _user$project$View$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(
-				{
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'font-size', _1: '90%'},
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
+			_0: _user$project$View$generator('view'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'font-size', _1: '90%'},
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
 		},
 		{
 			ctor: '::',
