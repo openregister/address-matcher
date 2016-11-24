@@ -65,6 +65,7 @@ urlpatterns = [
     url(r'^brain/$', views.brain, name='brain'),
     url(r'^test-addresses/$', views.random_test_addresses, name='test-addresses'),
     url(r'^main/$', views.index, name='main'),
+    url(r'^send/$', views.send, name='matches2'),
     url(r'^scores/$', views.scores, name='scores'),
     url(r'^scores.json$', views.scores_json),
     url(r'^', include(router.urls)),

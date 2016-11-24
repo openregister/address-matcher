@@ -3,6 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.db.models import Count
 from django.utils.safestring import mark_safe
+from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
 from random import randint
 from hashlib import md5
 from models import Address, Match, User
@@ -132,6 +134,19 @@ def brain(request):
         candidate_addresses.append(newCandidate)
 
     return JsonResponse(candidate_addresses, safe=False)
+
+
+@csrf_exempt
+def send(request):
+    newMatch = Match(
+        test_address = Address.objects.get(pk=request.POST['test_address']),
+        user = User.objects.get(pk=request.POST['user']),
+        uprn = request.POST['uprn'],
+        date = datetime.now()
+    )
+    newMatch.save()
+    return JsonResponse(make_stats())
+
 
 
 def random_test_addresses(request):
