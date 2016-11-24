@@ -47,6 +47,7 @@ def wordy_match(nb_matches):
     else:
         return "Addresses matched " + str(nb_matches) + " times"
 
+
 def occurrence_dict(counts):
     # generate dictionary that gives the number of addresses
     # for each occurrence count:
@@ -60,9 +61,22 @@ def occurrence_dict(counts):
             len({k: v for k, v in counts.iteritems() if v == occurrence})
 
     non_zero = [[wordy_match(k), v] for k, v in occurrence_nbaddresses.iteritems() if v != 0]
-
-
     return non_zero
+
+
+def make_users_stats():
+    matches = Match.objects.all()
+    users = User.objects.all()
+    users_stats = []
+    for user in users:
+        if user.score > 0:
+            user_stats = { 'name': user.name, 'id': user.pk}
+            user_matches = Match.objects.filter(user__id = user.pk)
+            nb_user_matches = len(user_matches)
+            user_stats['score'] = user.score
+            users_stats.append(user_stats)
+    users_stats.sort(key=lambda x: x['score'], reverse=True)
+    return users_stats
 
 
 def make_stats():
@@ -70,16 +84,7 @@ def make_stats():
     users = User.objects.all()
     addresses = Address.objects.all()
     stats = {}
-    stats['users'] = []
-    for user in users:
-        user_stats = { 'name': user.name, 'user_id': user.pk}
-        user_matches = Match.objects.filter(user__id = user.pk)
-        nb_user_matches = len(user_matches)
-        user_stats['nb_matches'] = nb_user_matches
-        user_stats['score'] = user_score(nb_user_matches)
-        if user_stats['score'] > 0:
-            stats['users'].append(user_stats)
-    stats['users'].sort(key=lambda x: x['score'], reverse=True)
+    stats['users'] = make_users_stats()
     stats['nb_addresses'] = Address.objects.count()
     stats['nb_matches'] = Match.objects.count()
     stats['occurrences'] = occurrence_dict(count_matches())
@@ -138,14 +143,33 @@ def brain(request):
 
 @csrf_exempt
 def send(request):
-    newMatch = Match(
+    user = User.objects.get(pk=request.POST['user'])
+    test = Address.objects.get(pk=request.POST['test_address'])
+    uprn = request.POST['uprn']
+    Match.objects.create(
         test_address = Address.objects.get(pk=request.POST['test_address']),
-        user = User.objects.get(pk=request.POST['user']),
-        uprn = request.POST['uprn'],
+        user = user,
+        uprn = uprn,
         date = datetime.now()
     )
-    newMatch.save()
-    return JsonResponse(make_stats())
+
+    # update users' score
+    match_score = 1 + len(Match.objects.filter(
+        test_address=test
+    ).filter(
+        uprn=uprn
+    ).exclude(
+        user=user
+    ))
+    user.score = user.score + match_score
+    user.save()
+
+    # return user scores for immediate display
+    response = {
+        'users': make_users_stats(),
+        'last_match_score': match_score
+    }
+    return JsonResponse(response, safe=False)
 
 
 
@@ -162,7 +186,3 @@ def random_test_addresses(request):
             'address': address.address
         })
     return JsonResponse(addresses, safe=False)
-
-
-def user_score(nb_matches):
-    return nb_matches

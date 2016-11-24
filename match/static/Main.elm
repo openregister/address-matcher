@@ -52,7 +52,7 @@ init location =
         initialAnimationStyle =
             Animation.style [ Animation.left (px 0) ]
     in
-        (Model userId Loading NotAsked Loading initialAnimationStyle NotAsked)
+        (Model userId Loading NotAsked Loading initialAnimationStyle NotAsked 0)
             ! initCmd
 
 
@@ -178,16 +178,15 @@ update msg model =
             in
                 ( newModel, sendMatchCmd )
 
-        SendMatchReturn (Ok result) ->
+        SendMatchReturn (Ok usersStats) ->
             let
-                command : Cmd Msg
-                command =
-                    if remoteAddressCount model.addresses == 0 then
-                        Rest.fetchStats
-                    else
-                        Cmd.none
+                newModel1 =
+                    { model | users = Success usersStats.users }
+
+                newModel =
+                    { newModel1 | lastMatchScore = usersStats.lastMatchScore }
             in
-                ( model, command )
+                ( newModel, Cmd.none )
 
         SendMatchReturn (Err error) ->
             ( model, Cmd.none )

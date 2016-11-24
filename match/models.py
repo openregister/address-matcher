@@ -23,9 +23,10 @@ class Address(models.Model):
 
 class User(models.Model):
     name = models.CharField(max_length=200)
+    score = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.name
+        return self.name + " (" + str(self.score) + ")"
 
 
 class Match(models.Model):

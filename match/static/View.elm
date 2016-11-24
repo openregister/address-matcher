@@ -109,14 +109,14 @@ viewAddressStats remoteStats =
         )
 
 
-viewTopUser : UserId -> UserStats -> Html Msg
-viewTopUser currentUserId userStats =
+viewTopUser : UserId -> User -> Html Msg
+viewTopUser currentUserId user =
     li
         []
-        [ if userStats.userId == currentUserId then
-            strong [] [ text ("You: " ++ (toString userStats.score)) ]
+        [ if (User.id user) == currentUserId then
+            strong [] [ text ("You: " ++ (toString (User.score user))) ]
           else
-            text (userStats.name ++ ": " ++ (toString userStats.score))
+            text ((User.name user) ++ ": " ++ (toString (User.score user)))
         ]
 
 
@@ -129,14 +129,21 @@ viewTopUsers model =
     [ h2 [ class "heading-small" ] [ text "Top users" ]
     , div
         [ class "user-stats-inner" ]
-        [ case model.stats of
-            Success stats ->
-                ul
-                    []
-                    (List.map
-                         (viewTopUser model.currentUserId)
-                         (users stats)
-                    )
+        [ case model.users of
+            Success users ->
+                let
+                    nonZeroSortedUsers =
+                        users
+                            |> filter (\u -> (score u) /= 0)
+                            |> sortBy score
+                            |> reverse
+                in
+                    ul
+                        []
+                        (List.map
+                            (viewTopUser model.currentUserId)
+                            nonZeroSortedUsers
+                        )
 
             _ ->
                 div [] [ text "Not available" ]
@@ -150,7 +157,8 @@ viewStats model =
         [ generator "viewStats"
         , class "stats"
         ]
-        [ viewAddressStats model.stats
+        [ viewTopUsers model
+        , viewAddressStats model.stats
         ]
 
 

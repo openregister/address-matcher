@@ -20913,13 +20913,17 @@ var _user$project$DataSetInfo$dataSetInfoDecoder = A2(
 	},
 	_user$project$DataSetInfo$dataSetAsListDecoder);
 
-var _user$project$User$name = function (_p0) {
+var _user$project$User$score = function (_p0) {
 	var _p1 = _p0;
-	return _p1._0.name;
+	return _p1._0.score;
 };
-var _user$project$User$id = function (_p2) {
+var _user$project$User$name = function (_p2) {
 	var _p3 = _p2;
-	return _p3._0.id;
+	return _p3._0.name;
+};
+var _user$project$User$id = function (_p4) {
+	var _p5 = _p4;
+	return _p5._0.id;
 };
 var _user$project$User$findById = F2(
 	function (userId, users) {
@@ -20933,15 +20937,16 @@ var _user$project$User$findById = F2(
 				},
 				users));
 	});
-var _user$project$User$UserRecord = F2(
-	function (a, b) {
-		return {name: a, id: b};
+var _user$project$User$UserRecord = F3(
+	function (a, b, c) {
+		return {name: a, id: b, score: c};
 	});
-var _user$project$User$userRecordDecoder = A3(
-	_elm_lang$core$Json_Decode$map2,
+var _user$project$User$userRecordDecoder = A4(
+	_elm_lang$core$Json_Decode$map3,
 	_user$project$User$UserRecord,
 	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'id', _elm_lang$core$Json_Decode$int));
+	A2(_elm_lang$core$Json_Decode$field, 'id', _elm_lang$core$Json_Decode$int),
+	A2(_elm_lang$core$Json_Decode$field, 'score', _elm_lang$core$Json_Decode$int));
 var _user$project$User$User = function (a) {
 	return {ctor: 'User', _0: a};
 };
@@ -20977,17 +20982,15 @@ var _user$project$Stats$users = function (_p10) {
 	var _p11 = _p10;
 	return _p11._0.users;
 };
-var _user$project$Stats$UserStats = F4(
-	function (a, b, c, d) {
-		return {nbMatches: a, score: b, userId: c, name: d};
+var _user$project$Stats$UsersStats = F2(
+	function (a, b) {
+		return {lastMatchScore: a, users: b};
 	});
-var _user$project$Stats$userStatsDecoder = A5(
-	_elm_lang$core$Json_Decode$map4,
-	_user$project$Stats$UserStats,
-	A2(_elm_lang$core$Json_Decode$field, 'nb_matches', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'score', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'user_id', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string));
+var _user$project$Stats$usersStatsDecoder = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$Stats$UsersStats,
+	A2(_elm_lang$core$Json_Decode$field, 'last_match_score', _elm_lang$core$Json_Decode$int),
+	A2(_elm_lang$core$Json_Decode$field, 'users', _user$project$User$usersDecoder));
 var _user$project$Stats$Occurrence = F2(
 	function (a, b) {
 		return {typeOfOccurrence: a, occurrenceValue: b};
@@ -21008,10 +21011,7 @@ var _user$project$Stats$statsRecordDecoder = A7(
 	A2(_elm_lang$core$Json_Decode$field, 'nb_matches', _elm_lang$core$Json_Decode$int),
 	A2(_elm_lang$core$Json_Decode$field, 'nb_addresses', _elm_lang$core$Json_Decode$int),
 	A2(_elm_lang$core$Json_Decode$field, 'nb_pass', _elm_lang$core$Json_Decode$int),
-	A2(
-		_elm_lang$core$Json_Decode$field,
-		'users',
-		_elm_lang$core$Json_Decode$list(_user$project$Stats$userStatsDecoder)),
+	A2(_elm_lang$core$Json_Decode$field, 'users', _user$project$User$usersDecoder),
 	A2(
 		_elm_lang$core$Json_Decode$field,
 		'occurrences',
@@ -21026,9 +21026,9 @@ var _user$project$Stats$statsDecoder = _elm_lang$core$Json_Decode$oneOf(
 		_1: {ctor: '[]'}
 	});
 
-var _user$project$State$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {currentUserId: a, users: b, addresses: c, dataSetInfo: d, animationStyle: e, stats: f};
+var _user$project$State$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {currentUserId: a, users: b, addresses: c, dataSetInfo: d, animationStyle: e, stats: f, lastMatchScore: g};
 	});
 var _user$project$State$Animate = function (a) {
 	return {ctor: 'Animate', _0: a};
@@ -21142,13 +21142,15 @@ var _user$project$View$viewPassButton = function (testId) {
 		});
 };
 var _user$project$View$viewTopUser = F2(
-	function (currentUserId, userStats) {
+	function (currentUserId, user) {
 		return A2(
 			_elm_lang$html$Html$li,
 			{ctor: '[]'},
 			{
 				ctor: '::',
-				_0: _elm_lang$core$Native_Utils.eq(userStats.userId, currentUserId) ? A2(
+				_0: _elm_lang$core$Native_Utils.eq(
+					_user$project$User$id(user),
+					currentUserId) ? A2(
 					_elm_lang$html$Html$strong,
 					{ctor: '[]'},
 					{
@@ -21157,16 +21159,18 @@ var _user$project$View$viewTopUser = F2(
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								'You: ',
-								_elm_lang$core$Basics$toString(userStats.score))),
+								_elm_lang$core$Basics$toString(
+									_user$project$User$score(user)))),
 						_1: {ctor: '[]'}
 					}) : _elm_lang$html$Html$text(
 					A2(
 						_elm_lang$core$Basics_ops['++'],
-						userStats.name,
+						_user$project$User$name(user),
 						A2(
 							_elm_lang$core$Basics_ops['++'],
 							': ',
-							_elm_lang$core$Basics$toString(userStats.score)))),
+							_elm_lang$core$Basics$toString(
+								_user$project$User$score(user))))),
 				_1: {ctor: '[]'}
 			});
 	});
@@ -21411,15 +21415,27 @@ var _user$project$View$viewTopUsers = function (model) {
 					{
 						ctor: '::',
 						_0: function () {
-							var _p2 = model.stats;
+							var _p2 = model.users;
 							if (_p2.ctor === 'Success') {
+								var nonZeroSortedUsers = _elm_lang$core$List$reverse(
+									A2(
+										_elm_lang$core$List$sortBy,
+										_user$project$User$score,
+										A2(
+											_elm_lang$core$List$filter,
+											function (u) {
+												return !_elm_lang$core$Native_Utils.eq(
+													_user$project$User$score(u),
+													0);
+											},
+											_p2._0)));
 								return A2(
 									_elm_lang$html$Html$ul,
 									{ctor: '[]'},
 									A2(
 										_elm_lang$core$List$map,
 										_user$project$View$viewTopUser(model.currentUserId),
-										_user$project$Stats$users(_p2._0)));
+										nonZeroSortedUsers));
 							} else {
 								return A2(
 									_elm_lang$html$Html$div,
@@ -21451,8 +21467,12 @@ var _user$project$View$viewStats = function (model) {
 		},
 		{
 			ctor: '::',
-			_0: _user$project$View$viewAddressStats(model.stats),
-			_1: {ctor: '[]'}
+			_0: _user$project$View$viewTopUsers(model),
+			_1: {
+				ctor: '::',
+				_0: _user$project$View$viewAddressStats(model.stats),
+				_1: {ctor: '[]'}
+			}
 		});
 };
 var _user$project$View$viewCandidate = function (candidateTestId) {
@@ -22218,11 +22238,7 @@ var _user$project$Rest$sendMatch = F3(
 					}
 				}
 			});
-		var request = A3(
-			_elm_lang$http$Http$post,
-			'/match/matches/',
-			body,
-			_elm_lang$core$Json_Decode$succeed(''));
+		var request = A3(_elm_lang$http$Http$post, '/match/send/', body, _user$project$Stats$usersStatsDecoder);
 		return A2(_elm_lang$http$Http$send, _user$project$State$SendMatchReturn, request);
 	});
 var _user$project$Rest$candidateAddressesDecoder = _elm_lang$core$Json_Decode$list(
@@ -22528,17 +22544,23 @@ var _user$project$Main$update = F2(
 				return {ctor: '_Tuple2', _0: newModel, _1: sendMatchCmd};
 			case 'SendMatchReturn':
 				if (_p0._0.ctor === 'Ok') {
-					var command = _elm_lang$core$Native_Utils.eq(
-						_user$project$Address$remoteAddressCount(model.addresses),
-						0) ? _user$project$Rest$fetchStats : _elm_lang$core$Platform_Cmd$none;
-					return {ctor: '_Tuple2', _0: model, _1: command};
+					var _p2 = _p0._0._0;
+					var newModel1 = _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							users: _user$project$Types$Success(_p2.users)
+						});
+					var newModel = _elm_lang$core$Native_Utils.update(
+						newModel1,
+						{lastMatchScore: _p2.lastMatchScore});
+					return {ctor: '_Tuple2', _0: newModel, _1: _elm_lang$core$Platform_Cmd$none};
 				} else {
 					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
 			default:
-				var _p2 = A2(_mdgriffith$elm_style_animation$Animation_Messenger$update, _p0._0, model.animationStyle);
-				var newStyle = _p2._0;
-				var cmds = _p2._1;
+				var _p3 = A2(_mdgriffith$elm_style_animation$Animation_Messenger$update, _p0._0, model.animationStyle);
+				var newStyle = _p3._0;
+				var cmds = _p3._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -22588,7 +22610,7 @@ var _user$project$Main$init = function (location) {
 	};
 	return A2(
 		_elm_lang$core$Platform_Cmd_ops['!'],
-		A6(_user$project$State$Model, userId, _user$project$Types$Loading, _user$project$Types$NotAsked, _user$project$Types$Loading, initialAnimationStyle, _user$project$Types$NotAsked),
+		A7(_user$project$State$Model, userId, _user$project$Types$Loading, _user$project$Types$NotAsked, _user$project$Types$Loading, initialAnimationStyle, _user$project$Types$NotAsked, 0),
 		initCmd);
 };
 var _user$project$Main$locationMessage = function (location) {
@@ -22602,7 +22624,7 @@ var _user$project$Main$main = A2(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Animation.Model.Tick":{"args":[],"tags":{"Tick":["Time.Time"]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"DataSetInfo.DataSetInfo":{"args":[],"tags":{"DataSetInfo":["DataSetInfo.DataSetInfoRecord"]}},"Stats.Stats":{"args":[],"tags":{"Stats":["Stats.StatsRecord"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"State.Msg":{"args":[],"tags":{"FetchAddresses":[],"FetchUsersReturn":["Result.Result Http.Error (List User.User)"],"FetchStatsReturn":["Result.Result Http.Error Stats.Stats"],"FetchDataSetInfoReturn":["Result.Result Http.Error DataSetInfo.DataSetInfo"],"SendMatchReturn":["Result.Result Http.Error String"],"FetchDataSetInfo":[],"UserChange":["String"],"NextCandidate":["( String, Address.TestId )"],"UrlChange":["Navigation.Location"],"SelectCandidate":["( String, Address.TestId )"],"Animate":["Animation.Msg"],"FetchUsers":[],"FetchAddressesReturn":["Result.Result Http.Error (List Address.Address)"]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"User.User":{"args":[],"tags":{"User":["User.UserRecord"]}}},"aliases":{"Stats.UserStats":{"args":[],"type":"{ nbMatches : Int, score : Int, userId : Int, name : String }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Address.Candidate":{"args":[],"type":"{ name : String , parentAddressName : String , streetName : String , streetTown : String , uprn : String }"},"Stats.Occurrence":{"args":[],"type":"{ typeOfOccurrence : String, occurrenceValue : Int }"},"DataSetInfo.DataSetInfoRecord":{"args":[],"type":"Dict.Dict String String"},"Stats.StatsRecord":{"args":[],"type":"{ nbPassRatio : Float , nbMatches : Int , nbAddresses : Int , nbPass : Int , users : List Stats.UserStats , occurrences : List Stats.Occurrence }"},"Address.TestId":{"args":[],"type":"Int"},"Address.Address":{"args":[],"type":"{ test : Address.Test, candidates : List Address.Candidate }"},"Address.Test":{"args":[],"type":"{ name : String, address : String, id : Address.TestId }"},"User.UserRecord":{"args":[],"type":"{ name : User.UserName, id : User.UserId }"},"User.UserId":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Navigation.Location":{"args":[],"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }"},"User.UserName":{"args":[],"type":"String"},"Animation.Msg":{"args":[],"type":"Animation.Model.Tick"}},"message":"State.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Animation.Model.Tick":{"args":[],"tags":{"Tick":["Time.Time"]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"DataSetInfo.DataSetInfo":{"args":[],"tags":{"DataSetInfo":["DataSetInfo.DataSetInfoRecord"]}},"Stats.Stats":{"args":[],"tags":{"Stats":["Stats.StatsRecord"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"State.Msg":{"args":[],"tags":{"FetchAddresses":[],"FetchUsersReturn":["Result.Result Http.Error (List User.User)"],"FetchStatsReturn":["Result.Result Http.Error Stats.Stats"],"FetchDataSetInfoReturn":["Result.Result Http.Error DataSetInfo.DataSetInfo"],"SendMatchReturn":["Result.Result Http.Error Stats.UsersStats"],"FetchDataSetInfo":[],"UserChange":["String"],"NextCandidate":["( String, Address.TestId )"],"UrlChange":["Navigation.Location"],"SelectCandidate":["( String, Address.TestId )"],"Animate":["Animation.Msg"],"FetchUsers":[],"FetchAddressesReturn":["Result.Result Http.Error (List Address.Address)"]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"User.User":{"args":[],"tags":{"User":["User.UserRecord"]}}},"aliases":{"Stats.UsersStats":{"args":[],"type":"{ lastMatchScore : Int, users : List User.User }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Address.Candidate":{"args":[],"type":"{ name : String , parentAddressName : String , streetName : String , streetTown : String , uprn : String }"},"Stats.Occurrence":{"args":[],"type":"{ typeOfOccurrence : String, occurrenceValue : Int }"},"DataSetInfo.DataSetInfoRecord":{"args":[],"type":"Dict.Dict String String"},"Stats.StatsRecord":{"args":[],"type":"{ nbPassRatio : Float , nbMatches : Int , nbAddresses : Int , nbPass : Int , users : List User.User , occurrences : List Stats.Occurrence }"},"Address.TestId":{"args":[],"type":"Int"},"Address.Address":{"args":[],"type":"{ test : Address.Test, candidates : List Address.Candidate }"},"Address.Test":{"args":[],"type":"{ name : String, address : String, id : Address.TestId }"},"User.UserRecord":{"args":[],"type":"{ name : User.UserName, id : User.UserId, score : User.UserScore }"},"User.UserId":{"args":[],"type":"Int"},"User.UserScore":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Navigation.Location":{"args":[],"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }"},"User.UserName":{"args":[],"type":"String"},"Animation.Msg":{"args":[],"type":"Animation.Model.Tick"}},"message":"State.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

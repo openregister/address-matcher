@@ -7,6 +7,7 @@ module User
         , usersDecoder
         , id
         , name
+        , score
         )
 
 import Json.Decode exposing (..)
@@ -22,9 +23,14 @@ type alias UserName =
     String
 
 
+type alias UserScore =
+    Int
+
+
 type alias UserRecord =
     { name : UserName
     , id : UserId
+    , score : UserScore
     }
 
 
@@ -43,20 +49,26 @@ findById userId users =
 
 
 id : User -> UserId
-id (User { id, name }) =
-    id
+id (User u) =
+    u.id
 
 
 name : User -> UserName
-name (User { id, name }) =
-    name
+name (User u) =
+    u.name
+
+
+score : User -> UserScore
+score (User u) =
+    u.score
 
 
 userRecordDecoder : Decoder UserRecord
 userRecordDecoder =
-    map2 UserRecord
+    map3 UserRecord
         (field "name" string)
         (field "id" int)
+        (field "score" int)
 
 
 userDecoder : Decoder User

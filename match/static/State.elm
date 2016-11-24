@@ -7,7 +7,7 @@ import DataSetInfo exposing (..)
 import Address exposing (..)
 import Animation exposing (..)
 import Animation.Messenger
-import Stats exposing (RemoteStats, Stats)
+import Stats exposing (Stats, RemoteStats, UsersStats)
 
 
 -- Model
@@ -22,6 +22,7 @@ type alias Model =
     , dataSetInfo : RemoteDataSetInfo
     , animationStyle : Animation.Messenger.State Msg
     , stats : RemoteStats
+    , lastMatchScore : Int
     }
 
 
@@ -37,5 +38,5 @@ type Msg
     | UserChange String
     | NextCandidate ( String, TestId )
     | SelectCandidate ( String, TestId )
-    | SendMatchReturn (Result Http.Error String)
+    | SendMatchReturn (Result Http.Error UsersStats)
     | Animate Animation.Msg

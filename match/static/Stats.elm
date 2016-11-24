@@ -2,7 +2,7 @@ module Stats exposing (..)
 
 import Json.Decode exposing (..)
 import Types exposing (WebData)
-
+import User exposing (User, usersDecoder)
 
 type alias RemoteStats =
     WebData Stats
@@ -12,7 +12,7 @@ type Stats
     = Stats StatsRecord
 
 
-users : Stats -> List UserStats
+users : Stats -> List User
 users (Stats s) =
     s.users
 
@@ -42,11 +42,9 @@ nbAddresses (Stats s) =
     s.nbAddresses
 
 
-type alias UserStats =
-    { nbMatches : Int
-    , score : Int
-    , userId : Int
-    , name : String
+type alias UsersStats =
+    { lastMatchScore : Int
+    , users : List User.User
     }
 
 
@@ -61,36 +59,11 @@ type alias StatsRecord =
     , nbMatches : Int
     , nbAddresses : Int
     , nbPass : Int
-    , users : List UserStats
+    , users : List User
     , occurrences : List Occurrence
     }
 
 
-
-{-
-   {
-     "nb_pass_ratio": 3.0,
-     "users": [{
-       "nb_matches": 35,
-       "score": 35,
-       "user_id": 5,
-       "name": "Gemma"
-     }, {
-       "nb_matches": 3,
-       "score": 3,
-       "user_id": 7,
-       "name": "Olivia"
-     }],
-     "nb_addresses": 63,
-     "nb_matches": 38,
-     "occurrences": [
-       ["Addresses not matched", 27],
-       ["Addresses matched once", 34],
-       ["Addresses matched twice", 2]
-     ],
-     "nb_pass": 1
-   }
--}
 
 
 statsDecoder : Decoder Stats
@@ -107,7 +80,7 @@ statsRecordDecoder =
         (field "nb_matches" int)
         (field "nb_addresses" int)
         (field "nb_pass" int)
-        (field "users" (list userStatsDecoder))
+        (field "users" User.usersDecoder)
         (field "occurrences" (list occurrenceDecoder))
 
 
@@ -119,11 +92,9 @@ occurrenceDecoder =
         (index 1 int)
 
 
-userStatsDecoder : Decoder UserStats
-userStatsDecoder =
-    map4
-        UserStats
-        (field "nb_matches" int)
-        (field "score" int)
-        (field "user_id" int)
-        (field "name" string)
+usersStatsDecoder : Decoder UsersStats
+usersStatsDecoder =
+    map2
+        UsersStats
+        (field "last_match_score" int)
+        (field "users" User.usersDecoder)

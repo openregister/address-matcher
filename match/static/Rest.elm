@@ -36,7 +36,7 @@ fetchStats : Cmd Msg
 fetchStats =
     send
         FetchStatsReturn
-        (jsonGetRequest "/match/scores.json" Stats.statsDecoder)
+        (jsonGetRequest "/match/scores.json" statsDecoder)
 
 
 fetchDataSetInfo : Cmd Msg
@@ -113,6 +113,6 @@ sendMatch uprn testId userId =
                 ]
 
         request =
-            post "/match/matches/" body (Json.Decode.succeed "")
+            post "/match/send/" body usersStatsDecoder
     in
         send SendMatchReturn request
