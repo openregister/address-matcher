@@ -41,10 +41,10 @@ init location =
 
         initCmd =
             if userId == 0 then
-                [ Rest.fetchDataSetInfo, Rest.fetchStats, Rest.fetchUsers ]
+                [ Rest.fetchDataSetInfo
+                , Rest.fetchUsers ]
             else
                 [ Rest.fetchDataSetInfo
-                , Rest.fetchStats
                 , Rest.fetchUsers
                 , Rest.fetchAddresses
                 ]
@@ -52,7 +52,7 @@ init location =
         initialAnimationStyle =
             Animation.style [ Animation.left (px 0) ]
     in
-        (Model userId Loading NotAsked Loading initialAnimationStyle NotAsked 0)
+        (Model userId Loading NotAsked Loading initialAnimationStyle 0)
             ! initCmd
 
 
@@ -131,12 +131,6 @@ update msg model =
 
         FetchAddressesReturn (Err error) ->
             ( { model | addresses = Failure error }, Cmd.none )
-
-        FetchStatsReturn (Ok newStats) ->
-            ( { model | stats = Success newStats }, Cmd.none )
-
-        FetchStatsReturn (Err error) ->
-            ( { model | stats = Failure error }, Cmd.none )
 
         SelectCandidate ( selectedCandidateUprn, testId ) ->
             let

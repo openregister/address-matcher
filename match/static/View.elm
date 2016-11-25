@@ -15,7 +15,6 @@ import Types exposing (..)
 import User exposing (..)
 import Address exposing (..)
 import DataSetInfo exposing (..)
-import Stats exposing (..)
 
 
 postcodeRegex : Regex
@@ -74,41 +73,6 @@ styleEmbeddedMap =
 -- HTML Generating Functions
 
 
-viewOccurrence : Occurrence -> Html Msg
-viewOccurrence occurrence =
-    li []
-        [ text
-            (occurrence.typeOfOccurrence
-                ++ ": "
-                ++ (toString (occurrence.occurrenceValue))
-            )
-        ]
-
-
-viewAddressStats : RemoteStats -> Html Msg
-viewAddressStats remoteStats =
-    div
-        [ generator "viewAddressStats"
-        , class "address-stats"
-        ]
-        (case remoteStats of
-            Success stats ->
-                [ h2 [ class "heading-small" ] [ text "Address stats" ]
-                , ul []
-                    [ li [] [ text ((toString (nbAddresses stats)) ++ " addresses") ]
-                    , li [] [ text ((toString (nbMatches stats)) ++ " matches") ]
-                    , li [] [ text ((toString (nbPass stats)) ++ " matches failed") ]
-                    ]
-                , h2 [ class "heading-small" ] [ text "Match coverage" ]
-                , ul []
-                    (List.map viewOccurrence (occurrences stats))
-                ]
-
-            _ ->
-                [ p [] [ text "No stats available" ] ]
-        )
-
-
 viewTopUser : UserId -> User -> Html Msg
 viewTopUser currentUserId user =
     li
@@ -149,17 +113,6 @@ viewTopUsers model =
                 div [] [ text "Not available" ]
         ]
     ]
-
-
-viewStats : Model -> Html Msg
-viewStats model =
-    div
-        [ generator "viewStats"
-        , class "stats"
-        ]
-        [ viewTopUsers model
-        , viewAddressStats model.stats
-        ]
 
 
 viewEmbeddedMap : String -> Html Msg
@@ -244,6 +197,7 @@ viewTest test =
                 )
             , viewEmbeddedMap test.address
             ]
+
 
 viewCandidates : TestId -> List Candidate -> Html Msg
 viewCandidates testId candidates =
@@ -400,7 +354,6 @@ viewFinishedSection : Model -> Html Msg
 viewFinishedSection model =
     div [ generator "viewFinishedSection" ]
         [ h2 [ class "heading-large" ] [ text "Well done!" ]
-        , viewStats model
         , button
               [ onClick FetchAddresses
               , class "button"

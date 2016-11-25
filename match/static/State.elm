@@ -7,8 +7,7 @@ import DataSetInfo exposing (..)
 import Address exposing (..)
 import Animation exposing (..)
 import Animation.Messenger
-import Stats exposing (Stats, RemoteStats, UsersStats)
-
+import Stats exposing (UsersStats)
 
 -- Model
 -- TODO: can we remove currentUserId and make the current user the top of the
@@ -21,7 +20,6 @@ type alias Model =
     , addresses : RemoteAddresses
     , dataSetInfo : RemoteDataSetInfo
     , animationStyle : Animation.Messenger.State Msg
-    , stats : RemoteStats
     , lastMatchScore : Int
     }
 
@@ -32,7 +30,6 @@ type Msg
     | FetchUsersReturn (Result Http.Error (List User))
     | FetchDataSetInfo
     | FetchDataSetInfoReturn (Result Http.Error DataSetInfo)
-    | FetchStatsReturn (Result Http.Error Stats)
     | FetchAddresses
     | FetchAddressesReturn (Result Http.Error (List Address))
     | UserChange String

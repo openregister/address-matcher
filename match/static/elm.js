@@ -21026,9 +21026,9 @@ var _user$project$Stats$statsDecoder = _elm_lang$core$Json_Decode$oneOf(
 		_1: {ctor: '[]'}
 	});
 
-var _user$project$State$Model = F7(
-	function (a, b, c, d, e, f, g) {
-		return {currentUserId: a, users: b, addresses: c, dataSetInfo: d, animationStyle: e, stats: f, lastMatchScore: g};
+var _user$project$State$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {currentUserId: a, users: b, addresses: c, dataSetInfo: d, animationStyle: e, lastMatchScore: f};
 	});
 var _user$project$State$Animate = function (a) {
 	return {ctor: 'Animate', _0: a};
@@ -21049,9 +21049,6 @@ var _user$project$State$FetchAddressesReturn = function (a) {
 	return {ctor: 'FetchAddressesReturn', _0: a};
 };
 var _user$project$State$FetchAddresses = {ctor: 'FetchAddresses'};
-var _user$project$State$FetchStatsReturn = function (a) {
-	return {ctor: 'FetchStatsReturn', _0: a};
-};
 var _user$project$State$FetchDataSetInfoReturn = function (a) {
 	return {ctor: 'FetchDataSetInfoReturn', _0: a};
 };
@@ -21174,23 +21171,6 @@ var _user$project$View$viewTopUser = F2(
 				_1: {ctor: '[]'}
 			});
 	});
-var _user$project$View$viewOccurrence = function (occurrence) {
-	return A2(
-		_elm_lang$html$Html$li,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					occurrence.typeOfOccurrence,
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						': ',
-						_elm_lang$core$Basics$toString(occurrence.occurrenceValue)))),
-			_1: {ctor: '[]'}
-		});
-};
 var _user$project$View$styleEmbeddedMap = {
 	ctor: '::',
 	_0: {ctor: '_Tuple2', _0: 'width', _1: '98%'},
@@ -21249,134 +21229,6 @@ var _user$project$View$styleCandidate = {
 var _user$project$View$generator = function (name) {
 	return A2(_elm_lang$html$Html_Attributes$attribute, 'data-elm-generator', name);
 };
-var _user$project$View$viewAddressStats = function (remoteStats) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _user$project$View$generator('viewAddressStats'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('address-stats'),
-				_1: {ctor: '[]'}
-			}
-		},
-		function () {
-			var _p0 = remoteStats;
-			if (_p0.ctor === 'Success') {
-				var _p1 = _p0._0;
-				return {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$h2,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('heading-small'),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Address stats'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$ul,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$li,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text(
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												_elm_lang$core$Basics$toString(
-													_user$project$Stats$nbAddresses(_p1)),
-												' addresses')),
-										_1: {ctor: '[]'}
-									}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$li,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text(
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(
-														_user$project$Stats$nbMatches(_p1)),
-													' matches')),
-											_1: {ctor: '[]'}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$li,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text(
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														_elm_lang$core$Basics$toString(
-															_user$project$Stats$nbPass(_p1)),
-														' matches failed')),
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
-									}
-								}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$h2,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('heading-small'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Match coverage'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$ul,
-									{ctor: '[]'},
-									A2(
-										_elm_lang$core$List$map,
-										_user$project$View$viewOccurrence,
-										_user$project$Stats$occurrences(_p1))),
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				};
-			} else {
-				return {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$p,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('No stats available'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				};
-			}
-		}());
-};
 var _user$project$View$viewTopUsers = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -21415,8 +21267,8 @@ var _user$project$View$viewTopUsers = function (model) {
 					{
 						ctor: '::',
 						_0: function () {
-							var _p2 = model.users;
-							if (_p2.ctor === 'Success') {
+							var _p0 = model.users;
+							if (_p0.ctor === 'Success') {
 								var nonZeroSortedUsers = _elm_lang$core$List$reverse(
 									A2(
 										_elm_lang$core$List$sortBy,
@@ -21428,7 +21280,7 @@ var _user$project$View$viewTopUsers = function (model) {
 													_user$project$User$score(u),
 													0);
 											},
-											_p2._0)));
+											_p0._0)));
 								return A2(
 									_elm_lang$html$Html$ul,
 									{ctor: '[]'},
@@ -21449,28 +21301,6 @@ var _user$project$View$viewTopUsers = function (model) {
 						}(),
 						_1: {ctor: '[]'}
 					}),
-				_1: {ctor: '[]'}
-			}
-		});
-};
-var _user$project$View$viewStats = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _user$project$View$generator('viewStats'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('stats'),
-				_1: {ctor: '[]'}
-			}
-		},
-		{
-			ctor: '::',
-			_0: _user$project$View$viewTopUsers(model),
-			_1: {
-				ctor: '::',
-				_0: _user$project$View$viewAddressStats(model.stats),
 				_1: {ctor: '[]'}
 			}
 		});
@@ -21672,8 +21502,8 @@ var _user$project$View$viewUsersSection = function (model) {
 		{
 			ctor: '::',
 			_0: function () {
-				var _p3 = model.users;
-				switch (_p3.ctor) {
+				var _p1 = model.users;
+				switch (_p1.ctor) {
 					case 'NotAsked':
 						return A2(
 							_elm_lang$html$Html$p,
@@ -21702,7 +21532,7 @@ var _user$project$View$viewUsersSection = function (model) {
 								_0: _elm_lang$html$Html$text(message),
 								_1: {
 									ctor: '::',
-									_0: A2(_user$project$View$viewUserSelect, model.currentUserId, _p3._0),
+									_0: A2(_user$project$View$viewUserSelect, model.currentUserId, _p1._0),
 									_1: {ctor: '[]'}
 								}
 							});
@@ -21716,7 +21546,7 @@ var _user$project$View$viewUsersSection = function (model) {
 									A2(
 										_elm_lang$core$Basics_ops['++'],
 										'Error loading user data: ',
-										_elm_lang$core$Basics$toString(_p3._0))),
+										_elm_lang$core$Basics$toString(_p1._0))),
 								_1: {ctor: '[]'}
 							});
 				}
@@ -21867,57 +21697,53 @@ var _user$project$View$viewFinishedSection = function (model) {
 				}),
 			_1: {
 				ctor: '::',
-				_0: _user$project$View$viewStats(model),
+				_0: A2(
+					_elm_lang$html$Html$button,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(_user$project$State$FetchAddresses),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('button'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Give me more!'),
+						_1: {ctor: '[]'}
+					}),
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$button,
+						_elm_lang$html$Html$p,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(_user$project$State$FetchAddresses),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('button'),
-								_1: {ctor: '[]'}
-							}
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'padding-top', _1: '1em'},
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
 						},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('Give me more!'),
+							_0: A2(
+								_elm_lang$html$Html$a,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$href('/match/scores/'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('See all stats'),
+									_1: {ctor: '[]'}
+								}),
 							_1: {ctor: '[]'}
 						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$p,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$style(
-									{
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'padding-top', _1: '1em'},
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$a,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$href('/match/scores/'),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('See all stats'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}
+					_1: {ctor: '[]'}
 				}
 			}
 		});
@@ -21937,8 +21763,8 @@ var _user$project$View$viewInfoSection = function (model) {
 		{
 			ctor: '::',
 			_0: function () {
-				var _p4 = model.dataSetInfo;
-				switch (_p4.ctor) {
+				var _p2 = model.dataSetInfo;
+				switch (_p2.ctor) {
 					case 'NotAsked':
 						return _elm_lang$html$Html$text('Fetching');
 					case 'Loading':
@@ -21948,13 +21774,13 @@ var _user$project$View$viewInfoSection = function (model) {
 							A2(
 								_elm_lang$core$Maybe$withDefault,
 								'No title',
-								A2(_user$project$DataSetInfo$get, 'title', _p4._0)));
+								A2(_user$project$DataSetInfo$get, 'title', _p2._0)));
 					default:
 						return _elm_lang$html$Html$text(
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								'Error loading dataset title',
-								_elm_lang$core$Basics$toString(_p4._0)));
+								_elm_lang$core$Basics$toString(_p2._0)));
 				}
 			}(),
 			_1: {ctor: '[]'}
@@ -22122,19 +21948,19 @@ var _user$project$View$viewMatcherSection = function (model) {
 						{ctor: '[]'},
 						{ctor: '[]'});
 				} else {
-					var _p5 = model.addresses;
-					switch (_p5.ctor) {
+					var _p3 = model.addresses;
+					switch (_p3.ctor) {
 						case 'Success':
-							var _p7 = _p5._0;
-							var _p6 = _elm_lang$core$List$head(_p7);
-							if (_p6.ctor === 'Nothing') {
+							var _p5 = _p3._0;
+							var _p4 = _elm_lang$core$List$head(_p5);
+							if (_p4.ctor === 'Nothing') {
 								return _user$project$View$viewFinishedSection(model);
 							} else {
 								return A3(
 									_user$project$View$viewMatcher,
 									model,
-									_elm_lang$core$List$length(_p7),
-									_p6._0);
+									_elm_lang$core$List$length(_p5),
+									_p4._0);
 							}
 						case 'Loading':
 							return A2(
@@ -22155,7 +21981,7 @@ var _user$project$View$viewMatcherSection = function (model) {
 										A2(
 											_elm_lang$core$Basics_ops['++'],
 											'Failed loading addresses: ',
-											_elm_lang$core$Basics$toString(_p5._0))),
+											_elm_lang$core$Basics$toString(_p3._0))),
 									_1: {ctor: '[]'}
 								});
 						default:
@@ -22278,10 +22104,6 @@ var _user$project$Rest$fetchUsers = A2(
 	_elm_lang$http$Http$send,
 	_user$project$State$FetchUsersReturn,
 	A2(_user$project$Rest$jsonGetRequest, '/match/users/', _user$project$User$usersDecoder));
-var _user$project$Rest$fetchStats = A2(
-	_elm_lang$http$Http$send,
-	_user$project$State$FetchStatsReturn,
-	A2(_user$project$Rest$jsonGetRequest, '/match/scores.json', _user$project$Stats$statsDecoder));
 var _user$project$Rest$fetchDataSetInfo = A2(
 	_elm_lang$http$Http$send,
 	_user$project$State$FetchDataSetInfoReturn,
@@ -22469,28 +22291,6 @@ var _user$project$Main$update = F2(
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				}
-			case 'FetchStatsReturn':
-				if (_p0._0.ctor === 'Ok') {
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{
-								stats: _user$project$Types$Success(_p0._0._0)
-							}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{
-								stats: _user$project$Types$Failure(_p0._0._0)
-							}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				}
 			case 'SelectCandidate':
 				var animationReset = _mdgriffith$elm_style_animation$Animation$set(
 					{
@@ -22584,33 +22384,25 @@ var _user$project$Main$init = function (location) {
 		_0: _user$project$Rest$fetchDataSetInfo,
 		_1: {
 			ctor: '::',
-			_0: _user$project$Rest$fetchStats,
-			_1: {
-				ctor: '::',
-				_0: _user$project$Rest$fetchUsers,
-				_1: {ctor: '[]'}
-			}
+			_0: _user$project$Rest$fetchUsers,
+			_1: {ctor: '[]'}
 		}
 	} : {
 		ctor: '::',
 		_0: _user$project$Rest$fetchDataSetInfo,
 		_1: {
 			ctor: '::',
-			_0: _user$project$Rest$fetchStats,
+			_0: _user$project$Rest$fetchUsers,
 			_1: {
 				ctor: '::',
-				_0: _user$project$Rest$fetchUsers,
-				_1: {
-					ctor: '::',
-					_0: _user$project$Rest$fetchAddresses,
-					_1: {ctor: '[]'}
-				}
+				_0: _user$project$Rest$fetchAddresses,
+				_1: {ctor: '[]'}
 			}
 		}
 	};
 	return A2(
 		_elm_lang$core$Platform_Cmd_ops['!'],
-		A7(_user$project$State$Model, userId, _user$project$Types$Loading, _user$project$Types$NotAsked, _user$project$Types$Loading, initialAnimationStyle, _user$project$Types$NotAsked, 0),
+		A6(_user$project$State$Model, userId, _user$project$Types$Loading, _user$project$Types$NotAsked, _user$project$Types$Loading, initialAnimationStyle, 0),
 		initCmd);
 };
 var _user$project$Main$locationMessage = function (location) {
@@ -22624,7 +22416,7 @@ var _user$project$Main$main = A2(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Animation.Model.Tick":{"args":[],"tags":{"Tick":["Time.Time"]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"DataSetInfo.DataSetInfo":{"args":[],"tags":{"DataSetInfo":["DataSetInfo.DataSetInfoRecord"]}},"Stats.Stats":{"args":[],"tags":{"Stats":["Stats.StatsRecord"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"State.Msg":{"args":[],"tags":{"FetchAddresses":[],"FetchUsersReturn":["Result.Result Http.Error (List User.User)"],"FetchStatsReturn":["Result.Result Http.Error Stats.Stats"],"FetchDataSetInfoReturn":["Result.Result Http.Error DataSetInfo.DataSetInfo"],"SendMatchReturn":["Result.Result Http.Error Stats.UsersStats"],"FetchDataSetInfo":[],"UserChange":["String"],"NextCandidate":["( String, Address.TestId )"],"UrlChange":["Navigation.Location"],"SelectCandidate":["( String, Address.TestId )"],"Animate":["Animation.Msg"],"FetchUsers":[],"FetchAddressesReturn":["Result.Result Http.Error (List Address.Address)"]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"User.User":{"args":[],"tags":{"User":["User.UserRecord"]}}},"aliases":{"Stats.UsersStats":{"args":[],"type":"{ lastMatchScore : Int, users : List User.User }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Address.Candidate":{"args":[],"type":"{ name : String , parentAddressName : String , streetName : String , streetTown : String , uprn : String }"},"Stats.Occurrence":{"args":[],"type":"{ typeOfOccurrence : String, occurrenceValue : Int }"},"DataSetInfo.DataSetInfoRecord":{"args":[],"type":"Dict.Dict String String"},"Stats.StatsRecord":{"args":[],"type":"{ nbPassRatio : Float , nbMatches : Int , nbAddresses : Int , nbPass : Int , users : List User.User , occurrences : List Stats.Occurrence }"},"Address.TestId":{"args":[],"type":"Int"},"Address.Address":{"args":[],"type":"{ test : Address.Test, candidates : List Address.Candidate }"},"Address.Test":{"args":[],"type":"{ name : String, address : String, id : Address.TestId }"},"User.UserRecord":{"args":[],"type":"{ name : User.UserName, id : User.UserId, score : User.UserScore }"},"User.UserId":{"args":[],"type":"Int"},"User.UserScore":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Navigation.Location":{"args":[],"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }"},"User.UserName":{"args":[],"type":"String"},"Animation.Msg":{"args":[],"type":"Animation.Model.Tick"}},"message":"State.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Animation.Model.Tick":{"args":[],"tags":{"Tick":["Time.Time"]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"DataSetInfo.DataSetInfo":{"args":[],"tags":{"DataSetInfo":["DataSetInfo.DataSetInfoRecord"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"State.Msg":{"args":[],"tags":{"FetchAddresses":[],"FetchUsersReturn":["Result.Result Http.Error (List User.User)"],"FetchDataSetInfoReturn":["Result.Result Http.Error DataSetInfo.DataSetInfo"],"SendMatchReturn":["Result.Result Http.Error Stats.UsersStats"],"FetchDataSetInfo":[],"UserChange":["String"],"NextCandidate":["( String, Address.TestId )"],"UrlChange":["Navigation.Location"],"SelectCandidate":["( String, Address.TestId )"],"Animate":["Animation.Msg"],"FetchUsers":[],"FetchAddressesReturn":["Result.Result Http.Error (List Address.Address)"]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"User.User":{"args":[],"tags":{"User":["User.UserRecord"]}}},"aliases":{"Stats.UsersStats":{"args":[],"type":"{ lastMatchScore : Int, users : List User.User }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Address.Candidate":{"args":[],"type":"{ name : String , parentAddressName : String , streetName : String , streetTown : String , uprn : String }"},"DataSetInfo.DataSetInfoRecord":{"args":[],"type":"Dict.Dict String String"},"Address.TestId":{"args":[],"type":"Int"},"Address.Address":{"args":[],"type":"{ test : Address.Test, candidates : List Address.Candidate }"},"Address.Test":{"args":[],"type":"{ name : String, address : String, id : Address.TestId }"},"User.UserRecord":{"args":[],"type":"{ name : User.UserName, id : User.UserId, score : User.UserScore }"},"User.UserId":{"args":[],"type":"Int"},"User.UserScore":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Navigation.Location":{"args":[],"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }"},"User.UserName":{"args":[],"type":"String"},"Animation.Msg":{"args":[],"type":"Animation.Model.Tick"}},"message":"State.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

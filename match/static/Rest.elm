@@ -32,13 +32,6 @@ fetchUsers =
         (jsonGetRequest "/match/users/" User.usersDecoder)
 
 
-fetchStats : Cmd Msg
-fetchStats =
-    send
-        FetchStatsReturn
-        (jsonGetRequest "/match/scores.json" statsDecoder)
-
-
 fetchDataSetInfo : Cmd Msg
 fetchDataSetInfo =
     send
