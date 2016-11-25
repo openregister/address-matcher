@@ -1,3 +1,11 @@
+#global-header .header-wrapper {
+  background-color: #2372b5;
+}
+
+#proposition-link span {
+  color: #2372b5;
+}
+
 .test-address {
   width: 29%;
   margin-top: 1em;
@@ -7,7 +15,7 @@
 }
 
 .stats {
-  height: 300px;
+  height: 30px;
   overflow-y: auto;
 }
 
@@ -22,7 +30,7 @@
 }
 
 .user-stats-inner {
-  height: 8em;
+  height: 7em;
   overflow-y: auto;
 }
 
@@ -34,4 +42,18 @@
 strong {
   color: red;
   font-weight: bold;
+}
+
+.score {
+  background-color: white;
+  padding: .2em;
+  border: 8px solid brown;
+  border-radius: 14px;
+  position: fixed;
+  top: 10%;
+  left: 40%;
+  font-size: 150%;
+  font-weight: bold;
+  max-width: 300px;
+  text-align: center;
 }

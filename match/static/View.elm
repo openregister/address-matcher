@@ -57,7 +57,7 @@ styleCandidate =
 
 styleCandidateHover : List ( String, String )
 styleCandidateHover =
-    [ ( "outline", "3px solid #F00" ) ]
+    [ ( "outline", "3px solid brown" ) ]
 
 
 styleEmbeddedMap : List ( String, String )
@@ -419,6 +419,22 @@ viewInfoSection model =
                 text ("Error loading dataset title" ++ (error |> toString))
         ]
 
+viewScore : Model -> Html Msg
+viewScore model =
+    if model.lastMatchScore > 1 then
+        div
+            [ generator "viewScore"
+            , class "score"
+            ]
+            [ text
+                ("Good Guess! You earned "
+                    ++ (toString model.lastMatchScore)
+                    ++ " points"
+                )
+            ]
+    else
+        div [ style [ ( "display", "none" ) ] ] []
+
 
 view : Model -> Html Msg
 view model =
@@ -430,4 +446,5 @@ view model =
         , viewInfoSection model
         , viewMatcherSection model
         , viewTopUsers model
+        , viewScore model
         ]

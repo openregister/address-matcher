@@ -21190,7 +21190,7 @@ var _user$project$View$styleEmbeddedMap = {
 };
 var _user$project$View$styleCandidateHover = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'outline', _1: '3px solid #F00'},
+	_0: {ctor: '_Tuple2', _0: 'outline', _1: '3px solid brown'},
 	_1: {ctor: '[]'}
 };
 var _user$project$View$styleCandidate = {
@@ -21786,6 +21786,43 @@ var _user$project$View$viewInfoSection = function (model) {
 			_1: {ctor: '[]'}
 		});
 };
+var _user$project$View$viewScore = function (model) {
+	return (_elm_lang$core$Native_Utils.cmp(model.lastMatchScore, 1) > 0) ? A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$View$generator('viewScore'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('score'),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'Good Guess! You earned ',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(model.lastMatchScore),
+						' points'))),
+			_1: {ctor: '[]'}
+		}) : A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'display', _1: 'none'},
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		},
+		{ctor: '[]'});
+};
 var _user$project$View$mapUrl = function (search) {
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
@@ -22028,7 +22065,11 @@ var _user$project$View$view = function (model) {
 					_1: {
 						ctor: '::',
 						_0: _user$project$View$viewTopUsers(model),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: _user$project$View$viewScore(model),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			}
