@@ -38,6 +38,13 @@ generator name =
     attribute "data-elm-generator" name
 
 
+-- lower case all text except first letter of each word
+capitaliseWords : String -> String
+capitaliseWords =
+        String.toLower
+            >> replace All (regex "\\b[a-z]") (\{match} -> String.toUpper match)
+
+
 
 -- Lists of style properties
 
@@ -144,10 +151,14 @@ viewCandidate candidateTestId =
             ]
             [ ul
                 []
-                [ li [] [ text candidate.name ]
-                , li [] [ text candidate.parentAddressName ]
-                , li [] [ text candidate.streetName ]
-                , li [] [ text candidate.streetTown ]
+                [ li []
+                    [ candidate.name |> capitaliseWords |> text ]
+                , li []
+                    [ candidate.parentAddressName |> capitaliseWords |> text ]
+                , li []
+                    [ candidate.streetName |> capitaliseWords |> text ]
+                , li []
+                    [ candidate.streetTown |> capitaliseWords |> text ]
                 ]
             ]
 

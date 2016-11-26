@@ -21226,6 +21226,17 @@ var _user$project$View$styleCandidate = {
 		}
 	}
 };
+var _user$project$View$capitaliseWords = function (_p0) {
+	return A4(
+		_elm_lang$core$Regex$replace,
+		_elm_lang$core$Regex$All,
+		_elm_lang$core$Regex$regex('\\b[a-z]'),
+		function (_p1) {
+			var _p2 = _p1;
+			return _elm_lang$core$String$toUpper(_p2.match);
+		},
+		_elm_lang$core$String$toLower(_p0));
+};
 var _user$project$View$generator = function (name) {
 	return A2(_elm_lang$html$Html_Attributes$attribute, 'data-elm-generator', name);
 };
@@ -21267,8 +21278,8 @@ var _user$project$View$viewTopUsers = function (model) {
 					{
 						ctor: '::',
 						_0: function () {
-							var _p0 = model.users;
-							if (_p0.ctor === 'Success') {
+							var _p3 = model.users;
+							if (_p3.ctor === 'Success') {
 								var nonZeroSortedUsers = _elm_lang$core$List$reverse(
 									A2(
 										_elm_lang$core$List$sortBy,
@@ -21280,7 +21291,7 @@ var _user$project$View$viewTopUsers = function (model) {
 													_user$project$User$score(u),
 													0);
 											},
-											_p0._0)));
+											_p3._0)));
 								return A2(
 									_elm_lang$html$Html$ul,
 									{ctor: '[]'},
@@ -21339,7 +21350,8 @@ var _user$project$View$viewCandidate = function (candidateTestId) {
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text(candidate.name),
+							_0: _elm_lang$html$Html$text(
+								_user$project$View$capitaliseWords(candidate.name)),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
@@ -21349,7 +21361,8 @@ var _user$project$View$viewCandidate = function (candidateTestId) {
 							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text(candidate.parentAddressName),
+								_0: _elm_lang$html$Html$text(
+									_user$project$View$capitaliseWords(candidate.parentAddressName)),
 								_1: {ctor: '[]'}
 							}),
 						_1: {
@@ -21359,7 +21372,8 @@ var _user$project$View$viewCandidate = function (candidateTestId) {
 								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text(candidate.streetName),
+									_0: _elm_lang$html$Html$text(
+										_user$project$View$capitaliseWords(candidate.streetName)),
 									_1: {ctor: '[]'}
 								}),
 							_1: {
@@ -21369,7 +21383,8 @@ var _user$project$View$viewCandidate = function (candidateTestId) {
 									{ctor: '[]'},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text(candidate.streetTown),
+										_0: _elm_lang$html$Html$text(
+											_user$project$View$capitaliseWords(candidate.streetTown)),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -21502,8 +21517,8 @@ var _user$project$View$viewUsersSection = function (model) {
 		{
 			ctor: '::',
 			_0: function () {
-				var _p1 = model.users;
-				switch (_p1.ctor) {
+				var _p4 = model.users;
+				switch (_p4.ctor) {
 					case 'NotAsked':
 						return A2(
 							_elm_lang$html$Html$p,
@@ -21532,7 +21547,7 @@ var _user$project$View$viewUsersSection = function (model) {
 								_0: _elm_lang$html$Html$text(message),
 								_1: {
 									ctor: '::',
-									_0: A2(_user$project$View$viewUserSelect, model.currentUserId, _p1._0),
+									_0: A2(_user$project$View$viewUserSelect, model.currentUserId, _p4._0),
 									_1: {ctor: '[]'}
 								}
 							});
@@ -21546,7 +21561,7 @@ var _user$project$View$viewUsersSection = function (model) {
 									A2(
 										_elm_lang$core$Basics_ops['++'],
 										'Error loading user data: ',
-										_elm_lang$core$Basics$toString(_p1._0))),
+										_elm_lang$core$Basics$toString(_p4._0))),
 								_1: {ctor: '[]'}
 							});
 				}
@@ -21763,8 +21778,8 @@ var _user$project$View$viewInfoSection = function (model) {
 		{
 			ctor: '::',
 			_0: function () {
-				var _p2 = model.dataSetInfo;
-				switch (_p2.ctor) {
+				var _p5 = model.dataSetInfo;
+				switch (_p5.ctor) {
 					case 'NotAsked':
 						return _elm_lang$html$Html$text('Fetching');
 					case 'Loading':
@@ -21774,13 +21789,13 @@ var _user$project$View$viewInfoSection = function (model) {
 							A2(
 								_elm_lang$core$Maybe$withDefault,
 								'No title',
-								A2(_user$project$DataSetInfo$get, 'title', _p2._0)));
+								A2(_user$project$DataSetInfo$get, 'title', _p5._0)));
 					default:
 						return _elm_lang$html$Html$text(
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								'Error loading dataset title',
-								_elm_lang$core$Basics$toString(_p2._0)));
+								_elm_lang$core$Basics$toString(_p5._0)));
 				}
 			}(),
 			_1: {ctor: '[]'}
@@ -21985,19 +22000,19 @@ var _user$project$View$viewMatcherSection = function (model) {
 						{ctor: '[]'},
 						{ctor: '[]'});
 				} else {
-					var _p3 = model.addresses;
-					switch (_p3.ctor) {
+					var _p6 = model.addresses;
+					switch (_p6.ctor) {
 						case 'Success':
-							var _p5 = _p3._0;
-							var _p4 = _elm_lang$core$List$head(_p5);
-							if (_p4.ctor === 'Nothing') {
+							var _p8 = _p6._0;
+							var _p7 = _elm_lang$core$List$head(_p8);
+							if (_p7.ctor === 'Nothing') {
 								return _user$project$View$viewFinishedSection(model);
 							} else {
 								return A3(
 									_user$project$View$viewMatcher,
 									model,
-									_elm_lang$core$List$length(_p5),
-									_p4._0);
+									_elm_lang$core$List$length(_p8),
+									_p7._0);
 							}
 						case 'Loading':
 							return A2(
@@ -22018,7 +22033,7 @@ var _user$project$View$viewMatcherSection = function (model) {
 										A2(
 											_elm_lang$core$Basics_ops['++'],
 											'Failed loading addresses: ',
-											_elm_lang$core$Basics$toString(_p3._0))),
+											_elm_lang$core$Basics$toString(_p6._0))),
 									_1: {ctor: '[]'}
 								});
 						default:
