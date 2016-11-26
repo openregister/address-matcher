@@ -24,9 +24,10 @@ class Command(BaseCommand):
         # copy test addresses from stdin
         Address.objects.all().delete()
         tsvin = csv.reader(sys.stdin, delimiter='\t')
+        next(tsvin) # skip header
         for row in tsvin:
             Address.objects.create(
                 test_id = row[0],
-                name = row[1],
-                address = ', '.join(row[2:])
+                name = row[4],
+                address = ', '.join(row[5:])
             )
