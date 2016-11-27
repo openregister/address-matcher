@@ -21823,7 +21823,26 @@ var _user$project$View$viewScore = function (model) {
 						_elm_lang$core$Basics_ops['++'],
 						_elm_lang$core$Basics$toString(model.lastMatchScore),
 						' points'))),
-			_1: {ctor: '[]'}
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$title('You score more points when your guesses match that of other players'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('help-pill'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('?'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
 		}) : A2(
 		_elm_lang$html$Html$div,
 		{

@@ -442,6 +442,11 @@ viewScore model =
                     ++ (toString model.lastMatchScore)
                     ++ " points"
                 )
+            , div
+                [ title "You score more points when your guesses match that of other players"
+                , class "help-pill"
+                ]
+                [ text "?" ]
             ]
     else
         div [ style [ ( "display", "none" ) ] ] []
