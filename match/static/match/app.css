@@ -1,6 +1,12 @@
+#global-header {
+  background-color: #2372b5;
+}
+
 #global-header .header-wrapper {
   background-color: #2372b5;
 }
+
+
 
 #proposition-link span {
   color: #2372b5;
