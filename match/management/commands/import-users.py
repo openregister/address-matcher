@@ -16,5 +16,6 @@ class Command(BaseCommand):
 
         for row in tsvin:
             User.objects.create(
-                name = row[0]
+                name = row[0],
+                score = row[1]
             )
