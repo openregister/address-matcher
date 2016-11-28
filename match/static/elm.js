@@ -21241,89 +21241,79 @@ var _user$project$View$generator = function (name) {
 	return A2(_elm_lang$html$Html_Attributes$attribute, 'data-elm-generator', name);
 };
 var _user$project$View$viewTopUsers = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _user$project$View$generator('viewTopUsers'),
-			_1: {
+	var _p3 = model.users;
+	if (_p3.ctor === 'Success') {
+		var nonZeroSortedUsers = _elm_lang$core$List$reverse(
+			A2(
+				_elm_lang$core$List$sortBy,
+				_user$project$User$score,
+				A2(
+					_elm_lang$core$List$filter,
+					function (u) {
+						return !_elm_lang$core$Native_Utils.eq(
+							_user$project$User$score(u),
+							0);
+					},
+					_p3._0)));
+		return (!_elm_lang$core$Native_Utils.eq(
+			nonZeroSortedUsers,
+			{ctor: '[]'})) ? A2(
+			_elm_lang$html$Html$div,
+			{
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('user-stats'),
-				_1: {ctor: '[]'}
-			}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$h2,
-				{
+				_0: _user$project$View$generator('viewTopUsers'),
+				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('heading-small'),
+					_0: _elm_lang$html$Html_Attributes$class('user-stats'),
 					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Top users'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
+				}
+			},
+			{
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$div,
+					_elm_lang$html$Html$h2,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('user-stats-inner'),
+						_0: _elm_lang$html$Html_Attributes$class('heading-small'),
 						_1: {ctor: '[]'}
 					},
 					{
 						ctor: '::',
-						_0: function () {
-							var _p3 = model.users;
-							if (_p3.ctor === 'Success') {
-								var nonZeroSortedUsers = _elm_lang$core$List$reverse(
-									A2(
-										_elm_lang$core$List$sortBy,
-										_user$project$User$score,
-										A2(
-											_elm_lang$core$List$filter,
-											function (u) {
-												return !_elm_lang$core$Native_Utils.eq(
-													_user$project$User$score(u),
-													0);
-											},
-											_p3._0)));
-								return (!_elm_lang$core$Native_Utils.eq(
-									nonZeroSortedUsers,
-									{ctor: '[]'})) ? A2(
-									_elm_lang$html$Html$ul,
-									{ctor: '[]'},
-									A2(
-										_elm_lang$core$List$map,
-										_user$project$View$viewTopUser(model.currentUserId),
-										nonZeroSortedUsers)) : A2(
-									_elm_lang$html$Html$h2,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('No scores yet'),
-										_1: {ctor: '[]'}
-									});
-							} else {
-								return A2(
-									_elm_lang$html$Html$div,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Not available'),
-										_1: {ctor: '[]'}
-									});
-							}
-						}(),
+						_0: _elm_lang$html$Html$text('Top users'),
 						_1: {ctor: '[]'}
 					}),
-				_1: {ctor: '[]'}
-			}
-		});
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('user-stats-inner'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$ul,
+								{ctor: '[]'},
+								A2(
+									_elm_lang$core$List$map,
+									_user$project$View$viewTopUser(model.currentUserId),
+									nonZeroSortedUsers)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}) : A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{ctor: '[]'});
+	} else {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{ctor: '[]'});
+	}
 };
 var _user$project$View$viewCandidate = function (candidateTestId) {
 	var testId = _elm_lang$core$Tuple$second(candidateTestId);

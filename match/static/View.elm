@@ -93,35 +93,35 @@ viewTopUser currentUserId user =
 
 viewTopUsers : Model -> Html Msg
 viewTopUsers model =
-    div
-        [ generator "viewTopUsers"
-        , class "user-stats"
-        ]
-    [ h2 [ class "heading-small" ] [ text "Top users" ]
-    , div
-        [ class "user-stats-inner" ]
-        [ case model.users of
-            Success users ->
-                let
-                    nonZeroSortedUsers =
-                        users
-                            |> filter (\u -> (score u) /= 0)
-                            |> sortBy score
-                            |> reverse
-                in
-                    if nonZeroSortedUsers /= [] then
-                        ul
-                            []
-                            (List.map
-                                (viewTopUser model.currentUserId)
-                                nonZeroSortedUsers
-                            )
-                    else
-                        h2 [] [ text "No scores yet" ]
-            _ ->
-                div [] [ text "Not available" ]
-        ]
-    ]
+    case model.users of
+        Success users ->
+            let
+                nonZeroSortedUsers =
+                    users
+                        |> filter (\u -> (score u) /= 0)
+                        |> sortBy score
+                        |> reverse
+            in
+                if nonZeroSortedUsers /= [] then
+                    div
+                        [ generator "viewTopUsers"
+                        , class "user-stats"
+                        ]
+                        [ h2 [ class "heading-small" ] [ text "Top users" ]
+                        , div
+                            [ class "user-stats-inner" ]
+                            [ ul
+                                []
+                                (List.map
+                                  (viewTopUser model.currentUserId)
+                                  nonZeroSortedUsers
+                                )
+                            ]
+                        ]
+                else
+                    div [] []
+        _ ->
+            div [] []
 
 
 viewEmbeddedMap : String -> Html Msg
