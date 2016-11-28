@@ -109,13 +109,15 @@ viewTopUsers model =
                             |> sortBy score
                             |> reverse
                 in
-                    ul
-                        []
-                        (List.map
-                            (viewTopUser model.currentUserId)
-                            nonZeroSortedUsers
-                        )
-
+                    if nonZeroSortedUsers /= [] then
+                        ul
+                            []
+                            (List.map
+                                (viewTopUser model.currentUserId)
+                                nonZeroSortedUsers
+                            )
+                    else
+                        h2 [] [ text "No scores yet" ]
             _ ->
                 div [] [ text "Not available" ]
         ]

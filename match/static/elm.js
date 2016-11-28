@@ -21292,13 +21292,22 @@ var _user$project$View$viewTopUsers = function (model) {
 													0);
 											},
 											_p3._0)));
-								return A2(
+								return (!_elm_lang$core$Native_Utils.eq(
+									nonZeroSortedUsers,
+									{ctor: '[]'})) ? A2(
 									_elm_lang$html$Html$ul,
 									{ctor: '[]'},
 									A2(
 										_elm_lang$core$List$map,
 										_user$project$View$viewTopUser(model.currentUserId),
-										nonZeroSortedUsers));
+										nonZeroSortedUsers)) : A2(
+									_elm_lang$html$Html$h2,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('No scores yet'),
+										_1: {ctor: '[]'}
+									});
 							} else {
 								return A2(
 									_elm_lang$html$Html$div,
