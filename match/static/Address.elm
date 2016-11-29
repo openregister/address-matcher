@@ -2,7 +2,7 @@ module Address exposing (..)
 
 import List exposing (..)
 import Types exposing (..)
-
+import String exposing (..)
 
 type alias TestId =
     Int
@@ -48,7 +48,7 @@ removeAddress : TestId -> RemoteAddresses -> RemoteAddresses
 removeAddress testId addresses =
     case addresses of
         Success list ->
-            Success (filter (\a -> a.test.id /= testId) list)
+            Success (List.filter (\a -> a.test.id /= testId) list)
 
         _ ->
             addresses

@@ -69,13 +69,11 @@ def make_users_stats():
     users = User.objects.all()
     users_stats = []
     for user in users:
-        if user.score > 0:
-            user_stats = { 'name': user.name, 'id': user.pk}
-            user_matches = Match.objects.filter(user__id = user.pk)
-            nb_user_matches = len(user_matches)
-            user_stats['score'] = user.score
-            users_stats.append(user_stats)
-    users_stats.sort(key=lambda x: x['score'], reverse=True)
+        user_stats = { 'name': user.name, 'id': user.pk}
+        user_matches = Match.objects.filter(user__id = user.pk)
+        nb_user_matches = len(user_matches)
+        user_stats['score'] = user.score
+        users_stats.append(user_stats)
     return users_stats
 
 
@@ -170,7 +168,6 @@ def send(request):
         'last_match_score': match_score
     }
     return JsonResponse(response, safe=False)
-
 
 
 def random_test_addresses(request):

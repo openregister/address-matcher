@@ -21237,6 +21237,245 @@ var _user$project$View$capitaliseWords = function (_p0) {
 		},
 		_elm_lang$core$String$toLower(_p0));
 };
+var _user$project$View$viewCandidateText = function (c) {
+	var comma = A2(
+		_elm_lang$html$Html$span,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(', '),
+			_1: {ctor: '[]'}
+		});
+	var lf = A2(
+		_elm_lang$html$Html$br,
+		{ctor: '[]'},
+		{ctor: '[]'});
+	var t = _user$project$View$capitaliseWords(c.streetTown);
+	var s = _user$project$View$capitaliseWords(c.streetName);
+	var p = _user$project$View$capitaliseWords(c.parentAddressName);
+	var a = _user$project$View$capitaliseWords(c.name);
+	return _elm_lang$core$Native_Utils.eq(
+		_elm_lang$core$String$length(a),
+		0) ? (_elm_lang$core$Native_Utils.eq(
+		_elm_lang$core$String$length(p),
+		0) ? {
+		ctor: '::',
+		_0: _elm_lang$html$Html$text(s),
+		_1: {
+			ctor: '::',
+			_0: lf,
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(t),
+				_1: {ctor: '[]'}
+			}
+		}
+	} : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$String$length(p),
+		8) < 0) ? {
+		ctor: '::',
+		_0: _elm_lang$html$Html$text(p),
+		_1: {
+			ctor: '::',
+			_0: comma,
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(s),
+				_1: {
+					ctor: '::',
+					_0: lf,
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(t),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	} : {
+		ctor: '::',
+		_0: _elm_lang$html$Html$text(p),
+		_1: {
+			ctor: '::',
+			_0: lf,
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(s),
+				_1: {
+					ctor: '::',
+					_0: lf,
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(t),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	})) : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$String$length(a),
+		8) < 0) ? (_elm_lang$core$Native_Utils.eq(
+		_elm_lang$core$String$length(p),
+		0) ? {
+		ctor: '::',
+		_0: _elm_lang$html$Html$text(a),
+		_1: {
+			ctor: '::',
+			_0: comma,
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(s),
+				_1: {
+					ctor: '::',
+					_0: lf,
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(t),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	} : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$String$length(p),
+		8) < 0) ? {
+		ctor: '::',
+		_0: _elm_lang$html$Html$text(a),
+		_1: {
+			ctor: '::',
+			_0: lf,
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(p),
+				_1: {
+					ctor: '::',
+					_0: comma,
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(s),
+						_1: {
+							ctor: '::',
+							_0: lf,
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(t),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		}
+	} : {
+		ctor: '::',
+		_0: _elm_lang$html$Html$text(a),
+		_1: {
+			ctor: '::',
+			_0: comma,
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(p),
+				_1: {
+					ctor: '::',
+					_0: lf,
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(s),
+						_1: {
+							ctor: '::',
+							_0: lf,
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(t),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		}
+	})) : (_elm_lang$core$Native_Utils.eq(
+		_elm_lang$core$String$length(p),
+		0) ? {
+		ctor: '::',
+		_0: _elm_lang$html$Html$text(a),
+		_1: {
+			ctor: '::',
+			_0: lf,
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(s),
+				_1: {
+					ctor: '::',
+					_0: lf,
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(t),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	} : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$String$length(p),
+		8) < 0) ? {
+		ctor: '::',
+		_0: _elm_lang$html$Html$text(a),
+		_1: {
+			ctor: '::',
+			_0: lf,
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(p),
+				_1: {
+					ctor: '::',
+					_0: comma,
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(s),
+						_1: {
+							ctor: '::',
+							_0: lf,
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(t),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		}
+	} : {
+		ctor: '::',
+		_0: _elm_lang$html$Html$text(a),
+		_1: {
+			ctor: '::',
+			_0: comma,
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(p),
+				_1: {
+					ctor: '::',
+					_0: comma,
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(s),
+						_1: {
+							ctor: '::',
+							_0: lf,
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(t),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		}
+	})));
+};
 var _user$project$View$generator = function (name) {
 	return A2(_elm_lang$html$Html_Attributes$attribute, 'data-elm-generator', name);
 };
@@ -21337,62 +21576,7 @@ var _user$project$View$viewCandidate = function (candidateTestId) {
 				}
 			}
 		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$ul,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$li,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(
-								_user$project$View$capitaliseWords(candidate.name)),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$li,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(
-									_user$project$View$capitaliseWords(candidate.parentAddressName)),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$li,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(
-										_user$project$View$capitaliseWords(candidate.streetName)),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$li,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text(
-											_user$project$View$capitaliseWords(candidate.streetTown)),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}),
-			_1: {ctor: '[]'}
-		});
+		_user$project$View$viewCandidateText(candidate));
 };
 var _user$project$View$viewCandidates = F2(
 	function (testId, candidates) {
@@ -21493,7 +21677,7 @@ var _user$project$View$viewUserSelect = F2(
 				_1: A2(
 					_elm_lang$core$List$map,
 					_user$project$View$viewUserOption(currentUserId),
-					users)
+					A2(_elm_lang$core$List$sortBy, _user$project$User$name, users))
 			});
 	});
 var _user$project$View$viewUsersSection = function (model) {
@@ -21882,6 +22066,27 @@ var _user$project$View$viewEmbeddedMap = function (search) {
 		},
 		{ctor: '[]'});
 };
+var _user$project$View$searchUrl = function (search) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'https://www.google.co.uk/search?q=',
+		_elm_lang$http$Http$encodeUri(search));
+};
+var _user$project$View$postcodeRegex = _elm_lang$core$Regex$regex('(GIR 0AA)|((([A-Z]\\d+)|(([A-Z]{2}\\d+)|(([A-Z][0-9][A-HJKSTUW])|([A-Z]{2}[0-9][ABEHMNPRVWXY]))))\\s?[0-9][A-Z]{2})');
+var _user$project$View$extractPostcode = function (text) {
+	var match = _elm_lang$core$List$head(
+		A3(
+			_elm_lang$core$Regex$find,
+			_elm_lang$core$Regex$AtMost(1),
+			_user$project$View$postcodeRegex,
+			text));
+	var _p6 = match;
+	if (_p6.ctor === 'Nothing') {
+		return text;
+	} else {
+		return _p6._0.match;
+	}
+};
 var _user$project$View$viewTest = function (test) {
 	var testNameHtml = A2(
 		_elm_lang$html$Html$p,
@@ -21934,7 +22139,14 @@ var _user$project$View$viewTest = function (test) {
 						})),
 				_1: {
 					ctor: '::',
-					_0: _user$project$View$viewEmbeddedMap(test.address),
+					_0: _user$project$View$viewEmbeddedMap(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							test.name,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								', ',
+								_user$project$View$extractPostcode(test.address)))),
 					_1: {ctor: '[]'}
 				}
 			}
@@ -22018,19 +22230,19 @@ var _user$project$View$viewMatcherSection = function (model) {
 						{ctor: '[]'},
 						{ctor: '[]'});
 				} else {
-					var _p6 = model.addresses;
-					switch (_p6.ctor) {
+					var _p7 = model.addresses;
+					switch (_p7.ctor) {
 						case 'Success':
-							var _p8 = _p6._0;
-							var _p7 = _elm_lang$core$List$head(_p8);
-							if (_p7.ctor === 'Nothing') {
+							var _p9 = _p7._0;
+							var _p8 = _elm_lang$core$List$head(_p9);
+							if (_p8.ctor === 'Nothing') {
 								return _user$project$View$viewFinishedSection(model);
 							} else {
 								return A3(
 									_user$project$View$viewMatcher,
 									model,
-									_elm_lang$core$List$length(_p8),
-									_p7._0);
+									_elm_lang$core$List$length(_p9),
+									_p8._0);
 							}
 						case 'Loading':
 							return A2(
@@ -22051,7 +22263,7 @@ var _user$project$View$viewMatcherSection = function (model) {
 										A2(
 											_elm_lang$core$Basics_ops['++'],
 											'Failed loading addresses: ',
-											_elm_lang$core$Basics$toString(_p6._0))),
+											_elm_lang$core$Basics$toString(_p7._0))),
 									_1: {ctor: '[]'}
 								});
 						default:
@@ -22108,13 +22320,6 @@ var _user$project$View$view = function (model) {
 			}
 		});
 };
-var _user$project$View$searchUrl = function (search) {
-	return A2(
-		_elm_lang$core$Basics_ops['++'],
-		'https://www.google.co.uk/search?q=',
-		_elm_lang$http$Http$encodeUri(search));
-};
-var _user$project$View$postcodeRegex = _elm_lang$core$Regex$regex('(GIR 0AA)|((([A-Z]\\d+)|(([A-Z]{2}\\d+)|(([A-Z][0-9][A-HJKSTUW])|([A-Z]{2}[0-9][ABEHMNPRVWXY]))))\\s?[0-9][A-Z]{2})');
 
 var _user$project$Rest$sendMatch = F3(
 	function (uprn, testId, userId) {

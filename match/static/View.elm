@@ -22,6 +22,21 @@ postcodeRegex =
     regex "(GIR 0AA)|((([A-Z]\\d+)|(([A-Z]{2}\\d+)|(([A-Z][0-9][A-HJKSTUW])|([A-Z]{2}[0-9][ABEHMNPRVWXY]))))\\s?[0-9][A-Z]{2})"
 
 
+extractPostcode : String -> String
+extractPostcode text =
+    let
+        match =
+            find (AtMost 1) postcodeRegex text
+            |> head
+    in
+        case match of
+            Nothing ->
+                text
+
+            Just m ->
+                m.match
+
+
 searchUrl : String -> String
 searchUrl search =
     "https://www.google.co.uk/search?q=" ++ (encodeUri search)
@@ -134,6 +149,44 @@ viewEmbeddedMap search =
         []
 
 
+-- converts to array for pretty printing
+viewCandidateText : Candidate -> List (Html Msg)
+viewCandidateText c =
+    let
+        a = c.name |> capitaliseWords
+        p = c.parentAddressName |> capitaliseWords
+        s = c.streetName |> capitaliseWords
+        t = c.streetTown |> capitaliseWords
+        lf = br [] []
+        comma = span [] [text ", "]
+    in
+        if String.length a == 0 then
+            if String.length p == 0 then
+                [ text s, lf, text t ]
+            else
+                if String.length p < 8 then
+                    [ text p, comma, text s, lf, text t ]
+                else
+                    [ text p, lf, text s, lf, text t ]
+        else
+            if String.length a < 8 then
+                if String.length p == 0 then
+                    [ text a, comma, text s, lf, text t ]
+                else
+                    if String.length p < 8 then
+                        [ text a, lf, text p, comma, text s, lf, text t ]
+                    else
+                        [ text a, comma, text p, lf, text s, lf, text t ]
+            else
+                if String.length p == 0 then
+                    [ text a, lf, text s, lf, text t ]
+                else
+                    if String.length p < 8 then
+                        [ text a, lf, text p, comma, text s, lf, text t ]
+                    else
+                        [ text a, comma, text p, comma, text s, lf, text t ]
+
+
 viewCandidate : ( Candidate, TestId ) -> Html Msg
 viewCandidate candidateTestId =
     let
@@ -151,18 +204,7 @@ viewCandidate candidateTestId =
             , onClick
                 (SelectCandidate ( candidate.uprn, testId ))
             ]
-            [ ul
-                []
-                [ li []
-                    [ candidate.name |> capitaliseWords |> text ]
-                , li []
-                    [ candidate.parentAddressName |> capitaliseWords |> text ]
-                , li []
-                    [ candidate.streetName |> capitaliseWords |> text ]
-                , li []
-                    [ candidate.streetTown |> capitaliseWords |> text ]
-                ]
-            ]
+            (viewCandidateText candidate)
 
 
 viewPassButton : TestId -> Html Msg
@@ -199,7 +241,7 @@ viewTest test =
             [ generator "viewTest"
             , class "test-address" ]
             [ testNameHtml
-             , h2
+            , h2
                 []
                 (List.concat
                     [ (List.map
@@ -208,7 +250,8 @@ viewTest test =
                       )
                     ]
                 )
-            , viewEmbeddedMap test.address
+            , viewEmbeddedMap
+                (test.name ++ ", " ++ (extractPostcode test.address))
             ]
 
 
@@ -279,8 +322,11 @@ viewUserSelect currentUserId users =
         [ generator "viewUserSelect"
         , onInput UserChange
         ]
-        ((option [] [ text "Select a user" ])
-            :: (List.map (viewUserOption currentUserId) users)
+        ((option [] [ text "Select a user" ]) ::
+            (List.map
+                (viewUserOption currentUserId)
+                (users |> sortBy User.name)
+            )
         )
 
 
