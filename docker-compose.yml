@@ -1,0 +1,16 @@
+ version: '2'
+ services:
+   db:
+     image: postgres
+   web:
+     build: .
+     environment:
+       - DATABASE_URL=postgres://postgres@db:5432/postgres
+       - ELASTICSEARCH_HOST
+     command: python manage.py runserver 0.0.0.0:8000
+     volumes:
+       - .:/code
+     ports:
+       - "8000:8000"
+     depends_on:
+       - db
