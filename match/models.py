@@ -20,6 +20,13 @@ class Address(models.Model):
     def __str__(self):
         return "%s (%s)" % (self.name, self.test_id)
 
+    def get_next(self):
+        next = Address.objects.filter(id__gt=self.id)
+        if next:
+            return next.first()
+        else:
+            return Address.objects.first()
+
 
 class User(models.Model):
     name = models.CharField(max_length=200)

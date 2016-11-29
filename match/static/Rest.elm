@@ -76,12 +76,14 @@ addCandidates test =
             )
 
 
-fetchAddresses : Cmd Msg
-fetchAddresses =
+fetchAddressesForUser : UserId -> Cmd Msg
+fetchAddressesForUser userId =
     let
         fetchTests : Request (List Test)
         fetchTests =
-            jsonGetRequest "/match/test-addresses/?n=5" testDecoder
+            jsonGetRequest
+                ("/match/test-addresses/?n=5&userid=" ++ (toString userId))
+                testDecoder
 
         fetchAllCandidates : List Test -> Task.Task Error (List Address)
         fetchAllCandidates tests =

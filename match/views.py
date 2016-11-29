@@ -152,13 +152,21 @@ def send(request):
     )
 
     # update users' score
-    match_score = 1 + len(Match.objects.filter(
+    nb_previous_matches = len(Match.objects.filter(
         test_address=test
     ).filter(
         uprn=uprn
     ).exclude(
         user=user
     ))
+
+    # If there have been 3 or more similar matches, score that - 1
+    # Otherwise, score 1 point
+    if nb_previous_matches >= 3:
+        match_score = nb_previous_matches - 1
+    else:
+        match_score = 1
+
     user.score = user.score + match_score
     user.save()
 
@@ -170,16 +178,28 @@ def send(request):
     return JsonResponse(response, safe=False)
 
 
+# Get the next test addresses for a given users
 def random_test_addresses(request):
-    number_requested = int(request.GET.get('n', 5))
-    last = Address.objects.count() - 1
+    num = int(request.GET.get('n', 5))
+    user_id = int(request.GET.get('userid', 0))
+
+    # find latest match from this user
+    if len(Match.objects.all()) == 0:
+        # No match yet, just pick first n address
+        address = Address.objects.first()
+    else:
+        latest_user_match = Match.objects.filter(user_id=user_id).order_by('-date').first()
+        if latest_user_match == None:
+            latest_user_match = Match.objects.first()
+        address = latest_user_match.test_address;
+
     addresses = []
-    for i in range(0, number_requested):
-        index = random.randint(0, last)
-        address = Address.objects.all()[index]
+    for i in range(0, num):
         addresses.append({
             'id': address.id,
             'name' : address.name,
             'address': address.address
         })
+        address = address.get_next()
+
     return JsonResponse(addresses, safe=False)

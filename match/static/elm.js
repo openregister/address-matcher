@@ -22400,12 +22400,18 @@ var _user$project$Rest$addCandidates = function (test) {
 		_elm_lang$http$Http$toTask(
 			A2(_user$project$Rest$jsonGetRequest, candidatesLookupUrl, _user$project$Rest$candidateAddressesDecoder)));
 };
-var _user$project$Rest$fetchAddresses = function () {
+var _user$project$Rest$fetchAddressesForUser = function (userId) {
 	var fetchAllCandidates = function (tests) {
 		return _elm_lang$core$Task$sequence(
 			A2(_elm_lang$core$List$map, _user$project$Rest$addCandidates, tests));
 	};
-	var fetchTests = A2(_user$project$Rest$jsonGetRequest, '/match/test-addresses/?n=5', _user$project$Rest$testDecoder);
+	var fetchTests = A2(
+		_user$project$Rest$jsonGetRequest,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'/match/test-addresses/?n=5&userid=',
+			_elm_lang$core$Basics$toString(userId)),
+		_user$project$Rest$testDecoder);
 	return A2(
 		_elm_lang$core$Task$attempt,
 		_user$project$State$FetchAddressesReturn,
@@ -22413,7 +22419,7 @@ var _user$project$Rest$fetchAddresses = function () {
 			_elm_lang$core$Task$andThen,
 			fetchAllCandidates,
 			_elm_lang$http$Http$toTask(fetchTests)));
-}();
+};
 
 var _user$project$Main$userIdToUrl = function (userId) {
 	return A2(
@@ -22506,7 +22512,7 @@ var _user$project$Main$update = F2(
 						_0: _user$project$Main$updateUrl(newUserId),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Rest$fetchAddresses,
+							_0: _user$project$Rest$fetchAddressesForUser(newUserId),
 							_1: {ctor: '[]'}
 						}
 					});
@@ -22546,7 +22552,7 @@ var _user$project$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{addresses: _user$project$Types$Loading}),
-					_1: _user$project$Rest$fetchAddresses
+					_1: _user$project$Rest$fetchAddressesForUser(model.currentUserId)
 				};
 			case 'FetchAddressesReturn':
 				if (_p0._0.ctor === 'Ok') {
@@ -22674,7 +22680,7 @@ var _user$project$Main$init = function (location) {
 			_0: _user$project$Rest$fetchUsers,
 			_1: {
 				ctor: '::',
-				_0: _user$project$Rest$fetchAddresses,
+				_0: _user$project$Rest$fetchAddressesForUser(userId),
 				_1: {ctor: '[]'}
 			}
 		}

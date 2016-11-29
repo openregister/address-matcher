@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from match.models import Match
+from match.models import Match, User
 
 import sys
 
@@ -8,3 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         Match.objects.all().delete()
+
+        for user in User.objects.all():
+            user.score = 0
+            user.save()

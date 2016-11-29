@@ -46,7 +46,7 @@ init location =
             else
                 [ Rest.fetchDataSetInfo
                 , Rest.fetchUsers
-                , Rest.fetchAddresses
+                , Rest.fetchAddressesForUser userId
                 ]
 
         initialAnimationStyle =
@@ -111,8 +111,10 @@ update msg model =
                 newUserId =
                     newUserIdAsText |> toInt |> Result.withDefault 0
             in
-                { model | currentUserId = newUserId }
-                    ! [ updateUrl newUserId, Rest.fetchAddresses ]
+                { model | currentUserId = newUserId } !
+                    [ updateUrl newUserId
+                    , Rest.fetchAddressesForUser newUserId
+                    ]
 
         FetchDataSetInfo ->
             ( { model | dataSetInfo = Loading }, Rest.fetchDataSetInfo )
@@ -124,7 +126,9 @@ update msg model =
             ( { model | dataSetInfo = Failure error }, Cmd.none )
 
         FetchAddresses ->
-            ( { model | addresses = Loading }, Rest.fetchAddresses )
+            ( { model | addresses = Loading }
+            , Rest.fetchAddressesForUser model.currentUserId
+            )
 
         FetchAddressesReturn (Ok newAddresses) ->
             ( { model | addresses = Success newAddresses }, Cmd.none )

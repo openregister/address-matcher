@@ -19,6 +19,7 @@ type alias UserId =
     Int
 
 
+
 type alias UserName =
     String
 
