@@ -335,7 +335,10 @@ viewUsersSection : Model -> Html Msg
 viewUsersSection model =
     div
         [ generator "viewUsersSection"
-        , style [ ( "margin-bottom", "20px" ) ]
+        , style
+              [ ( "margin", "20px 0 20px 0" )
+              , ( "font-size", "1.3em" )
+              ]
         ]
         [ case model.users of
             NotAsked ->
@@ -352,7 +355,7 @@ viewUsersSection model =
                         else
                             "Current user: "
                 in
-                    div []
+                    div [ style [ ( "text-align", "center" ) ] ]
                         [ text message
                         , viewUserSelect model.currentUserId userList
                         ]
@@ -471,9 +474,13 @@ viewInfoSection model =
                 text "Loading infos"
 
             Success infoDict ->
-                DataSetInfo.get "title" infoDict
-                    |> Maybe.withDefault "No title"
-                    |> text
+                case model.addresses of
+                    Success _ ->
+                        DataSetInfo.get "title" infoDict
+                            |> Maybe.withDefault "No title"
+                            |> text
+                    _ ->
+                        text ""
 
             Failure error ->
                 text ("Error loading dataset title" ++ (error |> toString))

@@ -74,3 +74,14 @@ strong {
   cursor: help;
   margin-left: 1.4em;
 }
+
+.helpBox {
+  background-color: white;
+  padding: .2em;
+  border: 8px solid brown;
+  position: fixed;
+  padding: 0 1em 1em 1em;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+}

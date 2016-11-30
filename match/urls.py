@@ -67,6 +67,7 @@ urlpatterns = [
     url(r'^main/$', views.index, name='main'),
     url(r'^send/$', views.send, name='matches2'),
     url(r'^scores/$', views.scores, name='scores'),
+    url(r'^help/$', views.help, name='help'),
     url(r'^scores.json$', views.scores_json),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))

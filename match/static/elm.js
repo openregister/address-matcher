@@ -17737,8 +17737,12 @@ var _user$project$View$viewUsersSection = function (model) {
 				_0: _elm_lang$html$Html_Attributes$style(
 					{
 						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'margin-bottom', _1: '20px'},
-						_1: {ctor: '[]'}
+						_0: {ctor: '_Tuple2', _0: 'margin', _1: '20px 0 20px 0'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'font-size', _1: '1.3em'},
+							_1: {ctor: '[]'}
+						}
 					}),
 				_1: {ctor: '[]'}
 			}
@@ -17770,7 +17774,16 @@ var _user$project$View$viewUsersSection = function (model) {
 						var message = _elm_lang$core$Native_Utils.eq(model.currentUserId, 0) ? 'Please tell me who you are: ' : 'Current user: ';
 						return A2(
 							_elm_lang$html$Html$div,
-							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$style(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'center'},
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							},
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html$text(message),
@@ -18014,11 +18027,16 @@ var _user$project$View$viewInfoSection = function (model) {
 					case 'Loading':
 						return _elm_lang$html$Html$text('Loading infos');
 					case 'Success':
-						return _elm_lang$html$Html$text(
-							A2(
-								_elm_lang$core$Maybe$withDefault,
-								'No title',
-								A2(_user$project$DataSetInfo$get, 'title', _p5._0)));
+						var _p6 = model.addresses;
+						if (_p6.ctor === 'Success') {
+							return _elm_lang$html$Html$text(
+								A2(
+									_elm_lang$core$Maybe$withDefault,
+									'No title',
+									A2(_user$project$DataSetInfo$get, 'title', _p5._0)));
+						} else {
+							return _elm_lang$html$Html$text('');
+						}
 					default:
 						return _elm_lang$html$Html$text(
 							A2(
@@ -18126,11 +18144,11 @@ var _user$project$View$extractPostcode = function (text) {
 			_elm_lang$core$Regex$AtMost(1),
 			_user$project$View$postcodeRegex,
 			text));
-	var _p6 = match;
-	if (_p6.ctor === 'Nothing') {
+	var _p7 = match;
+	if (_p7.ctor === 'Nothing') {
 		return text;
 	} else {
-		return _p6._0.match;
+		return _p7._0.match;
 	}
 };
 var _user$project$View$viewTest = function (test) {
@@ -18276,19 +18294,19 @@ var _user$project$View$viewMatcherSection = function (model) {
 						{ctor: '[]'},
 						{ctor: '[]'});
 				} else {
-					var _p7 = model.addresses;
-					switch (_p7.ctor) {
+					var _p8 = model.addresses;
+					switch (_p8.ctor) {
 						case 'Success':
-							var _p9 = _p7._0;
-							var _p8 = _elm_lang$core$List$head(_p9);
-							if (_p8.ctor === 'Nothing') {
+							var _p10 = _p8._0;
+							var _p9 = _elm_lang$core$List$head(_p10);
+							if (_p9.ctor === 'Nothing') {
 								return _user$project$View$viewFinishedSection(model);
 							} else {
 								return A3(
 									_user$project$View$viewMatcher,
 									model,
-									_elm_lang$core$List$length(_p9),
-									_p8._0);
+									_elm_lang$core$List$length(_p10),
+									_p9._0);
 							}
 						case 'Loading':
 							return A2(
@@ -18309,7 +18327,7 @@ var _user$project$View$viewMatcherSection = function (model) {
 										A2(
 											_elm_lang$core$Basics_ops['++'],
 											'Failed loading addresses: ',
-											_elm_lang$core$Basics$toString(_p7._0))),
+											_elm_lang$core$Basics$toString(_p8._0))),
 									_1: {ctor: '[]'}
 								});
 						default:

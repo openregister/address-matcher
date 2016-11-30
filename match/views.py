@@ -21,6 +21,12 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 
+def help(request):
+    template = loader.get_template('help.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+
 def count_matches():
     # compute how many times each address is referred to in matches
     addresses = Address.objects.all()
