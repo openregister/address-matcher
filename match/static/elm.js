@@ -17771,7 +17771,7 @@ var _user$project$View$viewUsersSection = function (model) {
 								_1: {ctor: '[]'}
 							});
 					case 'Success':
-						var message = _elm_lang$core$Native_Utils.eq(model.currentUserId, 0) ? 'Please tell me who you are: ' : 'Current user: ';
+						var message = _elm_lang$core$Native_Utils.eq(model.currentUserId, 0) ? 'Please tell me who you are (or click Help above): ' : 'Current user: ';
 						return A2(
 							_elm_lang$html$Html$div,
 							{

@@ -351,7 +351,7 @@ viewUsersSection model =
                 let
                     message =
                         if model.currentUserId == 0 then
-                            "Please tell me who you are: "
+                            "Please tell me who you are (or click Help above): "
                         else
                             "Current user: "
                 in
