@@ -197,7 +197,7 @@ def random_test_addresses(request):
         latest_user_match = Match.objects.filter(user_id=user_id).order_by('-date').first()
         if latest_user_match == None:
             latest_user_match = Match.objects.first()
-        address = latest_user_match.test_address;
+        address = latest_user_match.test_address.get_next();
 
     addresses = []
     for i in range(0, num):
