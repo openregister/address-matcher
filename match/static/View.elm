@@ -153,6 +153,7 @@ viewEmbeddedMap search =
 viewCandidateText : Candidate -> List (Html Msg)
 viewCandidateText c =
     let
+        lengthThreshold = 5
         a = c.name |> capitaliseWords
         p = c.parentAddressName |> capitaliseWords
         s = c.streetName |> capitaliseWords
@@ -164,16 +165,16 @@ viewCandidateText c =
             if String.length p == 0 then
                 [ text s, lf, text t ]
             else
-                if String.length p < 8 then
+                if String.length p < lengthThreshold then
                     [ text p, comma, text s, lf, text t ]
                 else
                     [ text p, lf, text s, lf, text t ]
         else
-            if String.length a < 8 then
+            if String.length a < lengthThreshold then
                 if String.length p == 0 then
                     [ text a, comma, text s, lf, text t ]
                 else
-                    if String.length p < 8 then
+                    if String.length p < lengthThreshold then
                         [ text a, lf, text p, comma, text s, lf, text t ]
                     else
                         [ text a, comma, text p, lf, text s, lf, text t ]
@@ -181,10 +182,10 @@ viewCandidateText c =
                 if String.length p == 0 then
                     [ text a, lf, text s, lf, text t ]
                 else
-                    if String.length p < 8 then
+                    if String.length p < lengthThreshold then
                         [ text a, lf, text p, comma, text s, lf, text t ]
                     else
-                        [ text a, comma, text p, comma, text s, lf, text t ]
+                        [ text a, lf, text p, lf, text s, lf, text t ]
 
 
 viewCandidate : ( Candidate, TestId ) -> Html Msg

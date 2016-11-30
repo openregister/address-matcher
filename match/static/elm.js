@@ -17299,6 +17299,7 @@ var _user$project$View$viewCandidateText = function (c) {
 	var s = _user$project$View$capitaliseWords(c.streetName);
 	var p = _user$project$View$capitaliseWords(c.parentAddressName);
 	var a = _user$project$View$capitaliseWords(c.name);
+	var lengthThreshold = 5;
 	return _elm_lang$core$Native_Utils.eq(
 		_elm_lang$core$String$length(a),
 		0) ? (_elm_lang$core$Native_Utils.eq(
@@ -17317,7 +17318,7 @@ var _user$project$View$viewCandidateText = function (c) {
 		}
 	} : ((_elm_lang$core$Native_Utils.cmp(
 		_elm_lang$core$String$length(p),
-		8) < 0) ? {
+		lengthThreshold) < 0) ? {
 		ctor: '::',
 		_0: _elm_lang$html$Html$text(p),
 		_1: {
@@ -17359,7 +17360,7 @@ var _user$project$View$viewCandidateText = function (c) {
 		}
 	})) : ((_elm_lang$core$Native_Utils.cmp(
 		_elm_lang$core$String$length(a),
-		8) < 0) ? (_elm_lang$core$Native_Utils.eq(
+		lengthThreshold) < 0) ? (_elm_lang$core$Native_Utils.eq(
 		_elm_lang$core$String$length(p),
 		0) ? {
 		ctor: '::',
@@ -17383,7 +17384,7 @@ var _user$project$View$viewCandidateText = function (c) {
 		}
 	} : ((_elm_lang$core$Native_Utils.cmp(
 		_elm_lang$core$String$length(p),
-		8) < 0) ? {
+		lengthThreshold) < 0) ? {
 		ctor: '::',
 		_0: _elm_lang$html$Html$text(a),
 		_1: {
@@ -17463,7 +17464,7 @@ var _user$project$View$viewCandidateText = function (c) {
 		}
 	} : ((_elm_lang$core$Native_Utils.cmp(
 		_elm_lang$core$String$length(p),
-		8) < 0) ? {
+		lengthThreshold) < 0) ? {
 		ctor: '::',
 		_0: _elm_lang$html$Html$text(a),
 		_1: {
@@ -17496,13 +17497,13 @@ var _user$project$View$viewCandidateText = function (c) {
 		_0: _elm_lang$html$Html$text(a),
 		_1: {
 			ctor: '::',
-			_0: comma,
+			_0: lf,
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html$text(p),
 				_1: {
 					ctor: '::',
-					_0: comma,
+					_0: lf,
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html$text(s),
