@@ -82,7 +82,7 @@ def make_stats():
     users = User.objects.all()
     addresses = Address.objects.all()
     stats = {}
-    stats['users'] = make_users_stats()
+    stats['users'] = filter(lambda x: x['score'] != 0, make_users_stats())
     stats['nb_addresses'] = Address.objects.count()
     stats['nb_matches'] = Match.objects.count()
     stats['occurrences'] = occurrence_dict(count_matches())
