@@ -45,13 +45,13 @@ def count_matches():
 
 def wordy_match(nb_matches):
     if nb_matches == 0:
-        return "Addresses not yet matched"
+        return "Not yet matched"
     elif nb_matches == 1:
-        return "Addresses matched once"
+        return "Matched once"
     elif nb_matches == 2:
-        return "Addresses matched twice"
+        return "Matched twice"
     else:
-        return "Addresses matched " + str(nb_matches) + " times"
+        return "Matched " + str(nb_matches) + " times"
 
 
 def occurrence_dict(counts):
@@ -92,8 +92,10 @@ def make_stats():
     stats['nb_addresses'] = Address.objects.count()
     stats['nb_matches'] = Match.objects.count()
     stats['occurrences'] = occurrence_dict(count_matches())
-    stats['nb_pass'] = len(Match.objects.filter(uprn__exact = "_unknown_"))
-    stats['nb_pass_ratio'] = round(100*float(stats['nb_pass']) / stats['nb_matches']) if stats['nb_matches'] > 0 else 0
+    stats['nb_notsure'] = len(Match.objects.filter(uprn__exact = "_notsure_"))
+    stats['nb_nomatch'] = len(Match.objects.filter(uprn__exact = "_nomatch_"))
+    stats['nb_notsure_ratio'] = round(100*float(stats['nb_notsure']) / stats['nb_matches']) if stats['nb_matches'] > 0 else 0
+    stats['nb_nomatch_ratio'] = round(100*float(stats['nb_nomatch']) / stats['nb_matches']) if stats['nb_matches'] > 0 else 0
     return stats;
 
 

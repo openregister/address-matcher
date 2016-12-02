@@ -208,17 +208,37 @@ viewCandidate candidateTestId =
             (viewCandidateText candidate)
 
 
-viewPassButton : TestId -> Html Msg
-viewPassButton testId =
-    button
-        [ class "button"
+viewNotSureButton : TestId -> Html Msg
+viewNotSureButton testId =
+    hover
+        styleCandidateHover
+        button
+        [ class "pass-button"
         , style
             [ ( "white-space", "nowrap" )
-            , ( "line-height", ".6" )
             ]
-        , onClick (SelectCandidate ( "_unknown_", testId ))
+        , onClick (SelectCandidate ( "_notsure_", testId ))
+        , title "Click here if you're not sure if one of the candidates match"
         ]
-        [ text "Pass" ]
+        [ text "Not sure"
+        , sup [ class "help-pill" ] [ text "?" ]
+        ]
+
+viewNoMatchButton : TestId -> Html Msg
+viewNoMatchButton testId =
+    hover
+        styleCandidateHover
+        button
+        [ class "pass-button"
+        , style
+            [ ( "white-space", "nowrap" )
+            ]
+        , onClick (SelectCandidate ( "_nomatch_", testId ))
+        , title "Click here if no candidate match the job centre address"
+        ]
+        [ text "No match"
+        , sup [ class "help-pill" ] [ text "?" ]
+        ]
 
 
 viewTestLine : String -> Html Msg
@@ -269,7 +289,9 @@ viewCandidates testId candidates =
           , h2
                 [ class "heading-small" ]
                 [ text "Select the matching address below, or "
-                , viewPassButton testId
+                , viewNoMatchButton testId
+                , text " or "
+                , viewNotSureButton testId
                 ]
           )
         , ( (toString testId) ++ "ul"
@@ -498,7 +520,7 @@ viewScore model =
                     ++ (toString model.lastMatchScore)
                     ++ " points"
                 )
-            , div
+            , sup
                 [ title "You score more points when your guesses match that of other players"
                 , class "help-pill"
                 ]

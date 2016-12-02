@@ -27,10 +27,14 @@
 <ul>
     <li>{{ nb_addresses }} addresses</li>
     <li>{{ nb_matches }} user matches</li>
-    <li>{{ nb_pass }} matches failed ({{ nb_pass_ratio }}% of all matches)</li>
+    <li>{{ nb_notsure }} matches where user wasn't sure ({{ nb_notsure_ratio }}% of all matches)</li>
+    <li>{{ nb_nomatch }} matches where no match was found ({{ nb_nomatch_ratio }}% of all matches)</li>
 </ul>
 
 <h3 class="heading-medium">Match coverage</h3>
+
+<p>This shows how close we are to the goal of matching every test address multiple times. At least we want all addresses matched at least once, at best we want to have all addresses matched many times, so we can start seeing some correlation, find out what matches are 'easy' and what matches need a closer look.</p>
+
 
 <div id="chart_div"></div>
 

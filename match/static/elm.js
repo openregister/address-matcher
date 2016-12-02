@@ -17150,39 +17150,6 @@ var _user$project$View$viewTestLine = function (line) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$View$viewPassButton = function (testId) {
-	return A2(
-		_elm_lang$html$Html$button,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('button'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$style(
-					{
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'white-space', _1: 'nowrap'},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'line-height', _1: '.6'},
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onClick(
-						_user$project$State$SelectCandidate(
-							{ctor: '_Tuple2', _0: '_unknown_', _1: testId})),
-					_1: {ctor: '[]'}
-				}
-			}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text('Pass'),
-			_1: {ctor: '[]'}
-		});
-};
 var _user$project$View$viewTopUser = F2(
 	function (currentUserId, user) {
 		return A2(
@@ -17237,6 +17204,106 @@ var _user$project$View$styleCandidateHover = {
 	ctor: '::',
 	_0: {ctor: '_Tuple2', _0: 'outline', _1: '3px solid brown'},
 	_1: {ctor: '[]'}
+};
+var _user$project$View$viewNotSureButton = function (testId) {
+	return A4(
+		_jinjor$elm_inline_hover$InlineHover$hover,
+		_user$project$View$styleCandidateHover,
+		_elm_lang$html$Html$button,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('pass-button'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'white-space', _1: 'nowrap'},
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						_user$project$State$SelectCandidate(
+							{ctor: '_Tuple2', _0: '_notsure_', _1: testId})),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$title('Click here if you\'re not sure if one of the candidates match'),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('Not sure'),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$sup,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('help-pill'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('?'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$View$viewNoMatchButton = function (testId) {
+	return A4(
+		_jinjor$elm_inline_hover$InlineHover$hover,
+		_user$project$View$styleCandidateHover,
+		_elm_lang$html$Html$button,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('pass-button'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'white-space', _1: 'nowrap'},
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						_user$project$State$SelectCandidate(
+							{ctor: '_Tuple2', _0: '_nomatch_', _1: testId})),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$title('Click here if no candidate match the job centre address'),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('No match'),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$sup,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('help-pill'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('?'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
 };
 var _user$project$View$styleCandidate = {
 	ctor: '::',
@@ -17667,8 +17734,16 @@ var _user$project$View$viewCandidates = F2(
 							_0: _elm_lang$html$Html$text('Select the matching address below, or '),
 							_1: {
 								ctor: '::',
-								_0: _user$project$View$viewPassButton(testId),
-								_1: {ctor: '[]'}
+								_0: _user$project$View$viewNoMatchButton(testId),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(' or '),
+									_1: {
+										ctor: '::',
+										_0: _user$project$View$viewNotSureButton(testId),
+										_1: {ctor: '[]'}
+									}
+								}
 							}
 						})
 				},
@@ -18073,7 +18148,7 @@ var _user$project$View$viewScore = function (model) {
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$div,
+					_elm_lang$html$Html$sup,
 					{
 						ctor: '::',
 						_0: _elm_lang$html$Html_Attributes$title('You score more points when your guesses match that of other players'),

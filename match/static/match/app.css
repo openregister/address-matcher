@@ -68,9 +68,9 @@ strong {
   display: inline-block;
   background-color: black;
   color: white;
-  font-size: 16px;
-  width: 22px;
-  border-radius: 15px;
+  font-size: 12px;
+  width: 16px;
+  border-radius: 12px;
   cursor: help;
   margin-left: 1.4em;
 }
@@ -84,4 +84,12 @@ strong {
   top: 10%;
   left: 10%;
   width: 80%;
+}
+
+.pass-button {
+  background-color: #AAA;
+  border: 0;
+  font-size: 1em;
+  padding: .15em .2em .1em .4em;
+  border-radius: 10px;
 }
