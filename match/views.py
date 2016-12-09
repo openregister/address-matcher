@@ -75,10 +75,12 @@ def make_users_stats():
     users = User.objects.all()
     users_stats = []
     for user in users:
-        user_stats = { 'name': user.name, 'id': user.pk}
-        user_matches = Match.objects.filter(user__id = user.pk)
-        nb_user_matches = len(user_matches)
-        user_stats['score'] = user.score
+        user_stats = {
+            'name': user.name,
+            'id': user.pk,
+            'nb_matches': len(Match.objects.filter(user__id = user.pk)),
+            'score': user.score
+        }
         users_stats.append(user_stats)
     return users_stats
 
