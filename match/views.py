@@ -188,28 +188,37 @@ def send(request):
     return JsonResponse(response, safe=False)
 
 
+def next_test_addresses(num):
+
+    # Pick the first among the addresses with the least number of matches
+    return Address.objects.annotate(num_matches=Count('match')).order_by('num_matches')[:num]
+
+    # could also be the next address after this user's last match
+    # if len(Match.objects.all()) == 0:
+    #     # No match yet, just pick first n address
+    #     address = Address.objects.first()
+    # else:
+    #     latest_user_match = Match.objects.filter(user_id=user_id).order_by('-date').first()
+    #     if latest_user_match == None:
+    #         latest_user_match = Match.objects.first()
+    #     address = latest_user_match.test_address.get_next();
+
+
+
 # Get the next test addresses for a given users
 def random_test_addresses(request):
     num = int(request.GET.get('n', 5))
     user_id = int(request.GET.get('userid', 0))
 
-    # find latest match from this user
-    if len(Match.objects.all()) == 0:
-        # No match yet, just pick first n address
-        address = Address.objects.first()
-    else:
-        latest_user_match = Match.objects.filter(user_id=user_id).order_by('-date').first()
-        if latest_user_match == None:
-            latest_user_match = Match.objects.first()
-        address = latest_user_match.test_address.get_next();
-
+    next_tests = next_test_addresses(num)
     addresses = []
-    for i in range(0, num):
+
+    for test in next_tests:
         addresses.append({
-            'id': address.id,
-            'name' : address.name,
-            'address': address.address
+            'id': test.id,
+            'name' : test.name,
+            'address': test.address
         })
-        address = address.get_next()
+
 
     return JsonResponse(addresses, safe=False)
