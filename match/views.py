@@ -9,6 +9,7 @@ from random import randint
 from hashlib import md5
 from models import Address, Match, User
 from elasticsearch import Elasticsearch
+#from postal.parser import parse_address
 import os
 import json
 import re
@@ -115,10 +116,34 @@ def scores_json(request):
 
 def brain(request):
     test_address = request.GET.get('q', '')
+
+    # Escape chars for ElasticSearch
     test_address = re.sub(
         r'([+-=&|><!(){}\[\]^"~*?:\\/\'])',
         r'\\\1',
         test_address)
+
+    # parsed = parse_address(test_address)
+    # dparse2 = dict(zip(dict(parsed).values(),dict(parsed).keys()))
+    # parent_address_name = dparse2.get('house', '')
+    # name = dparse2.get('house_number', '')
+    # street_name = dparse2.get('road', '')
+    # street_town = dparse2.get('city', '')
+    # queryObject = {
+    #     "size": 9,
+    #     "_source": ["parent-address-name", "street-name", "street-town", "name", "address"],
+    #     "query": {
+    #         "bool": {
+    #             "should": [
+    #                 { "match": { "parent-address-name": parent_address_name }},
+    #                 { "match": { "name": name }},
+    #                 { "match": { "street-name": street_name }},
+    #                 { "match": { "street-town": street_town }},
+    #                 { "match": { "_all": test_address }}
+    #             ]
+    #         }
+    #     }
+    # }
 
     queryObject = {
         "size": 9,
