@@ -98,7 +98,25 @@ def make_stats():
     stats['nb_nomatch'] = len(Match.objects.filter(uprn__exact = "_nomatch_"))
     stats['nb_notsure_ratio'] = round(100*float(stats['nb_notsure']) / stats['nb_matches']) if stats['nb_matches'] > 0 else 0
     stats['nb_nomatch_ratio'] = round(100*float(stats['nb_nomatch']) / stats['nb_matches']) if stats['nb_matches'] > 0 else 0
+
+
+    agreements = []
+    for address in addresses:
+        address_matches = Match.objects.filter(test_address__id=address.id)
+        nb_matches = len(address_matches)
+        if nb_matches > 0:
+            agreement_ratio = 100 * address_matches.values('uprn').distinct().count() / nb_matches
+            agreements.append([
+                nb_matches,
+                agreement_ratio,
+                "%s: %d matches, %.f%% agreement" % (address.name, nb_matches, agreement_ratio)
+            ])
+
+    stats['agreements'] = agreements
+
     return stats;
+
+
 
 
 

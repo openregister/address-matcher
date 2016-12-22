@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load jsonify %}
 
 {% block content %}
 
@@ -40,7 +40,9 @@
 <p>This shows how close we are to the goal of matching every test address multiple times. At least we want all addresses matched at least once, at best we want to have all addresses matched many times, so we can start seeing some correlation, find out what matches are 'easy' and what matches need a closer look.</p>
 
 
-<div id="chart_div"></div>
+<div id="piechart_div"></div>
+
+<div id="scatterchart_div"></div>
 
 <!--Load the AJAX API-->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -55,7 +57,7 @@
  // Callback that creates and populates a data table,
  // instantiates the pie chart, passes in the data and
  // draws it.
- function drawChart() {
+ function drawPieChart() {
 
    // Create the data table.
    var data = new google.visualization.DataTable();
@@ -63,16 +65,51 @@
    data.addColumn('number', 'Number of addresses');
    data.addRows({{ occurrences }});
 
+
+
    // Set chart options
    var options = {'title':'Matching coverage for all test addresses',
                   'width':400,
                   'height':300};
 
    // Instantiate and draw our chart, passing in some options.
-   var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+   var chart = new google.visualization.PieChart(document.getElementById('piechart_div'));
    chart.draw(data, options);
  }
+
+ function drawScatterPlot() {
+   var data = new google.visualization.DataTable();
+
+   data.addColumn('number', 'Matches');
+   data.addColumn('number', '% Agree');
+   data.addColumn({type: 'string', role: 'tooltip'});
+   data.addRows({{ agreements|jsonify }});
+
+   console.log(data);
+
+   var options = {
+     title: 'Agreement vs Number of matches',
+     vAxis: {title: 'Matches', minValue: 0, maxValue: 20},
+     hAxis: {title: '% agreement', minValue: 0, maxValue: 100},
+     tooltip: {isHtml: true},
+     width: 500,
+     height: 500,
+     legend: 'none'
+   };
+
+   var chart = new google.visualization.ScatterChart(document.getElementById('scatterchart_div'));
+
+   chart.draw(data, options);
+ }
+
+ function drawChart() {
+   drawPieChart();
+   drawScatterPlot();
+ }
+
+
 </script>
+
 
 
 {% endblock %}
