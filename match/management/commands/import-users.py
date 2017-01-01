@@ -12,9 +12,9 @@ class Command(BaseCommand):
 
         User.objects.all().delete()
 
-        tsvin = csv.reader(sys.stdin, delimiter='\t')
+        csvin = csv.reader(sys.stdin, delimiter=',')
 
-        for row in tsvin:
+        for row in csvin:
             User.objects.create(
                 name = row[0],
                 score = row[1]
