@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.db.models import Count
@@ -240,3 +240,22 @@ def random_test_addresses(request):
 
 
     return JsonResponse(addresses, safe=False)
+
+
+# Display the page of a specific test address
+def test(request, id):
+    template = loader.get_template('test.html')
+    test = get_object_or_404(Address, pk = id)
+    test_matches = Match.objects.filter(test_address__id = id)
+    context = { 'test': test, 'matches': test_matches }
+    return HttpResponse(template.render(context, request))
+
+
+# Display the list of all test addresses
+def tests(request):
+    template = loader.get_template('tests.html')
+    addresses = Address.objects.all() \
+        .annotate(nb_matches=Count('match__test_address')) \
+        .order_by('-nb_matches')
+    context = { 'addresses': addresses }
+    return HttpResponse(template.render(context, request))

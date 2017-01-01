@@ -67,6 +67,8 @@ urlpatterns = [
     url(r'^main/$', views.index, name='main'),
     url(r'^send/$', views.send, name='matches2'),
     url(r'^scores/$', views.scores, name='scores'),
+    url(r'^tests/$', views.tests, name='tests'),
+    url(r'^test/(?P<id>[0-9]+)/$', views.test, name='test'),
     url(r'^help/$', views.help, name='help'),
     url(r'^scores.json$', views.scores_json),
     url(r'^', include(router.urls)),

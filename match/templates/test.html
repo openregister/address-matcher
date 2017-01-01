@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load jsonify %}
+
+{% block content %}
+
+  <h1 class="heading-large">{{ test.name }}  ({{ test.test_id }})</h1>
+
+  <p>
+    <address>{{ test.address }}</address>
+  </p>
+
+  <ul>
+    {% for match in matches %}
+      <li>{{ match.user.name }} matched with {{ match.uprn }}</li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}

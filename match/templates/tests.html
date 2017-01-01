@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h1 class="heading-large">All test addresses</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Number of times matched</th>
+        <th>Number of distinct matches</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for address in addresses %}
+      <tr>
+        <td><a href="{% url 'test' address.id %}">{{ address.name }}</a></td>
+        <td>{{ address.nb_matches }}</td>
+        <td></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
