@@ -2,9 +2,9 @@
 
 {% block content %}
 
-  <h1 class="heading-large">All test addresses</h1>
+  <h1 class="heading-large">Test addresses</h1>
 
-  <p>Sorted by ambiguity</p>
+  <p>Addresses with more than 1 match, sorted by ambiguity</p>
 
   <table>
     <thead>
@@ -12,6 +12,7 @@
         <th>Name</th>
         <th>Number of times matched</th>
         <th>Number of distinct matches</th>
+        <th>Confidence score</th>
       </tr>
     </thead>
     <tbody>
@@ -20,6 +21,7 @@
         <td><a href="{% url 'test' address.id %}">{{ address.name }}</a></td>
         <td>{{ address.nb_matches }}</td>
         <td>{{ address.nb_uprns }}</td>
+        <td>{{ address.confidence|floatformat }}</td>
       </tr>
       {% endfor %}
     </tbody>

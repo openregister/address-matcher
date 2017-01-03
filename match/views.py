@@ -257,14 +257,14 @@ def test(request, id):
     return HttpResponse(template.render(context, request))
 
 
-# Display the list of all test addresses
+# Display the list of test addresses that have more than 1 matches
 def tests(request):
     template = loader.get_template('tests.html')
     addresses = Address.objects.all() \
-        .annotate(nb_matches=Count('match__test_address')) \
-        .order_by('-nb_matches')
+        .annotate(nb_matches=Count('match'))
+
     tests = []
-    for address in addresses:
+    for address in filter(lambda a: a.nb_matches > 1, addresses):
         test = {
             'name': address.name,
             'id': address.id,
@@ -272,8 +272,9 @@ def tests(request):
         }
         matches = Match.objects.filter(test_address__id = address.id)
         test['nb_uprns'] = len(set(map(lambda m: m.uprn, matches)))
+        test['confidence'] = float(test['nb_matches']) / (2 * test['nb_uprns'])
         tests.append(test)
 
-    context = { 'addresses': tests }
+    context = { 'addresses': sorted(tests, key=lambda t: t['confidence']) }
 
     return HttpResponse(template.render(context, request))
