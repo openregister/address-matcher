@@ -9,6 +9,7 @@ from random import randint
 from hashlib import md5
 from models import Address, Match, User
 from elasticsearch import Elasticsearch
+from itertools import groupby
 import os
 import json
 import re
@@ -246,8 +247,13 @@ def random_test_addresses(request):
 def test(request, id):
     template = loader.get_template('test.html')
     test = get_object_or_404(Address, pk = id)
-    test_matches = Match.objects.filter(test_address__id = id)
-    context = { 'test': test, 'matches': test_matches }
+    test_matches = Match.objects.filter(test_address__id = id) \
+        .order_by('uprn')
+
+    context = {
+        'test': test,
+        'matches': test_matches
+    }
     return HttpResponse(template.render(context, request))
 
 
@@ -257,5 +263,17 @@ def tests(request):
     addresses = Address.objects.all() \
         .annotate(nb_matches=Count('match__test_address')) \
         .order_by('-nb_matches')
-    context = { 'addresses': addresses }
+    tests = []
+    for address in addresses:
+        test = {
+            'name': address.name,
+            'id': address.id,
+            'nb_matches': address.nb_matches
+        }
+        matches = Match.objects.filter(test_address__id = address.id)
+        test['nb_uprns'] = len(set(map(lambda m: m.uprn, matches)))
+        tests.append(test)
+
+    context = { 'addresses': tests }
+
     return HttpResponse(template.render(context, request))

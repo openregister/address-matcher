@@ -93,3 +93,11 @@ strong {
   padding: .15em .2em .1em .4em;
   border-radius: 10px;
 }
+
+ul.uprn-group {
+  padding-left: 2em;
+}
+
+ul.uprn-group li {
+  display: inline;
+}

@@ -9,9 +9,22 @@
     <address>{{ test.address }}</address>
   </p>
 
+  <h2 class="heading-medium">Matches by UPRN</h2>
+
+  {% regroup matches by uprn as uprn_groups %}
+
   <ul>
-    {% for match in matches %}
-      <li>{{ match.user.name }} matched with {{ match.uprn }}</li>
+    {% for group in uprn_groups %}
+      <li>
+        <h3 class="heading-small">{{ group.grouper }}</h3>
+        <ul class="uprn-group">
+          {% for match in group.list %}
+            <li>
+              {{ match.user.name }}{% if not forloop.last %}, {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </li>
     {% endfor %}
   </ul>
 
