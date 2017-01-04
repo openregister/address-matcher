@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="heading-large">Top users</h2>
+
+<table>
+  <thead>
+    <tr><th>Name</th><th>Score</th><th>Matches</th><th>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <td>{{ user.name }}</td>
+      <td>{{ user.score }}</td>
+      <td>{{ user.nb_matches }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock %}

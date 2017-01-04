@@ -234,7 +234,7 @@ viewNoMatchButton testId =
             [ ( "white-space", "nowrap" )
             ]
         , onClick (SelectCandidate ( "_nomatch_", testId ))
-        , title "Click here if no candidate match the job centre address"
+        , title "Click here if no candidate matches the job centre address"
         ]
         [ text "No match"
         , sup [ class "help-pill" ] [ text "?" ]
@@ -445,9 +445,19 @@ viewFinishedSection model =
               ]
               [ text "Give me more!" ]
         , p [ style [ ( "padding-top", "1em" ) ] ]
-            [ a
-                [ href "/match/scores/" ]
-                [ text "See all stats" ]
+            [ text "See "
+            , a
+                [ href "/match/top_users/" ]
+                [ text "scores" ]
+            , text ", "
+            , a
+                [ href "/match/stats/" ]
+                [ text "stats" ]
+            , text " or "
+            , a
+                [ href "/match/tests/" ]
+                [ text "results" ]
+            , text "."
             ]
         ]
 

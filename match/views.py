@@ -83,7 +83,8 @@ def make_users_stats():
             'score': user.score
         }
         users_stats.append(user_stats)
-    return users_stats
+
+    return sorted(users_stats, key=lambda u: u['score'], reverse=True)
 
 
 def make_stats():
@@ -91,7 +92,6 @@ def make_stats():
     users = User.objects.all()
     addresses = Address.objects.all()
     stats = {}
-    stats['users'] = filter(lambda x: x['score'] != 0, make_users_stats())
     stats['nb_addresses'] = Address.objects.count()
     stats['nb_matches'] = Match.objects.count()
     stats['occurrences'] = occurrence_dict(count_matches())
@@ -121,11 +121,19 @@ def make_stats():
 
 
 
-def scores(request):
-    template = loader.get_template('scores.html')
+def stats(request):
+    template = loader.get_template('stats.html')
     stats = make_stats()
     stats['occurrences'] = mark_safe(json.dumps(stats['occurrences']))
     return HttpResponse(template.render(stats, request))
+
+
+def top_users(request):
+    template = loader.get_template('top_users.html')
+    context = {
+        'users': filter(lambda x: x['score'] != 0, make_users_stats())
+    }
+    return HttpResponse(template.render(context, request))
 
 
 def scores_json(request):

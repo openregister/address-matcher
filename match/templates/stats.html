@@ -5,29 +5,6 @@
 
 <h1 class="heading-xlarge">Stats</h1>
 
-<a href="#users">Top users</a>,
-<a href="#addresses">Address stats</a>
-
-
-<h2 id="users" class="heading-large">Top users</h2>
-
-<table>
-    <thead>
-      <tr><th>Name</th><th>Score</th><th>Matches</th><th>
-    </thead>
-    <tbody>
-        {% for user in users|dictsortreversed:"score" %}
-            <tr>
-              <td>{{ user.name }}</td>
-              <td>{{ user.score }}</td>
-              <td>{{ user.nb_matches }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<h2 id="addresses" class="heading-large">Address stats</h2>
-
 <ul>
     <li>{{ nb_addresses }} addresses</li>
     <li>{{ nb_matches }} user matches</li>
@@ -89,8 +66,8 @@
 
    var options = {
      title: 'Agreement vs Number of matches',
-     vAxis: {title: 'Matches', minValue: 0, maxValue: 20},
-     hAxis: {title: '% agreement', minValue: 0, maxValue: 100},
+     hAxis: {title: 'Matches', minValue: 0, maxValue: 20},
+     vAxis: {title: '% agreement', minValue: 0, maxValue: 100},
      tooltip: {isHtml: true},
      width: 500,
      height: 500,
