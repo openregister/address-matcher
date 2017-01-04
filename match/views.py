@@ -267,12 +267,21 @@ def tests(request):
     for address in filter(lambda a: a.nb_matches > 1, addresses):
         test = {
             'name': address.name,
-            'id': address.id,
-            'nb_matches': address.nb_matches
+            'id': address.id
         }
         matches = Match.objects.filter(test_address__id = address.id)
-        test['nb_uprns'] = len(set(map(lambda m: m.uprn, matches)))
-        test['confidence'] = float(test['nb_matches']) / (2 * test['nb_uprns'])
+
+        t = address.nb_matches
+        d = len(set(map(lambda m: m.uprn, matches)))
+        n = len(matches.filter(uprn = '_nomatch_'))
+        s = len(matches.filter(uprn = '_notsure_'))
+
+        test['nb_matches'] = t
+        test['nb_uprns'] = d
+        test['no_match'] = n
+        test['no_notsure'] = s
+
+        test['confidence'] = 10*(t/(2*d) - 5*(n+s))
         tests.append(test)
 
     context = { 'addresses': sorted(tests, key=lambda t: t['confidence']) }

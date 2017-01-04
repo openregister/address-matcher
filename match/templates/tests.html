@@ -10,8 +10,10 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Number of times matched</th>
-        <th>Number of distinct matches</th>
+        <th>Times matched</th>
+        <th>Distinct matches</th>
+        <th>No matches</th>
+        <th>Not sure</th>
         <th>Confidence score</th>
       </tr>
     </thead>
@@ -21,7 +23,9 @@
         <td><a href="{% url 'test' address.id %}">{{ address.name }}</a></td>
         <td>{{ address.nb_matches }}</td>
         <td>{{ address.nb_uprns }}</td>
-        <td>{{ address.confidence|floatformat }}</td>
+        <td>{{ address.no_match }}</td>
+        <td>{{ address.notsure }}</td>
+        <td>{{ address.confidence|floatformat:"0" }}</td>
       </tr>
       {% endfor %}
     </tbody>
