@@ -284,6 +284,8 @@ def tests(request):
         test['confidence'] = 10*(t/(2*d) - 5*(n+s))
         tests.append(test)
 
-    context = { 'addresses': sorted(tests, key=lambda t: t['confidence']) }
+    context = {
+        'addresses': sorted(tests, key=lambda t: t['confidence'], reverse=True)
+    }
 
     return HttpResponse(template.render(context, request))
