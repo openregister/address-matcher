@@ -216,20 +216,8 @@ def send(request):
 
 
 def next_test_addresses(num):
-
     # Pick the first among the addresses with the least number of matches
     return Address.objects.annotate(num_matches=Count('match')).order_by('num_matches')[:num]
-
-    # could also be the next address after this user's last match
-    # if len(Match.objects.all()) == 0:
-    #     # No match yet, just pick first n address
-    #     address = Address.objects.first()
-    # else:
-    #     latest_user_match = Match.objects.filter(user_id=user_id).order_by('-date').first()
-    #     if latest_user_match == None:
-    #         latest_user_match = Match.objects.first()
-    #     address = latest_user_match.test_address.get_next();
-
 
 
 # Get the next test addresses for a given users
