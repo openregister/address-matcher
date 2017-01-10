@@ -7,6 +7,8 @@ import String exposing (..)
 type alias TestId =
     Int
 
+type alias Uprn =
+    String
 
 type alias Test =
     { name : String
@@ -20,7 +22,7 @@ type alias Candidate =
     , parentAddressName : String
     , streetName : String
     , streetTown : String
-    , uprn : String
+    , uprn : Uprn
     }
 
 
