@@ -136,7 +136,7 @@ update msg model =
         FetchAddressesReturn (Err error) ->
             ( { model | addresses = Failure error }, Cmd.none )
 
-        SelectCandidate ( selectedCandidateUprn, testId ) ->
+        SelectCandidate ( candidate, testId ) ->
             let
                 animationMoveLeft =
                     Animation.toWith
@@ -150,7 +150,7 @@ update msg model =
                     [ animationMoveLeft
                     , Animation.Messenger.send
                         (NextCandidate
-                            ( selectedCandidateUprn, testId )
+                            ( candidate, testId )
                         )
                     , animationReset
                     ]
@@ -162,7 +162,7 @@ update msg model =
                 , Cmd.none
                 )
 
-        NextCandidate ( selectedCandidateUprn, testId ) ->
+        NextCandidate ( candidate, testId ) ->
             let
                 newModel =
                     { model | addresses = removeAddress testId model.addresses }
@@ -170,7 +170,7 @@ update msg model =
                 sendMatchCmd : Cmd Msg
                 sendMatchCmd =
                     Rest.sendMatch
-                        selectedCandidateUprn
+                        candidate
                         testId
                         model.currentUserId
             in

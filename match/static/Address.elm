@@ -36,6 +36,16 @@ type alias RemoteAddresses =
     WebData (List Address)
 
 
+notSureCandidate: Candidate
+notSureCandidate =
+    Candidate "" "" "" "" "_notsure_"
+
+
+noMatchCandidate: Candidate
+noMatchCandidate =
+    Candidate "" "" "" "" "_nomatch_"
+
+
 remoteAddressCount : RemoteAddresses -> Int
 remoteAddressCount remoteAddresses =
     case remoteAddresses of

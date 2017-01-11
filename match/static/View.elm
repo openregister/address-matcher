@@ -203,7 +203,7 @@ viewCandidate candidateTestId =
             [ generator "viewCandidate"
             , style styleCandidate
             , onClick
-                (SelectCandidate ( candidate.uprn, testId ))
+                (SelectCandidate ( candidate, testId ))
             ]
             (viewCandidateText candidate)
 
@@ -217,7 +217,7 @@ viewNotSureButton testId =
         , style
             [ ( "white-space", "nowrap" )
             ]
-        , onClick (SelectCandidate ( "_notsure_", testId ))
+        , onClick (SelectCandidate ( notSureCandidate, testId ))
         , title "Click here if you're not sure if one of the candidates match"
         ]
         [ text "Not sure"
@@ -234,7 +234,7 @@ viewNoMatchButton testId =
         , style
             [ ( "white-space", "nowrap" )
             ]
-        , onClick (SelectCandidate ( "_nomatch_", testId ))
+        , onClick (SelectCandidate ( noMatchCandidate, testId ))
         , title "Click here if no candidate matches the job centre address"
         ]
         [ text "No match"

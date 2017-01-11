@@ -44,3 +44,11 @@ class Match(models.Model):
 
     def __str__(self):
         return self.user.name + " thinks " + self.test_address.test_id + " is " + self.uprn
+
+
+class RegisterAddress(models.Model):
+    uprn = models.CharField(max_length=20)
+    name = models.CharField(max_length=512)
+    parent_address_name = models.CharField(max_length=512)
+    street_name = models.CharField(max_length=512)
+    street_town = models.CharField(max_length=512)

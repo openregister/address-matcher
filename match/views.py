@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from random import randint
 from hashlib import md5
-from models import Address, Match, User
+from models import Address, Match, User, RegisterAddress
 from elasticsearch import Elasticsearch
 from itertools import groupby
 import os
@@ -181,12 +181,27 @@ def send(request):
     user = User.objects.get(pk=request.POST['user'])
     test = Address.objects.get(pk=request.POST['test_address'])
     uprn = request.POST['uprn']
+
     Match.objects.create(
         test_address = Address.objects.get(pk=request.POST['test_address']),
         user = user,
         uprn = uprn,
         date = datetime.now()
     )
+
+    # If this is a new UPRN, record the address
+    if not uprn in ['_nomatch_', '_notsure_']:
+        try:
+            RegisterAddress.objects.get(uprn=uprn)
+        except:
+            RegisterAddress(
+                uprn = uprn,
+                name = request.POST['name'],
+                parent_address_name = request.POST['parent_address_name'],
+                street_name = request.POST['street_name'],
+                street_town = request.POST['street_town']
+            ).save()
+
 
     # update users' score
     nb_previous_matches = len(Match.objects.filter(

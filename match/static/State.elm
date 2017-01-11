@@ -33,7 +33,7 @@ type Msg
     | FetchAddresses
     | FetchAddressesReturn (Result Http.Error (List Address))
     | UserChange String
-    | NextCandidate ( Uprn, TestId )
-    | SelectCandidate ( Uprn, TestId )
+    | NextCandidate ( Candidate, TestId )
+    | SelectCandidate ( Candidate, TestId )
     | SendMatchReturn (Result Http.Error UsersStats)
     | Animate Animation.Msg

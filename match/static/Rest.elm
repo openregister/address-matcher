@@ -97,12 +97,16 @@ fetchAddressesForUser userId =
             )
 
 
-sendMatch : String -> TestId -> UserId -> Cmd Msg
-sendMatch uprn testId userId =
+sendMatch : Candidate -> TestId -> UserId -> Cmd Msg
+sendMatch candidate testId userId =
     let
         body =
             multipartBody
-                [ stringPart "uprn" uprn
+                [ stringPart "uprn" candidate.uprn
+                , stringPart "name" candidate.name
+                , stringPart "parent_address_name" candidate.parentAddressName
+                , stringPart "street_name" candidate.streetName
+                , stringPart "street_town" candidate.streetTown
                 , stringPart "test_address" (toString testId)
                 , stringPart "user" (toString userId)
                 ]

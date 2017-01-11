@@ -16953,6 +16953,8 @@ var _user$project$Address$Candidate = F5(
 	function (a, b, c, d, e) {
 		return {name: a, parentAddressName: b, streetName: c, streetTown: d, uprn: e};
 	});
+var _user$project$Address$notSureCandidate = A5(_user$project$Address$Candidate, '', '', '', '', '_notsure_');
+var _user$project$Address$noMatchCandidate = A5(_user$project$Address$Candidate, '', '', '', '', '_nomatch_');
 var _user$project$Address$Address = F2(
 	function (a, b) {
 		return {test: a, candidates: b};
@@ -17250,7 +17252,7 @@ var _user$project$View$viewNotSureButton = function (testId) {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Events$onClick(
 						_user$project$State$SelectCandidate(
-							{ctor: '_Tuple2', _0: '_notsure_', _1: testId})),
+							{ctor: '_Tuple2', _0: _user$project$Address$notSureCandidate, _1: testId})),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html_Attributes$title('Click here if you\'re not sure if one of the candidates match'),
@@ -17300,7 +17302,7 @@ var _user$project$View$viewNoMatchButton = function (testId) {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Events$onClick(
 						_user$project$State$SelectCandidate(
-							{ctor: '_Tuple2', _0: '_nomatch_', _1: testId})),
+							{ctor: '_Tuple2', _0: _user$project$Address$noMatchCandidate, _1: testId})),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html_Attributes$title('Click here if no candidate matches the job centre address'),
@@ -17709,7 +17711,7 @@ var _user$project$View$viewCandidate = function (candidateTestId) {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Events$onClick(
 						_user$project$State$SelectCandidate(
-							{ctor: '_Tuple2', _0: candidate.uprn, _1: testId})),
+							{ctor: '_Tuple2', _0: candidate, _1: testId})),
 					_1: {ctor: '[]'}
 				}
 			}
@@ -18532,24 +18534,40 @@ var _user$project$View$view = function (model) {
 };
 
 var _user$project$Rest$sendMatch = F3(
-	function (uprn, testId, userId) {
+	function (candidate, testId, userId) {
 		var body = _elm_lang$http$Http$multipartBody(
 			{
 				ctor: '::',
-				_0: A2(_elm_lang$http$Http$stringPart, 'uprn', uprn),
+				_0: A2(_elm_lang$http$Http$stringPart, 'uprn', candidate.uprn),
 				_1: {
 					ctor: '::',
-					_0: A2(
-						_elm_lang$http$Http$stringPart,
-						'test_address',
-						_elm_lang$core$Basics$toString(testId)),
+					_0: A2(_elm_lang$http$Http$stringPart, 'name', candidate.name),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_elm_lang$http$Http$stringPart,
-							'user',
-							_elm_lang$core$Basics$toString(userId)),
-						_1: {ctor: '[]'}
+						_0: A2(_elm_lang$http$Http$stringPart, 'parent_address_name', candidate.parentAddressName),
+						_1: {
+							ctor: '::',
+							_0: A2(_elm_lang$http$Http$stringPart, 'street_name', candidate.streetName),
+							_1: {
+								ctor: '::',
+								_0: A2(_elm_lang$http$Http$stringPart, 'street_town', candidate.streetTown),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$http$Http$stringPart,
+										'test_address',
+										_elm_lang$core$Basics$toString(testId)),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$http$Http$stringPart,
+											'user',
+											_elm_lang$core$Basics$toString(userId)),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
 					}
 				}
 			});
