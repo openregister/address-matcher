@@ -258,12 +258,21 @@ def random_test_addresses(request):
 def test(request, id):
     template = loader.get_template('test.html')
     test = get_object_or_404(Address, pk = id)
-    test_matches = Match.objects.filter(test_address__id = id) \
-        .order_by('uprn')
+    test_matches = list(Match.objects.filter(test_address__id = id) \
+        .order_by('uprn'))
+
+    matches = []
+    for match in test_matches:
+        reg_addr = RegisterAddress.objects.filter(uprn=match.uprn).first()
+        matches.append({
+            'uprn': match.uprn,
+            'username': match.user.name,
+            'candidate': str(reg_addr)
+        })
 
     context = {
         'test': test,
-        'matches': test_matches
+        'matches': matches
     }
     return HttpResponse(template.render(context, request))
 

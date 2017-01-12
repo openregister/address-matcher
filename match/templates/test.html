@@ -20,7 +20,7 @@
         <ul class="uprn-group">
           {% for match in group.list %}
             <li>
-              {{ match.user.name }}{% if not forloop.last %}, {% endif %}
+              {{ match.username }}{% if not forloop.last %}, {% endif %}
             </li>
           {% endfor %}
         </ul>
