@@ -52,3 +52,9 @@ class RegisterAddress(models.Model):
     parent_address_name = models.CharField(max_length=512)
     street_name = models.CharField(max_length=512)
     street_town = models.CharField(max_length=512)
+
+    def __str__(self):
+        return "{}: {}, {}, {}, {}".format(
+            self.uprn, self.name, self.parent_address_name,
+            self.street_name, self.street_town
+        )
