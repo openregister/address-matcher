@@ -11,16 +11,14 @@
 
   <h2 class="heading-medium">Matches by UPRN</h2>
 
-  {% regroup matches by uprn as uprn_groups %}
-
   <ul>
-    {% for group in uprn_groups %}
+    {% for group in matches %}
       <li>
-        <h3 class="heading-small">{{ group.grouper }}</h3>
+        <h3 class="heading-small">{{ group.address }}</h3>
         <ul class="uprn-group">
-          {% for match in group.list %}
+          {% for match in group.matches %}
             <li>
-              {{ match.username }}{% if not forloop.last %}, {% endif %}
+              {{ match.user.name }}{% if not forloop.last %}, {% endif %}
             </li>
           {% endfor %}
         </ul>

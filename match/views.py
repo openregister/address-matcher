@@ -9,11 +9,12 @@ from random import randint
 from hashlib import md5
 from models import Address, Match, User, RegisterAddress
 from elasticsearch import Elasticsearch
-from itertools import groupby
 import os
 import json
 import re
 import random
+import itertools
+import operator
 
 
 def index(request):
@@ -254,6 +255,17 @@ def random_test_addresses(request):
     return JsonResponse(addresses, safe=False)
 
 
+def address_of_uprn(uprn):
+    if uprn == '_nomatch_':
+        return 'No match'
+    elif uprn == '_notsure_':
+        return 'Not sure'
+    else:
+        return '{} ({})'.format(
+            str(RegisterAddress.objects.filter(uprn=uprn).first()).title(),
+            uprn
+        )
+
 # Display the page of a specific test address
 def test(request, id):
     template = loader.get_template('test.html')
@@ -261,14 +273,15 @@ def test(request, id):
     test_matches = list(Match.objects.filter(test_address__id = id) \
         .order_by('uprn'))
 
-    matches = []
-    for match in test_matches:
-        reg_addr = RegisterAddress.objects.filter(uprn=match.uprn).first()
-        matches.append({
-            'uprn': match.uprn,
-            'username': match.user.name,
-            'candidate': str(reg_addr)
-        })
+
+    get_attr = operator.attrgetter('uprn')
+    matches = [
+        {
+            'uprn': uprn,
+            'matches': list(g),
+            'address': address_of_uprn(uprn)
+        } for uprn, g in itertools.groupby(sorted(test_matches, key=get_attr), get_attr)
+    ]
 
     context = {
         'test': test,
