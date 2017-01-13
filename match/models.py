@@ -54,7 +54,13 @@ class RegisterAddress(models.Model):
     street_town = models.CharField(max_length=512)
 
     def __str__(self):
-        return "{}, {}, {}, {}".format(
-            self.name, self.parent_address_name,
-            self.street_name, self.street_town
+        sans_empty = filter(
+            lambda x: x!='',
+            [
+                self.name,
+                self.parent_address_name,
+                self.street_name,
+                self.street_town
+            ]
         )
+        return ', '.join(sans_empty)
