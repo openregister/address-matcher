@@ -9,7 +9,7 @@ Reqirements:
 - postgresql
 
 ```
-$ sudo -u postgres bash -c "psql -c \"create user matcher with password 'matcher' with createdb;\""
+$ sudo -u postgres bash -c "psql -c \"create user matcher with password 'matcher' createdb;\""
 $ sudo -u postgres bash -c "psql -c \"create database matcher owner matcher;\""
 $ virtualenv venv
 $ source venv/bin/activate
